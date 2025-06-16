@@ -17,6 +17,7 @@ export default defineConfig({
 			'@styles': '/src/styles',
 			'@types': '/src/types',
 			'@utils': '/src/utils',
+			'@fonts': '/src/fonts',
 		},
 	},
 	build: {
