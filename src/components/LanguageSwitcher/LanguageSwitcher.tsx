@@ -3,12 +3,18 @@ import { useTranslation } from 'react-i18next'
 import { Menu, MenuItem, Typography, Box } from '@mui/material'
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
 
+interface LanguageSwitcherProps {
+	color?: string
+}
+
 const languages = [
 	{ code: 'en', name: 'EN' },
 	{ code: 'ru', name: 'RU' },
 ]
 
-const LanguageSwitcher = () => {
+const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
+	color = '#1F1FFF',
+}) => {
 	const { i18n } = useTranslation()
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 	const open = Boolean(anchorEl)
@@ -38,7 +44,7 @@ const LanguageSwitcher = () => {
 					display: 'flex',
 					alignItems: 'center',
 					cursor: 'pointer',
-					color: '#1F1FFF',
+					color: color,
 					fontWeight: 500,
 				}}
 			>

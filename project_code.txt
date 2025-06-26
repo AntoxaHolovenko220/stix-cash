@@ -1,0 +1,4422 @@
+----
+D:\Coding\styx-cash\index.html
+----
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+		<!-- My fonts -->
+		<link rel="stylesheet" href="/fonts/fonts.css" />
+
+		<!-- Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Public+Sans:ital,wght@0,100..900;1,100..900&display=swap"
+			rel="stylesheet"
+		/>
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Vite + React + TS</title>
+		<style>
+			html,
+			body {
+				margin: 0;
+			}
+		</style>
+	</head>
+	<body style="">
+		<div id="root"></div>
+		<script type="module" src="/src/main.tsx"></script>
+	</body>
+</html>
+
+----
+D:\Coding\styx-cash\package.json
+----
+{
+	"name": "styx-cash",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build"
+	},
+	"dependencies": {
+		"@emotion/react": "^11.14.0",
+		"@emotion/styled": "^11.14.0",
+		"@mui/icons-material": "^7.1.1",
+		"@mui/material": "^7.1.1",
+		"axios": "^1.10.0",
+		"i18next": "^25.2.1",
+		"i18next-browser-languagedetector": "^8.2.0",
+		"react": "18.2.0",
+		"react-dom": "18.2.0",
+		"react-i18next": "^15.5.3",
+		"react-router-dom": "^7.6.2",
+		"react-slick": "^0.30.3",
+		"slick-carousel": "^1.8.1"
+	},
+	"devDependencies": {
+		"@types/react": "18.2.0",
+		"@types/react-dom": "18.2.0",
+		"@types/react-slick": "^0.23.13",
+		"@vitejs/plugin-react": "^4.4.1",
+		"globals": "^16.0.0",
+		"typescript": "~5.8.3",
+		"vite": "^6.3.5"
+	}
+}
+
+----
+D:\Coding\styx-cash\public\fonts\fonts.css
+----
+@font-face {
+    font-family: 'Benzin';
+    src: url('Benzin-ExtraBold.eot');
+    src: local('☞Benzin ExtraBold'), local('Benzin-ExtraBold'),
+        url('Benzin-ExtraBold.eot?#iefix') format('embedded-opentype'),
+        url('Benzin-ExtraBold.woff2') format('woff2'),
+        url('Benzin-ExtraBold.woff') format('woff'),
+        url('Benzin-ExtraBold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Benzin';
+    src: url('Benzin-Medium.eot');
+    src: local('☞Benzin Medium'), local('Benzin-Medium'),
+        url('Benzin-Medium.eot?#iefix') format('embedded-opentype'),
+        url('Benzin-Medium.woff2') format('woff2'),
+        url('Benzin-Medium.woff') format('woff'),
+        url('Benzin-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Benzin';
+    src: url('Benzin-Bold.eot');
+    src: local('☞Benzin Bold'), local('Benzin-Bold'),
+        url('Benzin-Bold.eot?#iefix') format('embedded-opentype'),
+        url('Benzin-Bold.woff2') format('woff2'),
+        url('Benzin-Bold.woff') format('woff'),
+        url('Benzin-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Benzin';
+    src: url('Benzin-Semibold.eot');
+    src: local('☞Benzin Semibold'), local('Benzin-Semibold'),
+        url('Benzin-Semibold.eot?#iefix') format('embedded-opentype'),
+        url('Benzin-Semibold.woff2') format('woff2'),
+        url('Benzin-Semibold.woff') format('woff'),
+        url('Benzin-Semibold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Benzin';
+    src: url('Benzin-Regular.eot');
+    src: local('☞Benzin Regular'), local('Benzin-Regular'),
+        url('Benzin-Regular.eot?#iefix') format('embedded-opentype'),
+        url('Benzin-Regular.woff2') format('woff2'),
+        url('Benzin-Regular.woff') format('woff'),
+        url('Benzin-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+----
+D:\Coding\styx-cash\src\App.tsx
+----
+import { BrowserRouter } from 'react-router-dom'
+import RouterContent from '@/router/RouterContent'
+
+const App = () => {
+	return (
+		<BrowserRouter>
+			<RouterContent />
+		</BrowserRouter>
+	)
+}
+
+export default App
+
+----
+D:\Coding\styx-cash\src\components\index.tsx
+----
+export { default as Loader } from './Loader'
+export { default as LanguageSwitcher } from './LanguageSwitcher'
+export { default as TransactionCard } from './TransactionCard'
+
+----
+D:\Coding\styx-cash\src\components\LanguageSwitcher\index.tsx
+----
+export { default } from './LanguageSwitcher'
+
+----
+D:\Coding\styx-cash\src\components\LanguageSwitcher\LanguageSwitcher.tsx
+----
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Menu, MenuItem, Typography, Box } from '@mui/material'
+import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
+
+interface LanguageSwitcherProps {
+	color?: string
+}
+
+const languages = [
+	{ code: 'en', name: 'EN' },
+	{ code: 'ru', name: 'RU' },
+]
+
+const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
+	color = '#1F1FFF',
+}) => {
+	const { i18n } = useTranslation()
+	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+	const open = Boolean(anchorEl)
+
+	const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+		setAnchorEl(event.currentTarget)
+	}
+
+	const handleClose = () => {
+		setAnchorEl(null)
+	}
+
+	const changeLanguage = (lng: string) => {
+		i18n.changeLanguage(lng)
+		handleClose()
+	}
+
+	const currentLang =
+		languages.find(lng => lng.code === i18n.language)?.name ||
+		i18n.language.toUpperCase()
+
+	return (
+		<Box>
+			<Box
+				onClick={handleClick}
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					cursor: 'pointer',
+					color: color,
+					fontWeight: 500,
+				}}
+			>
+				<Typography variant='body1'>{currentLang}</Typography>
+				<ExpandMoreIcon fontSize='small' sx={{ ml: 0.5, mt: '-2px' }} />
+			</Box>
+
+			<Menu
+				id='language-menu'
+				anchorEl={anchorEl}
+				open={open}
+				onClose={handleClose}
+				MenuListProps={{
+					'aria-labelledby': 'language-display',
+				}}
+				PaperProps={{
+					sx: {
+						width: '70px',
+						ml: '-16px',
+					},
+				}}
+			>
+				{languages.map(language => (
+					<MenuItem
+						key={language.code}
+						onClick={() => changeLanguage(language.code)}
+						selected={i18n.language === language.code}
+					>
+						<Typography variant='body1'>{language.name}</Typography>
+					</MenuItem>
+				))}
+			</Menu>
+		</Box>
+	)
+}
+
+export default LanguageSwitcher
+
+----
+D:\Coding\styx-cash\src\components\Loader\index.tsx
+----
+export { default } from './Loader'
+
+----
+D:\Coding\styx-cash\src\components\Loader\Loader.tsx
+----
+import { Box, CircularProgress } from '@mui/material'
+
+const Loader = () => {
+	return (
+		<Box
+			sx={{
+				display: 'flex',
+				justifyContent: 'center',
+				alignItems: 'center',
+				height: '100vh',
+			}}
+		>
+			<CircularProgress />
+		</Box>
+	)
+}
+
+export default Loader
+
+----
+D:\Coding\styx-cash\src\components\TransactionCard\index.tsx
+----
+export { default } from './TransactionCard'
+
+----
+D:\Coding\styx-cash\src\components\TransactionCard\TransactionCard.tsx
+----
+import { Box, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+
+type TransactionType = 'Deposit' | 'Withdrawal'
+type TransactionStatus = 'Completed' | 'Canceled' | 'Pending'
+type PaymentMethod = 'Zelle' | 'PayPal' | 'Wire transfer' | 'Wallet'
+
+interface PaymentMethodConfig {
+	icon: string
+	label?: string
+}
+
+export interface TransactionCardProps {
+	id: string
+	date: string
+	status: TransactionStatus
+	type: TransactionType
+	paymentMethod: PaymentMethod
+	amount: number
+	balance: number
+	wallet?: string
+}
+
+const TransactionCard: React.FC<TransactionCardProps> = ({
+	id,
+	date,
+	status,
+	type,
+	paymentMethod,
+	amount,
+	balance,
+	wallet,
+}) => {
+	const { t } = useTranslation()
+
+	// Форматирование чисел
+	const formatNumber = (num: number) =>
+		new Intl.NumberFormat('en-US', {
+			minimumFractionDigits: 2,
+			maximumFractionDigits: 2,
+		}).format(num)
+
+	// Конфигурация статусов
+	const statusConfig = {
+		Completed: { color: '#52BC37', icon: '/completed.svg' },
+		Canceled: { color: '#D72828', icon: '/canceled.svg' },
+		Pending: { color: '#F4D800', icon: '/pending.svg' },
+	}
+
+	// Конфигурация методов оплаты
+	const paymentMethodConfig: Record<PaymentMethod, PaymentMethodConfig> = {
+		PayPal: { icon: '/paypal.svg' },
+		Zelle: { icon: '/zelle.svg' },
+		'Wire transfer': { icon: '/wire-transfer.svg', label: 'Wire transfer' },
+		Wallet: {
+			icon: '/wallet.svg',
+			label: type === 'Deposit' ? 'From wallet' : 'To wallet',
+		},
+	}
+
+	// Общие стили
+	const commonStyles = {
+		fontFamily: 'Manrope',
+		fontSize: '16px',
+		lineHeight: 1,
+	}
+
+	// Получаем конфигурацию для текущего метода оплаты
+	const currentPaymentMethod = paymentMethodConfig[paymentMethod]
+
+	return (
+		<Box
+			sx={{
+				width: 'calc(100% - 30px)',
+				minHeight: '98px',
+				backgroundColor: '#F7F9FF',
+				p: '25px 15px',
+			}}
+		>
+			<Box
+				sx={{
+					width: 'fit-content',
+					p: '5px 9px',
+					display: 'flex',
+					alignItems: 'center',
+					gap: '12px',
+					bgcolor: '#BDCAF0',
+					borderRadius: '4px',
+					mb: '20px',
+				}}
+			>
+				<Box
+					component='img'
+					src='/transaction-arrow.svg'
+					sx={{
+						transform: type === 'Deposit' ? 'rotate(0deg)' : 'rotate(180deg)',
+					}}
+				/>
+				<Typography sx={{ ...commonStyles, fontWeight: 500, color: '#FFFFFF' }}>
+					{type === 'Deposit' ? t('top-up') : t('withdrawal')}
+				</Typography>
+				<Box sx={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+					<Box component='img' src={currentPaymentMethod.icon} />
+					{currentPaymentMethod.label && (
+						<Typography
+							sx={{ ...commonStyles, fontWeight: 500, color: '#FFFFFF' }}
+						>
+							{currentPaymentMethod.label}
+						</Typography>
+					)}
+				</Box>
+			</Box>
+
+			<Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+				{[
+					{ label: t('id transaction'), value: id },
+					{ label: t('date'), value: date },
+					{
+						label: t('status'),
+						value: (
+							<Box
+								sx={{ display: 'flex', alignItems: 'flex-start', gap: '5px' }}
+							>
+								<Typography
+									sx={{
+										...commonStyles,
+										fontWeight: 600,
+										color: statusConfig[status].color,
+									}}
+								>
+									{status}
+								</Typography>
+								<Box component='img' src={statusConfig[status].icon} />
+							</Box>
+						),
+					},
+					{
+						label: t('type'),
+						value: (
+							<Typography
+								sx={{
+									...commonStyles,
+									fontWeight: 600,
+									color: type === 'Deposit' ? '#52BC37' : '#000000',
+								}}
+							>
+								{type}
+							</Typography>
+						),
+					},
+					{
+						value: (
+							<>
+								<Box
+									sx={{
+										height: '16px',
+										display: 'flex',
+										alignItems: 'flex-start',
+										gap: '5px',
+									}}
+								>
+									<Box component='img' src={currentPaymentMethod.icon} />
+									{currentPaymentMethod.label && (
+										<Typography
+											sx={{
+												...commonStyles,
+												fontWeight: 600,
+												whiteSpace: 'nowrap',
+											}}
+										>
+											{currentPaymentMethod.label}
+										</Typography>
+									)}
+								</Box>
+								<Typography
+									sx={{ ...commonStyles, fontWeight: 400, mt: '15px' }}
+								>
+									{wallet
+										? `${wallet.slice(0, 4)}...${wallet.slice(-6)}`
+										: 'Details'}
+								</Typography>
+							</>
+						),
+					},
+					{ label: t('amount'), value: formatNumber(amount) },
+					{ label: t('balance'), value: formatNumber(balance) },
+				].map((item, index) => (
+					<Box
+						key={index}
+						sx={{
+							maxWidth:
+								index === 0
+									? '114px'
+									: index === 1
+									? '110px'
+									: index === 2
+									? '108px'
+									: index === 3
+									? '90px'
+									: index === 4
+									? '128px'
+									: index === 5
+									? '85px'
+									: '105px',
+							width: '100%',
+						}}
+					>
+						{item.label && (
+							<Typography sx={{ ...commonStyles, fontWeight: 600, mb: '15px' }}>
+								{item.label}
+							</Typography>
+						)}
+						{typeof item.value === 'string' ? (
+							<Typography sx={{ ...commonStyles, fontWeight: 400 }}>
+								{item.value}
+							</Typography>
+						) : (
+							item.value
+						)}
+					</Box>
+				))}
+			</Box>
+		</Box>
+	)
+}
+
+export default TransactionCard
+
+----
+D:\Coding\styx-cash\src\hooks\useLanguageSwitcher.ts
+----
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
+const useLanguageSwitcher = () => {
+	const { i18n } = useTranslation()
+	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+
+	const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+		setAnchorEl(event.currentTarget)
+	}
+
+	const closeMenu = () => {
+		setAnchorEl(null)
+	}
+
+	const changeLanguage = (lng: string) => {
+		i18n.changeLanguage(lng)
+		closeMenu()
+	}
+
+	return {
+		anchorEl,
+		openMenu,
+		closeMenu,
+		changeLanguage,
+	}
+}
+
+export default useLanguageSwitcher
+
+----
+D:\Coding\styx-cash\src\hooks\useRouteTitle.ts
+----
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import routes from '@/router/routes.json'
+
+const useRouteTitle = () => {
+	const location = useLocation()
+
+	useEffect(() => {
+		const route = Object.values(routes).find(
+			r =>
+				r.path === location.pathname ||
+				(r.path.includes(':') &&
+					location.pathname.startsWith(r.path.split(':')[0]))
+		)
+
+		if (route?.title) {
+			document.title = route.title
+		}
+	}, [location.pathname])
+}
+
+export default useRouteTitle
+
+----
+D:\Coding\styx-cash\src\i18n\i18n.config.ts
+----
+import i18n from 'i18next'
+import { initReactI18next } from 'react-i18next'
+import LanguageDetector from 'i18next-browser-languagedetector'
+
+import { enTranslations } from './locales/en'
+import { ruTranslations } from './locales/ru'
+
+i18n
+	.use(LanguageDetector)
+	.use(initReactI18next)
+	.init({
+		resources: {
+			en: { translation: enTranslations },
+			ru: { translation: ruTranslations },
+		},
+		fallbackLng: 'en',
+		supportedLngs: ['en', 'ru'],
+		interpolation: {
+			escapeValue: false,
+		},
+		detection: {
+			order: ['localStorage', 'navigator'],
+			caches: ['localStorage'],
+			convertDetectedLanguage: lng => {
+				return ['en', 'ru'].includes(lng) ? lng : 'en'
+			},
+		},
+	})
+
+export default i18n
+
+----
+D:\Coding\styx-cash\src\i18n\locales\en.ts
+----
+export const enTranslations = {
+	easy: 'Easy and safe',
+	withdrawing: 'withdrawing money from credit cards in the USA',
+	unique: 'Unique legal methods',
+	minimum: 'Minimal commissions',
+	maximum: 'Maximum benefit',
+	why: 'Why is it so difficult and',
+	fix: ' how do we fix it?',
+	'made it easy':
+		"It's not easy to convert a line of credit to real currency in the U.S., but we've made it simple",
+	'we know': 'We know how to safely use your funds with minimal effort',
+	'too high':
+		'In the U.S., it is difficult to convert credit lines into real currencies, and banks limit the costs of transfers and cash withdrawals Too high',
+	'how does': 'How does',
+	'it work': 'it work?',
+	left: 'Leave a request',
+	analyze: 'We analyse your situation and choose the best way to proceed',
+	'money arrives': 'Money arrives on your debit card quickly and risk-free',
+	advantages: 'Benefits of working',
+	'with us': 'with us',
+	legally: 'Legal and safe',
+	'US law': 'We operate within the confines of US law',
+	commission: 'Minimal commission',
+	'hiding costs': 'There is no advantage to hiding costs',
+	quick: 'Quick and convenient',
+	'can use': 'You can use absolutely any bank registered in the USA',
+	counselling: 'Consultations on the use of credit money',
+	profitability: 'help increase profitability',
+	transfer:
+		'Transfer money from your credit card to your debit card in 30 minutes today!',
+	'leave contact':
+		'Leave your contact details and one of our experts will get back to you within 5 minutes and help you with the whole procedure!',
+	'get money': 'Get money now',
+	feedback: 'Customer',
+	customer: 'feedback',
+	Jessica: 'Jessica',
+	'credit line':
+		"« I have a line of credit that can't really be used. Using Styx Cash, I turned it into real money in a matter of hours. Fast, transparent, carefree. highly recommended!»",
+	'credit line2':
+		'«My credit line had been unused for a long time. Thanks to Styx Cash, I was able to turn it into real money in just a few hours - fast, transparent and hassle-free. Definitely recommend it!»',
+	'credit line3':
+		" «I had a credit limit that I couldn't use. With the help of Styx Cash, I turned it into real money in just a few hours. Fast, transparent and no hassle. Highly recommended!»",
+	cards: 'Which cards are supported?',
+	time: 'How long is the process taking?',
+	risks: 'Are there any risks to credit history?',
+	commissions: 'What kind of commissions?',
+	phone: 'Tel:',
+	support: 'Support',
+	'in touch': "We'll get back to you",
+	'full name': 'Name and surname',
+	'fn examp': 'Ivanov Alexander',
+	email: 'Email',
+	'email examp': 'qwerty@gmail.com',
+	number: 'Phone number',
+	'numb examp': '+123 456 789 10',
+	send: 'Send data',
+	'transaction history': 'Transaction history',
+	'top-up': 'Deposit',
+	'id transaction': 'Id transaction:',
+	date: 'Date:',
+	status: 'Status:',
+	type: 'Type:',
+	balance: 'Your balance:',
+	amount: 'Amount:',
+	withdrawal: 'Withdrawal',
+	'execution time': 'Execution time ≈',
+	'all transactions': 'All transactions',
+	'your email': 'Your email',
+	password: 'Password',
+	'forgot password': 'Forgot password?',
+	'log in': 'Sign in',
+	'log in button': 'By clicking the «sign in» button, ',
+	'personal data': 'I consent to the processing of my personal data',
+	'no account': 'No account? Sign up',
+	'have account': 'Have an account? Sign in',
+	register: 'Sign up',
+	name: 'Name',
+	surname: 'Surname',
+	'phone number': 'Phone number',
+	country: 'Choose the country',
+	'make up password': 'Make up password',
+	'repeat password': 'Repeat password',
+	aknowledge: 'I acknowledge that I have read and accept the terms',
+	agreement: 'User Agreement',
+	and: 'and',
+	statement: 'Privacy Statement',
+	'legal age':
+		'of the Styx Cash and that I am of legal age. I understand that I have the right to change the communication methods settings on my Styx Cash account at any time',
+	'incorrect email': '*incorrect email format',
+	'incorrect password': '*password entered incorrectly',
+	home: 'Home',
+	transactions: 'Transactions',
+	profile: 'Profile',
+	'customer support': 'Customer Support',
+	logout: 'Logout',
+	'nice to see': 'Nice to see you!',
+	bridge: 'Styx Cash — your bridge between you and financial freedom',
+	'your balance': 'Total balance',
+	'top up': 'Deposit balance',
+	withdraw: 'Withdraw funds',
+}
+
+----
+D:\Coding\styx-cash\src\i18n\locales\ru.ts
+----
+export const ruTranslations = {
+	easy: 'Легкий и безопасный',
+	withdrawing: 'вывод денег с кредитных карт в США',
+	unique: 'Уникальные легальные методы',
+	minimum: 'Минимальные комиссии',
+	maximum: 'Максимальная выгода',
+	why: 'Почему это так сложно и',
+	fix: 'как мы это исправим?',
+	'made it easy':
+		'В США конвертировать кредитную линию в реальную валюту непросто, но мы упростили ее',
+	'we know':
+		'Мы знаем, как безопасно использовать ваши средства с минимальными усилиями',
+	'too high':
+		'В США сложно конвертировать кредитные линии в реальные валюты, а банки ограничивают расходы на переводы и снятие наличных Слишком высоко',
+	'how does': 'Как это',
+	'it work': 'работает?',
+	left: 'Оставьте запрос',
+	analyze: 'Мы анализируем вашу ситуацию и выбираем лучший способ',
+	'money arrives':
+		'Деньги поступают на вашу дебетовую карту быстро и без риска',
+	advantages: 'Преимущества работы',
+	'with us': 'с нами',
+	legally: 'Законно и безопасно',
+	'US law': 'Мы работаем в рамках законодательства США',
+	commission: 'Минимальная комиссия',
+	'hiding costs': 'Нет никаких преимуществ для сокрытия расходов',
+	quick: 'Быстро и удобно',
+	'can use':
+		'Вы можете использовать абсолютно любой банк зарегистрированный на территории США',
+	counselling: 'Консультации по использованию кредитных денег',
+	profitability: 'помогаем увеличить доходность',
+	transfer:
+		'Переведите деньги с кредитной карты на вашу дебитовую за 30 минут уже сегодня!',
+	'leave contact':
+		'Оставьте свои контактные данные и один из наших специалистов свяжется с вами в течении 5 минут и поможет вам со всей процедурой!',
+	'get money': 'Получить деньги сейчас',
+	feedback: 'Отзывы',
+	customer: 'клиентов',
+	Jessica: 'Джессика',
+	'credit line':
+		'« У меня есть кредитная линия, которая не может быть действительно использована. Используя Styx Cash, я превратил ее в реальные деньги за несколько часов. Быстро, прозрачно, беззаботно. настоятельно рекомендую!»',
+	'credit line2':
+		'«Моя кредитная линия долгое время оставалась неиспользуемой. Благодаря Styx Cash я смог превратить её в реальные деньги всего за несколько часов — быстро, прозрачно и без лишних хлопот. Определённо рекомендую!»',
+	'credit line3':
+		' «У меня был кредитный лимит, который я не мог использовать. С помощью Styx Cash я превратил его в реальные деньги всего за несколько часов. Быстро, прозрачно и без проблем. Очень рекомендую!»',
+	cards: 'Какие карты поддерживаются?',
+	time: 'Сколько времени занимает процесс?',
+	risks: 'Есть ли риски для кредитной истории?',
+	commissions: 'Какие комиссии?',
+	phone: 'Тел:',
+	support: 'Поддержка',
+	'in touch': 'Мы с вами свяжемся',
+	'full name': 'Имя и фамилия',
+	'fn examp': 'Иванов Александр',
+	email: 'Почта',
+	'email examp': 'qwerty@gmail.com',
+	number: 'Номер',
+	'numb examp': '+123 456 789 10',
+	send: 'Отправить данные',
+	'transaction history': 'История транзакций',
+	'top-up': 'Пополнение',
+	'id transaction': 'Id транзакции:',
+	date: 'Дата:',
+	status: 'Статус:',
+	type: 'Тип:',
+	balance: 'Ваш баланс:',
+	amount: 'Сумма:',
+	withdrawal: 'Вывод',
+	'execution time': 'Время выполнения ≈',
+	'all transactions': 'Все транзакции',
+	'your email': 'Ваш email',
+	password: 'Пароль',
+	'forgot password': 'Забыли пароль?',
+	'log in': 'Войти',
+	'log in button': 'Нажимая кнопку «sign in»,',
+	'personal data': 'даю согласие на обработку моих персональных данных',
+	'no account': 'Нет аккаунта? Зарегистрируйтесь',
+	'have account': 'Есть аккаунт? Войдите',
+	register: 'Зарегистрироваться',
+	name: 'Имя',
+	surname: 'Фамилия',
+	'phone number': 'Номер телефона',
+	country: 'Выберите страну',
+	'make up password': 'Придумайте пароль',
+	'repeat password': 'Повторите пароль',
+	aknowledge: 'Я подтверждаю, что прочитал (-а) и принимаю условия',
+	agreement: 'Соглашения с пользователем',
+	and: 'и',
+	statement: 'Положения о конфиденциальности',
+	'legal age':
+		'Styx Cash и что я достиг(-ла) совершеннолетия. Я понимаю, что имею право в любой момент изменить настройки способов связи в своей учетной записи Styx Cash',
+	'incorrect email': '*некорректный формат email',
+	'incorrect password': '*пароль введен неверно',
+	home: 'Главная',
+	transactions: 'Транзакции',
+	profile: 'Профиль',
+	'customer support': 'Поддержка',
+	logout: 'Выйти',
+	'nice to see': 'Рады вас видеть!',
+	bridge: 'Styx Cash — ваш мост между вами и финансовой свободой',
+	'your balance': 'Общий баланс',
+	'top up': 'Пополнить баланс',
+	withdraw: 'Вывести средства',
+}
+
+----
+D:\Coding\styx-cash\src\layouts\Footer\Footer.tsx
+----
+const Footer = () => {
+	return <div>Footer</div>
+}
+
+export default Footer
+
+----
+D:\Coding\styx-cash\src\layouts\Footer\index.tsx
+----
+export { default } from './Footer'
+
+----
+D:\Coding\styx-cash\src\layouts\Header\Header.tsx
+----
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { LanguageSwitcher } from '@/components'
+import { Box, IconButton, Typography, useMediaQuery } from '@mui/material'
+import routes from '@/router/routes.json'
+
+interface HeaderProps {
+	onLogoClick: () => void
+}
+
+const Header = ({ onLogoClick }: HeaderProps) => {
+	const navigate = useNavigate()
+	const isWideScreen = useMediaQuery('(min-width:1280px)')
+
+	return (
+		<Box
+			sx={{
+				width: '100%',
+				py: '20px',
+				display: 'flex',
+				justifyContent: !isWideScreen ? 'space-between' : 'flex-end',
+				backgroundColor: '#0246FF',
+				position: 'relative', // Добавляем позиционирование
+			}}
+		>
+			{!isWideScreen && (
+				<Box
+					onClick={onLogoClick}
+					sx={{
+						width: 'fit-content',
+						ml: '50px',
+						p: '10px',
+						bgcolor: '#EFEFEF',
+						borderRadius: '30px',
+						cursor: 'pointer',
+					}}
+				>
+					<Typography
+						sx={{
+							fontFamily: 'Benzin',
+							fontSize: '16px',
+							fontWeight: 700,
+							lineHeight: '31px',
+							background: 'linear-gradient(90deg, #0044FF, #002999)',
+							WebkitBackgroundClip: 'text',
+							WebkitTextFillColor: 'transparent',
+							display: 'inline-block',
+						}}
+					>
+						Styx Cash
+					</Typography>
+				</Box>
+			)}
+			<Box
+				sx={{ mr: '50px', display: 'flex', alignItems: 'center', gap: '20px' }}
+			>
+				<LanguageSwitcher color='#FFFFFF' />
+				<IconButton onClick={() => navigate(`${routes.HomePage.path}`)}>
+					<Box component='img' src='person-white.svg' />
+				</IconButton>
+			</Box>
+		</Box>
+	)
+}
+
+export default Header
+
+----
+D:\Coding\styx-cash\src\layouts\Header\index.tsx
+----
+export { default } from './Header'
+
+----
+D:\Coding\styx-cash\src\layouts\index.tsx
+----
+export { default as MainLayout } from './MainLayout'
+export { default as Header } from './Header'
+export { default as Sidebar } from './Sidebar'
+export { default as Footer } from './Footer'
+
+----
+D:\Coding\styx-cash\src\layouts\MainLayout\index.tsx
+----
+export { default } from './MainLayout'
+
+----
+D:\Coding\styx-cash\src\layouts\MainLayout\MainLayout.tsx
+----
+import { ReactNode, useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import { Header, Sidebar } from '@/layouts'
+import { Box, useMediaQuery } from '@mui/material'
+
+interface MainLayoutProps {
+	children: ReactNode
+}
+
+const MainLayout = ({ children }: MainLayoutProps) => {
+	const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+	const location = useLocation()
+	const isWideScreen = useMediaQuery('(min-width:1280px)')
+
+	useEffect(() => {
+		setIsSidebarOpen(isWideScreen)
+	}, [isWideScreen])
+
+	const toggleSidebar = () => {
+		if (!isWideScreen) {
+			setIsSidebarOpen(!isSidebarOpen)
+		}
+	}
+
+	return (
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: isWideScreen ? 'row' : 'column',
+				height: '100vh',
+				overflow: 'hidden',
+			}}
+		>
+			{isWideScreen && (
+				<Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} />
+			)}
+			{!isWideScreen && <Header onLogoClick={toggleSidebar} />}
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: !isWideScreen ? 'row' : 'column',
+					flex: 1,
+					overflow: 'hidden',
+				}}
+			>
+				{isWideScreen && <Header onLogoClick={toggleSidebar} />}
+				{!isWideScreen && (
+					<Sidebar isOpen={isSidebarOpen} onClose={toggleSidebar} />
+				)}
+				<Box
+					sx={{
+						flex: 1,
+						overflowY: 'auto',
+						position: 'relative',
+						p: '20px',
+					}}
+					key={location.pathname}
+				>
+					{children}
+				</Box>
+			</Box>
+		</Box>
+	)
+}
+
+export default MainLayout
+
+----
+D:\Coding\styx-cash\src\layouts\Sidebar\index.tsx
+----
+export { default } from './Sidebar'
+
+----
+D:\Coding\styx-cash\src\layouts\Sidebar\Sidebar.tsx
+----
+import { useEffect, useState } from 'react'
+import {
+	Box,
+	IconButton,
+	List,
+	ListItem,
+	Typography,
+	useMediaQuery,
+} from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+
+import routes from '@/router/routes.json'
+
+interface SidebarProps {
+	isOpen: boolean
+	onClose: () => void
+}
+
+const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
+	const { t } = useTranslation()
+	const navigate = useNavigate()
+	const location = useLocation()
+	const [activePath, setActivePath] = useState(location.pathname)
+	const isWideScreen = useMediaQuery('(min-width:1280px)')
+
+	useEffect(() => {
+		setActivePath(location.pathname)
+	}, [location.pathname])
+
+	const navItems = [
+		{ label: t('home'), path: routes.HomePage.path },
+		{ label: t('transactions'), path: routes.TransactionsPage.path },
+		{ label: t('profile'), path: routes.ProfilePage.path },
+		{ label: t('customer support'), path: routes.CustomerSupportPage.path },
+	]
+
+	return (
+		<Box
+			sx={{
+				height: '100vh',
+				width: '295px',
+				backgroundColor: '#0C3E9C',
+				position: isWideScreen ? 'relative' : 'fixed',
+				left: isOpen ? 0 : '-345px',
+				top: 0,
+				transition: !isWideScreen ? 'left 0.3s ease' : 'none',
+				zIndex: 1000,
+				pt: '22px',
+				pl: '50px',
+			}}
+		>
+			<Box
+				sx={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					alignItems: 'center',
+				}}
+			>
+				<Typography
+					sx={{
+						fontFamily: 'Benzin',
+						fontSize: '20px',
+						fontWeight: 700,
+						lineHeight: '40px',
+						color: '#FFFFFF',
+					}}
+				>
+					Styx Cash
+				</Typography>
+				{!isWideScreen && (
+					<IconButton
+						onClick={onClose}
+						sx={{
+							mt: '3px',
+							mr: '10px',
+							color: 'white',
+						}}
+					>
+						<CloseIcon />
+					</IconButton>
+				)}
+			</Box>
+
+			<List
+				sx={{
+					mt: '70px',
+					display: 'flex',
+					flexDirection: 'column',
+					gap: '30px',
+					color: '#FFFFFF',
+					fontFamily: 'Manrope',
+					fontSize: '18px',
+					lineHeight: 1,
+				}}
+			>
+				{navItems.map(item => {
+					const isActive = activePath === item.path
+
+					return (
+						<Box
+							key={item.path}
+							sx={{
+								position: 'relative',
+								'&:hover': {
+									'& .nav-item': {
+										borderTopRightRadius: !isActive ? '50px' : '0',
+										borderBottomRightRadius: !isActive ? '50px' : '0',
+										backgroundColor: !isActive
+											? 'rgba(255, 255, 255, 0.1)'
+											: '#FFFFFF',
+									},
+								},
+							}}
+						>
+							<ListItem
+								className='nav-item'
+								onClick={() => {
+									navigate(item.path)
+									onClose()
+								}}
+								sx={{
+									cursor: 'pointer',
+									backgroundColor: isActive ? '#FFFFFF' : 'transparent',
+									color: isActive ? '#0C3E9C' : '#FFFFFF',
+									borderTopLeftRadius: '50px',
+									borderBottomLeftRadius: '50px',
+
+									px: '20px',
+									py: '12px',
+									position: 'relative',
+									zIndex: 1,
+								}}
+							>
+								{item.label}
+							</ListItem>
+
+							{isActive && (
+								<>
+									<Box
+										sx={{
+											position: 'absolute',
+											right: '42px',
+											top: '-62px',
+											bottom: '0',
+											width: '20px',
+											backgroundColor: '#FFFFFF',
+											transform: 'rotate(-90deg)',
+											zIndex: 0,
+										}}
+									>
+										<Box
+											sx={{
+												width: '100%',
+												height: '100%',
+												backgroundColor: '#0C3E9C',
+												borderBottomLeftRadius: '50px',
+											}}
+										/>
+									</Box>
+									<Box
+										sx={{
+											position: 'absolute',
+											right: '42px',
+											top: '0',
+											bottom: '-62px',
+											width: '20px',
+											backgroundColor: '#FFFFFF',
+											transform: 'rotate(90deg)',
+											zIndex: 0,
+										}}
+									>
+										<Box
+											sx={{
+												width: '100%',
+												height: '100%',
+												backgroundColor: '#0C3E9C',
+												borderTopLeftRadius: '50px',
+											}}
+										/>
+									</Box>
+								</>
+							)}
+						</Box>
+					)
+				})}
+			</List>
+
+			<Box
+				sx={{
+					mt: '30px',
+					width: 'fit-content',
+					display: 'flex',
+					alignItems: 'center',
+					cursor: 'pointer',
+					gap: 1,
+				}}
+				onClick={() => {
+					navigate('/')
+				}}
+			>
+				<LogoutRoundedIcon sx={{ color: '#FFFFFF' }} />
+				<Typography
+					sx={{
+						fontFamily: 'Manrope',
+						color: '#FFFFFF',
+					}}
+				>
+					{t('logout')}
+				</Typography>
+			</Box>
+		</Box>
+	)
+}
+
+export default Sidebar
+
+----
+D:\Coding\styx-cash\src\main.tsx
+----
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
+import './i18n/i18n.config'
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+	<React.StrictMode>
+		<App />
+	</React.StrictMode>
+)
+
+----
+D:\Coding\styx-cash\src\pages\ClientPage\ClientPage.tsx
+----
+const ClientPage = () => {
+	return <div>ClientPage</div>
+}
+
+export default ClientPage
+
+----
+D:\Coding\styx-cash\src\pages\ClientPage\index.tsx
+----
+export { default } from './ClientPage'
+
+----
+D:\Coding\styx-cash\src\pages\ClientsPage\ClientsPage.tsx
+----
+const ClientsPage = () => {
+	return <div>ClientsPage</div>
+}
+
+export default ClientsPage
+
+----
+D:\Coding\styx-cash\src\pages\ClientsPage\index.tsx
+----
+export { default } from './ClientsPage'
+
+----
+D:\Coding\styx-cash\src\pages\CustomerSupportPage\CustomerSupportPage.tsx
+----
+const CustomerSupportPage = () => {
+	return <div>CustomerSupportPage</div>
+}
+
+export default CustomerSupportPage
+
+----
+D:\Coding\styx-cash\src\pages\CustomerSupportPage\index.tsx
+----
+export { default } from './CustomerSupportPage'
+
+----
+D:\Coding\styx-cash\src\pages\HomePage\CardBalance\CardBalance.tsx
+----
+import { Box, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+import routes from '@/router/routes.json'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+
+interface CardBalanceProps {
+	balance: number | string
+	showBtcBalance?: boolean
+}
+
+const CardBalance = ({
+	balance = '50,000',
+	showBtcBalance = true,
+}: CardBalanceProps) => {
+	const { t } = useTranslation()
+	const navigate = useNavigate()
+	const [btcRate, setBtcRate] = useState<number | null>(null)
+	const [loading, setLoading] = useState(true)
+	const [error, setError] = useState('')
+
+	useEffect(() => {
+		const fetchBtcRate = async () => {
+			try {
+				const response = await axios.get(
+					'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
+				)
+				setBtcRate(response.data.bitcoin.usd)
+				setLoading(false)
+			} catch (error) {
+				setError(error instanceof Error ? error.message : 'Unknown error')
+				setLoading(false)
+			}
+		}
+
+		fetchBtcRate()
+		const interval = setInterval(fetchBtcRate, 60000)
+		return () => clearInterval(interval)
+	}, [])
+
+	const calculateBtcBalance = () => {
+		if (!btcRate || !showBtcBalance) return null
+
+		const numericBalance =
+			typeof balance === 'string'
+				? parseFloat(balance.replace(/,/g, ''))
+				: balance
+		const btcValue = numericBalance / btcRate
+		return btcValue.toFixed(10)
+	}
+
+	const formatBalance = () => {
+		return typeof balance === 'number' ? balance.toLocaleString() : balance
+	}
+
+	const commonTextStyles = {
+		fontFamily: 'Manrope',
+		fontWeight: 700,
+		lineHeight: 1,
+		color: '#FFFFFF',
+		textTransform: 'uppercase',
+	}
+
+	if (loading) {
+		return <Typography>Loading...</Typography>
+	}
+
+	if (error) {
+		return <Typography color='error'>Error: {error}</Typography>
+	}
+
+	const btcBalance = calculateBtcBalance()
+
+	return (
+		<Box
+			sx={{
+				maxWidth: '420px',
+				aspectRatio: '1 / 0.4758',
+				backgroundImage: 'url(/public/balance-card.svg)',
+				backgroundSize: 'cover',
+				backgroundPosition: 'center',
+				p: '20px',
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'space-between',
+				borderRadius: '20px',
+			}}
+		>
+			<Box>
+				<Typography sx={{ ...commonTextStyles, fontSize: '22px' }}>
+					{t('your balance')}
+				</Typography>
+
+				<Box sx={{ mt: '25px' }}>
+					{showBtcBalance && btcBalance && (
+						<Typography
+							sx={{
+								...commonTextStyles,
+								fontSize: '32px',
+								mb: '10px',
+								letterSpacing: '-1px',
+							}}
+						>
+							{btcBalance} BTC
+						</Typography>
+					)}
+					<Typography
+						sx={{
+							...commonTextStyles,
+							fontSize: '26px',
+							letterSpacing: '-1px',
+						}}
+					>
+						$ {formatBalance()}
+					</Typography>
+				</Box>
+			</Box>
+
+			<Typography
+				sx={{
+					width: 'fit-content',
+					fontFamily: 'Manrope',
+					fontSize: '20px',
+					fontWeight: 300,
+					color: '#FFFFFF',
+					lineHeight: 1,
+					borderBottom: '1px solid #FFFFFF',
+					cursor: 'pointer',
+					transition: 'opacity 0.2s ease',
+					'&:hover': { opacity: 0.8 },
+				}}
+				role='button'
+				onClick={() => navigate(routes.TransactionsPage.path)}
+			>
+				{t('transaction history')}
+			</Typography>
+		</Box>
+	)
+}
+
+export default CardBalance
+
+----
+D:\Coding\styx-cash\src\pages\HomePage\CardBalance\index.tsx
+----
+export { default } from './CardBalance'
+
+----
+D:\Coding\styx-cash\src\pages\HomePage\HomePage.tsx
+----
+import { Box, Button, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+import routes from '@/router/routes.json'
+import CardBalance from './CardBalance'
+import { TransactionCard } from '@/components'
+import jsonTransactions from '@/pages/transactions.json'
+import { TransactionCardProps } from '@/components/TransactionCard/TransactionCard'
+
+const HomePage = () => {
+	const { t } = useTranslation()
+	const navigate = useNavigate()
+
+	const parseDate = (dateStr: string) => {
+		const [day, month, yearAndTime] = dateStr.split('.')
+		const [year, time] = yearAndTime.split(' ')
+		return new Date(`20${year}-${month}-${day}T${time}`)
+	}
+
+	const latestTransactions = [...(jsonTransactions as TransactionCardProps[])]
+		.sort((a, b) => parseDate(b.date).getTime() - parseDate(a.date).getTime())
+		.slice(0, 4)
+
+	const gradientText = {
+		background: 'linear-gradient(90deg, #0246FF, #666666)',
+		WebkitBackgroundClip: 'text',
+		WebkitTextFillColor: 'transparent',
+		fontFamily: 'Manrope',
+		fontWeight: 700,
+		lineHeight: 1,
+		textTransform: 'uppercase',
+	}
+
+	const actionButton = {
+		px: '50px',
+		width: '100%',
+		height: '56px',
+		border: '1px solid #414141',
+		borderRadius: '6px',
+		boxShadow: 'none',
+		background: 'linear-gradient(90deg, #58A9FF, #0044FF)',
+	}
+
+	return (
+		<Box>
+			<Typography
+				sx={{
+					ml: '2px',
+					fontFamily: 'Manrope',
+					fontSize: '14px',
+					// color: '#232323',
+				}}
+			>
+				{t('home')}
+			</Typography>
+
+			<Box
+				sx={{ mt: '60px', display: 'flex', justifyContent: 'space-between' }}
+			>
+				<Box sx={{ maxWidth: '393px', width: '100%' }}>
+					<Typography sx={{ ...gradientText, fontSize: '40px' }}>
+						{t('nice to see')}
+					</Typography>
+					<Typography sx={{ ...gradientText, mt: '15px', fontSize: '26px' }}>
+						{t('bridge')}
+					</Typography>
+				</Box>
+
+				<Box sx={{ maxWidth: '420px', width: '100%' }}>
+					<CardBalance balance={50.95} />
+					<Box
+						sx={{
+							mt: '60px',
+							display: 'flex',
+							flexDirection: 'column',
+							gap: '25px',
+						}}
+					>
+						<Button
+							variant='contained'
+							sx={actionButton}
+							onClick={() => navigate(routes.TopUpPage.path)}
+						>
+							<Box
+								sx={{
+									width: '100%',
+									display: 'flex',
+									justifyContent: 'space-between',
+									alignItems: 'center',
+								}}
+							>
+								<Typography
+									sx={{
+										fontFamily: 'Manrope',
+										fontSize: '20px',
+										fontWeight: 700,
+										textTransform: 'none',
+									}}
+								>
+									{t('top up')}
+								</Typography>
+								<Box component='img' src='/top-up.svg' />
+							</Box>
+						</Button>
+
+						<Button
+							variant='contained'
+							sx={actionButton}
+							onClick={() => navigate(routes.WithdrawPage.path)}
+						>
+							<Box
+								sx={{
+									width: '100%',
+									display: 'flex',
+									justifyContent: 'space-between',
+									alignItems: 'center',
+								}}
+							>
+								<Typography
+									sx={{
+										fontFamily: 'Manrope',
+										fontSize: '20px',
+										fontWeight: 700,
+										textTransform: 'none',
+									}}
+								>
+									{t('withdraw')}
+								</Typography>
+								<Box component='img' src='/withdraw.svg' />
+							</Box>
+						</Button>
+					</Box>
+				</Box>
+			</Box>
+
+			<Box
+				sx={{ display: 'flex', justifyContent: 'space-between', mt: '60px' }}
+			>
+				<Typography sx={{ ...gradientText, fontSize: '22px', lineHeight: 1.2 }}>
+					{t('transaction history')}
+				</Typography>
+				<Typography
+					sx={{
+						fontFamily: 'Manrope',
+						fontSize: '20px',
+						borderBottom: '1px solid #000000',
+						cursor: 'pointer',
+						'&:hover': { opacity: 0.7 },
+					}}
+					onClick={() => navigate(routes.TransactionsPage.path)}
+				>
+					{t('all transactions')}
+				</Typography>
+			</Box>
+
+			<Box
+				sx={{
+					mt: '50px',
+					display: 'flex',
+					flexDirection: 'column',
+					gap: '20px',
+				}}
+			>
+				{latestTransactions.map(tx => (
+					<TransactionCard key={`${tx.id}-${tx.date}`} {...tx} />
+				))}
+			</Box>
+		</Box>
+	)
+}
+
+export default HomePage
+
+----
+D:\Coding\styx-cash\src\pages\HomePage\index.tsx
+----
+export { default } from './HomePage'
+
+----
+D:\Coding\styx-cash\src\pages\index.tsx
+----
+export { default as HomePage } from './HomePage'
+export { default as LandingPage } from './LandingPage'
+export { default as ProfilePage } from './ProfilePage'
+export { default as TransactionsPage } from './TransactionsPage'
+export { default as ClientsPage } from './ClientsPage'
+export { default as ClientPage } from './ClientPage'
+export { default as NotFoundPage } from './NotFoundPage'
+export { default as RegisterModal } from './RegisterModal'
+export { default as CustomerSupportPage } from './CustomerSupportPage'
+export { default as TopUpPage } from './TopUpPage'
+export { default as WithdrawPage } from './WithdrawPage'
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\BenefitsBlock\BenefitsBlock.tsx
+----
+import { Box, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import {
+	titleStyles,
+	cardStyles,
+	titleCardStyles,
+	descriptionStyles,
+} from './style'
+
+const BenefitsBlock = () => {
+	const { t } = useTranslation()
+
+	const benefits = [
+		{ title: t('legally'), description: t('US law') },
+		{ title: t('commission'), description: t('hiding costs') },
+		{ title: t('quick'), description: t('can use') },
+		{ title: t('counselling'), description: t('profitability') },
+	]
+
+	return (
+		<Box sx={{ p: '150px 50px', overflow: 'hidden' }}>
+			<Box sx={{ display: 'flex', gap: '15px' }}>
+				<Typography
+					sx={{
+						background: 'linear-gradient(90deg, #1C1C1C, #ACACAC)',
+						...titleStyles,
+					}}
+				>
+					{t('advantages')}
+				</Typography>
+				<Typography
+					sx={{
+						background: 'linear-gradient(90deg, #3AA2FF, #0073FF)',
+						...titleStyles,
+					}}
+				>
+					{t('with us')}
+				</Typography>
+			</Box>
+			<Box
+				sx={{
+					maxWidth: '860px',
+					mt: '50px',
+					ml: '15px',
+					position: 'relative',
+					display: 'flex',
+					gap: '30px',
+					flexWrap: 'wrap',
+				}}
+			>
+				<Box
+					component='img'
+					src='lock.svg'
+					sx={{
+						position: 'absolute',
+						top: '-50px',
+						left: '550px',
+						transform: 'rotate(15deg)',
+						zIndex: -1,
+					}}
+				/>
+				{benefits.map((benefit, index) => (
+					<Box sx={cardStyles} key={index}>
+						<Typography sx={titleCardStyles}>{benefit.title}</Typography>
+						<Typography sx={descriptionStyles}>
+							{benefit.description}
+						</Typography>
+					</Box>
+				))}
+			</Box>
+		</Box>
+	)
+}
+
+export default BenefitsBlock
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\BenefitsBlock\index.tsx
+----
+export { default } from './BenefitsBlock'
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\BenefitsBlock\style.ts
+----
+export const titleStyles = {
+	fontFamily: 'Manrope',
+	fontSize: '62px',
+	fontWeight: 700,
+	textAlign: 'center',
+	WebkitBackgroundClip: 'text',
+	WebkitTextFillColor: 'transparent',
+}
+
+export const cardStyles = {
+	width: '373px',
+	height: '169px',
+	p: '30px 20px',
+	backgroundColor: 'rgba(255, 255, 255, 0.1)',
+	backdropFilter: 'blur(20px)',
+	WebkitBackdropFilter: 'blur(20px)',
+	border: '1px solid #9A9A9A',
+	borderRadius: '20px',
+}
+
+export const titleCardStyles = {
+	fontFamily: 'Manrope',
+	fontSize: '30px',
+	fontWeight: 700,
+	lineHeight: 1,
+	color: '#74AFFF',
+}
+
+export const descriptionStyles = {
+	mt: '20px',
+	fontFamily: 'Manrope',
+	fontSize: '26px',
+	fontWeight: 400,
+	lineHeight: 1,
+	color: '#545454',
+}
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\CardBlock\Card.tsx
+----
+import { Box, Typography, SxProps, Theme } from '@mui/material'
+
+interface CardProps {
+	sx?: SxProps<Theme>
+}
+
+const Card = ({ sx }: CardProps) => {
+	return (
+		<Box
+			sx={{
+				width: '518px',
+				height: '292px',
+				p: '15px',
+				border: '1px solid #979797',
+				borderRadius: '20px',
+				backgroundColor: 'rgba(200, 200, 200, 0.3)',
+				backdropFilter: 'blur(9px)',
+				WebkitBackdropFilter: 'blur(9px)',
+				...sx, // добавление пользовательских стилей
+			}}
+		>
+			<Box sx={{ display: 'flex', alignItems: 'center' }}>
+				<Box component='img' src='mastercard.svg' />
+				<Typography
+					sx={{
+						ml: '15px',
+						fontFamily: 'Montserrat',
+						fontSize: '21px',
+						color: '#232323',
+					}}
+				>
+					Creditcard
+				</Typography>
+				<Box
+					component='img'
+					src='wifi.svg'
+					sx={{ mt: '5px', ml: 'auto', mr: '20px' }}
+				/>
+			</Box>
+
+			<Box sx={{ mt: '80px', ml: '5px' }}>
+				<Typography
+					sx={{ fontFamily: 'Montserrat', fontSize: '15px', color: '#232323' }}
+				>
+					Quinten Hiralal
+				</Typography>
+				<Typography
+					sx={{
+						fontFamily: 'Montserrat',
+						fontSize: '30px',
+						fontWeight: 600,
+						color: '#232323',
+					}}
+				>
+					2817-9403-1784-5372
+				</Typography>
+			</Box>
+
+			<Box sx={{ mt: '15px', ml: '5px' }}>
+				<Typography
+					sx={{ fontFamily: 'Montserrat', fontSize: '12px', color: '#232323' }}
+				>
+					Geldig tot
+				</Typography>
+				<Typography
+					sx={{
+						fontFamily: 'Montserrat',
+						fontSize: '19px',
+						fontWeight: 600,
+						color: '#232323',
+					}}
+				>
+					12-2022
+				</Typography>
+			</Box>
+		</Box>
+	)
+}
+
+export default Card
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\CardBlock\CardBlock.tsx
+----
+import { Box, Button, Typography } from '@mui/material'
+import { Link } from 'react-router-dom'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import { useTranslation } from 'react-i18next'
+import Card from './Card'
+import Circle from '../Circle'
+
+const CardBlock = () => {
+	const { t } = useTranslation()
+
+	const titleStyles = {
+		fontFamily: 'Manrope',
+		fontSize: '64px',
+		display: 'inline-block',
+		lineHeight: 1,
+		WebkitBackgroundClip: 'text',
+		WebkitTextFillColor: 'transparent',
+	}
+
+	const featureBoxStyles = {
+		width: '350px',
+		height: '70px',
+		display: 'flex',
+		alignItems: 'center',
+		gap: '10px',
+		backgroundColor: '#FFFFFF',
+		border: '1px solid #979797',
+		borderRadius: '8px',
+	}
+
+	const iconStyles = {
+		ml: '20px',
+		color: '#4a5568',
+		width: '30px',
+		height: '30px',
+	}
+
+	const features = [t('unique'), t('minimum'), t('maximum')]
+	return (
+		<Box
+			sx={{
+				minHeight: '700px',
+				p: '50px',
+				position: 'relative',
+				overflow: 'hidden',
+			}}
+		>
+			<Typography
+				sx={{
+					width: '100%',
+					background: 'linear-gradient(90deg, #3B3B3B, #B2B2B2)',
+					...titleStyles,
+				}}
+			>
+				{t('easy')}
+			</Typography>
+			<Typography
+				sx={{
+					background: 'linear-gradient(90deg, #0044FF, #98CEFF)',
+					...titleStyles,
+					fontWeight: 700,
+					maxWidth: '850px',
+				}}
+			>
+				{t('withdrawing')}
+			</Typography>
+			<Box
+				sx={{
+					mt: '20px',
+					display: 'flex',
+					flexWrap: 'wrap',
+					gap: '15px',
+					maxWidth: '719px',
+				}}
+			>
+				{features.map((text, index) => (
+					<Box key={index} sx={featureBoxStyles}>
+						<CheckCircleIcon sx={iconStyles} />
+						<Typography sx={{ fontFamily: 'Manrope', color: '#333333' }}>
+							{text}
+						</Typography>
+					</Box>
+				))}
+			</Box>
+			<Link to='/login'>
+				<Button
+					variant='contained'
+					disableElevation
+					sx={{
+						width: '352px',
+						height: '72px',
+						mt: '30px',
+						border: '1px solid #414141',
+						borderRadius: '8px',
+						background: 'linear-gradient(90deg, #58A9FF, #0044FF)',
+						textTransform: 'none',
+						fontFamily: 'Manrope',
+						fontSize: '20px',
+						fontWeight: 600,
+					}}
+				>
+					{t('get money')}
+				</Button>
+			</Link>
+			<Card
+				sx={{
+					position: 'absolute',
+					top: '280px',
+					right: '30px',
+					transform: 'rotate(10deg)',
+					zIndex: -1,
+				}}
+			/>
+			<Circle
+				size={495}
+				color='linear-gradient(220deg, #006AFF, #80CEFF)'
+				sx={{ position: 'absolute', top: '270px', right: '-250px', zIndex: -3 }}
+			/>
+			<Circle
+				size={95}
+				color='linear-gradient(90deg, #0A70FB, #76C4FB)'
+				sx={{ position: 'absolute', top: '300px', right: '530px', zIndex: -3 }}
+			/>
+			<Circle
+				size={55}
+				color='linear-gradient(90deg, #0A70FB, #76C4FB)'
+				sx={{ position: 'absolute', top: '550px', right: '430px', zIndex: -3 }}
+			/>
+		</Box>
+	)
+}
+
+export default CardBlock
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\CardBlock\index.tsx
+----
+export { default } from './CardBlock'
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\Circle\Circle.tsx
+----
+import { Box, SxProps, Theme } from '@mui/material'
+
+interface CircleProps {
+	size?: number | string
+	color?: string
+	sx?: SxProps<Theme>
+}
+
+const Circle: React.FC<CircleProps> = ({
+	size = 50,
+	color = '#3AA2FF',
+	sx = {},
+}) => {
+	const sizeValue = typeof size === 'number' ? `${size}px` : size
+
+	return (
+		<Box
+			sx={{
+				width: sizeValue,
+				height: sizeValue,
+				borderRadius: '50%',
+				background: color,
+				...sx,
+			}}
+		/>
+	)
+}
+
+export default Circle
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\Circle\index.tsx
+----
+export { default } from './Circle'
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\ConnectionBlock\ConnectionBlock.tsx
+----
+import { Box, Button, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+
+const ConnectionBlock = () => {
+	const { t } = useTranslation()
+
+	return (
+		<Box
+			sx={{
+				mt: '50px',
+				py: '100px',
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				background: 'linear-gradient(120deg, #006CFF, #5DA2FF)',
+				textAlign: 'center',
+			}}
+		>
+			<Typography
+				sx={{
+					maxWidth: '900px',
+					fontFamily: 'Manrope',
+					fontSize: '54px',
+					fontWeight: 700,
+					lineHeight: 1,
+					background: 'linear-gradient(90deg, #FFFFFF, #E0E0E0)',
+					WebkitBackgroundClip: 'text',
+					WebkitTextFillColor: 'transparent',
+				}}
+			>
+				{t('transfer')}
+			</Typography>
+			<Typography
+				sx={{
+					maxWidth: '510px',
+					mt: '30px',
+					fontFamily: 'Manrope',
+					fontSize: '22px',
+					fontWeight: 300,
+					lineHeight: 1,
+					color: '#EEEEEE',
+				}}
+			>
+				{t('leave contact')}
+			</Typography>
+			<Button
+				sx={{
+					width: '323px',
+					height: '65px',
+					mt: '40px',
+					backgroundColor: '#FFFFFF',
+					border: '1px solid #414141',
+					borderRadius: '8px',
+				}}
+			>
+				<Typography
+					sx={{
+						fontFamily: 'Manrope',
+						fontSize: '16px',
+						fontWeight: 600,
+						background: 'linear-gradient(90deg, #0044FF, #0B73FF)',
+						WebkitBackgroundClip: 'text',
+						WebkitTextFillColor: 'transparent',
+					}}
+				>
+					{t('get money')}
+				</Typography>
+			</Button>
+		</Box>
+	)
+}
+
+export default ConnectionBlock
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\ConnectionBlock\index.tsx
+----
+export { default } from './ConnectionBlock'
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\FAQBlock\FAQBlock.tsx
+----
+import { useState } from 'react'
+import { Box, Typography, IconButton, Collapse } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+
+const FAQBlock = () => {
+	const { t } = useTranslation()
+
+	const faqItems = [
+		{
+			question: t('get money'),
+			answer:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id faucibus nulla. Donec non ante sem. Donec lorem est, molestie eget finibus vitae, pulvinar nec leo.',
+		},
+		{
+			question: t('time'),
+			answer:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id faucibus nulla. Donec non ante sem. Donec lorem est, molestie eget finibus vitae, pulvinar nec leo.',
+		},
+		{
+			question: t('risks'),
+			answer:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id faucibus nulla. Donec non ante sem. Donec lorem est, molestie eget finibus vitae, pulvinar nec leo.',
+		},
+		{
+			question: t('commissions'),
+			answer:
+				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id faucibus nulla. Donec non ante sem. Donec lorem est, molestie eget finibus vitae, pulvinar nec leo.',
+		},
+	]
+
+	const [openIndex, setOpenIndex] = useState<number | null>(null)
+
+	const handleToggle = (index: number) => {
+		setOpenIndex(prev => (prev === index ? null : index))
+	}
+
+	return (
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				px: '50px',
+				pb: '150px',
+			}}
+		>
+			<Typography
+				sx={{
+					mt: '65px',
+					mb: '30px',
+					fontFamily: 'Public Sans',
+					fontStyle: 'italic',
+					fontSize: '55px',
+					fontWeight: 600,
+					lineHeight: 1,
+					color: '#000000',
+				}}
+			>
+				FAQ
+			</Typography>
+			<Box
+				sx={{
+					p: '35px 90px',
+					backgroundColor: '#242424',
+					borderRadius: '42px',
+				}}
+			>
+				{faqItems.map((item, index) => (
+					<Box
+						key={index}
+						sx={{
+							my: '15px',
+							borderRadius: '10px',
+							background: 'linear-gradient(90deg, #006CFF, #3AA2FF)',
+							color: '#FFFFFF',
+							overflow: 'hidden',
+							border: `1px solid #979797`,
+						}}
+					>
+						<Box
+							sx={{
+								height: '98px',
+								px: '32px',
+								display: 'flex',
+								justifyContent: 'space-between',
+								alignItems: 'center',
+								cursor: 'pointer',
+							}}
+							onClick={() => handleToggle(index)}
+						>
+							<Typography
+								sx={{
+									fontFamily: 'Manrope',
+									fontSize: '32px',
+									fontStyle: 'italic',
+									flexGrow: 1,
+									color: '#FFFFFF',
+									fontWeight: 300,
+								}}
+							>
+								{item.question}
+							</Typography>
+							<IconButton
+								sx={{
+									transform:
+										openIndex === index ? 'rotate(180deg)' : 'rotate(0deg)',
+									transition: '0.3s',
+								}}
+							>
+								<ExpandMoreIcon
+									sx={{
+										width: '40px',
+										height: '40px',
+										color: '#FFFFFF',
+									}}
+								/>
+							</IconButton>
+						</Box>
+
+						<Collapse in={openIndex === index} timeout='auto' unmountOnExit>
+							<Box
+								sx={{
+									p: '32px',
+									background: 'linear-gradient(90deg, #2D2D2D, #003277)',
+								}}
+							>
+								<Typography
+									sx={{
+										fontFamily: 'Manrope',
+										fontSize: '27px',
+										fontWeight: 200,
+										color: '#FFFFFF',
+										lineHeight: 1,
+									}}
+								>
+									{item.answer}
+								</Typography>
+							</Box>
+						</Collapse>
+					</Box>
+				))}
+			</Box>
+		</Box>
+	)
+}
+
+export default FAQBlock
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\FAQBlock\index.tsx
+----
+export { default } from './FAQBlock'
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\FeedbackBlock\FeedbackBlock.tsx
+----
+import React from 'react'
+import { Box, Typography, alpha } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import Slider from 'react-slick'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
+import Circle from '../Circle'
+
+// Кастомные стрелки
+const NextArrow = (props: any) => {
+	const { className, onClick } = props
+	return (
+		<div
+			className={className}
+			onClick={onClick}
+			style={{
+				right: '-30px',
+				zIndex: 1,
+				width: '30px',
+				height: '30px',
+				backgroundColor: '#2E2E2E',
+				borderRadius: '50%',
+			}}
+		>
+			<svg
+				width='32'
+				height='30'
+				viewBox='0 0 24 24'
+				fill='none'
+				xmlns='http://www.w3.org/2000/svg'
+			>
+				<path
+					d='M9 18L15 12L9 6'
+					stroke='#FFFFFF'
+					strokeWidth='2'
+					strokeLinecap='round'
+					strokeLinejoin='round'
+				/>
+			</svg>
+		</div>
+	)
+}
+
+const PrevArrow = (props: any) => {
+	const { className, onClick } = props
+	return (
+		<div
+			className={className}
+			onClick={onClick}
+			style={{
+				left: '-30px',
+				zIndex: 1,
+				width: '30px',
+				height: '30px',
+				backgroundColor: '#2E2E2E',
+				borderRadius: '50%',
+			}}
+		>
+			<svg
+				width='28'
+				height='30'
+				viewBox='0 0 24 24'
+				fill='none'
+				xmlns='http://www.w3.org/2000/svg'
+			>
+				<path
+					d='M15 18L9 12L15 6'
+					stroke='#FFFFFF'
+					strokeWidth='2'
+					strokeLinecap='round'
+					strokeLinejoin='round'
+				/>
+			</svg>
+		</div>
+	)
+}
+
+const FeedbackBlock = () => {
+	const { t } = useTranslation()
+	const [currentSlide, setCurrentSlide] = React.useState(0)
+	const [maxHeight, setMaxHeight] = React.useState(0)
+	const slideRefs = React.useRef<(HTMLDivElement | null)[]>([])
+	const setSlideRef = React.useCallback(
+		(index: number) => (el: HTMLDivElement | null) => {
+			if (el) slideRefs.current[index] = el
+		},
+		[]
+	)
+
+	const slides = [
+		{
+			name: t('Jessica'),
+			feedback: t('credit line'),
+		},
+		{
+			name: t('Jessica'),
+			feedback: t('credit line2'),
+		},
+		{
+			name: t('Jessica'),
+			feedback: t('credit line3'),
+		},
+	]
+
+	React.useEffect(() => {
+		const updateMaxHeight = () => {
+			const heights = slideRefs.current
+				.filter(ref => ref !== null)
+				.map(ref => ref?.clientHeight || 0)
+
+			const newMaxHeight = Math.max(...heights)
+			if (newMaxHeight > 0) {
+				setMaxHeight(newMaxHeight)
+			}
+		}
+
+		updateMaxHeight()
+		window.addEventListener('resize', updateMaxHeight)
+
+		return () => {
+			window.removeEventListener('resize', updateMaxHeight)
+		}
+	}, [])
+
+	const settings = {
+		dots: true,
+		infinite: true,
+		speed: 500,
+		slidesToShow: 3,
+		slidesToScroll: 1,
+		cssEase: 'linear',
+		pauseOnHover: true,
+		nextArrow: <NextArrow />,
+		prevArrow: <PrevArrow />,
+		beforeChange: (current: number, next: number) => setCurrentSlide(next),
+
+		responsive: [
+			{
+				breakpoint: 1281,
+				settings: {
+					slidesToShow: 3,
+					slidesToScroll: 1,
+					nextArrow: <NextArrow />,
+					prevArrow: <PrevArrow />,
+				},
+			},
+			{
+				breakpoint: 1025,
+				settings: {
+					slidesToShow: 3,
+					slidesToScroll: 1,
+					arrows: false,
+				},
+			},
+			{
+				breakpoint: 769,
+				settings: {
+					slidesToShow: 2,
+					slidesToScroll: 1,
+					arrows: false,
+				},
+			},
+		],
+	}
+
+	return (
+		<Box
+			sx={{
+				pt: '70px',
+				px: '50px',
+				pb: '40px',
+				display: 'flex',
+				flexDirection: 'column',
+				justifyContent: 'center',
+				alignItems: 'center',
+				position: 'relative',
+				overflow: 'hidden',
+			}}
+		>
+			<Box sx={{ display: 'flex', justifyContent: 'center', gap: '12px' }}>
+				<Typography
+					sx={{
+						fontFamily: 'Manrope',
+						fontSize: '42px',
+						fontWeight: 700,
+						lineHeight: 1,
+						background: 'linear-gradient(90deg, #0044FF, #74AFFF)',
+						WebkitBackgroundClip: 'text',
+						WebkitTextFillColor: 'transparent',
+					}}
+				>
+					{t('feedback')}
+				</Typography>
+				<Typography
+					sx={{
+						fontFamily: 'Manrope',
+						fontSize: '42px',
+						fontWeight: 700,
+						lineHeight: 1,
+						background: 'linear-gradient(90deg, #464646, #ACACAC)',
+						WebkitBackgroundClip: 'text',
+						WebkitTextFillColor: 'transparent',
+					}}
+				>
+					{t('customer')}
+				</Typography>
+			</Box>
+			<Box
+				sx={{
+					width: '100%',
+					py: '70px',
+					'& .slick-slider': {
+						display: 'flex',
+						alignItems: 'center',
+					},
+					'& .slick-list': {
+						overflow: 'hidden',
+						margin: '0 auto',
+						width: '100%',
+					},
+					'& .slick-track': {
+						display: 'flex',
+						alignItems: 'stretch',
+						justifyContent: 'center',
+					},
+					'& .slick-slide': {
+						padding: { xxs: '0 8px', sm: '0 12px' },
+						height: 'auto',
+						'& > div': {
+							height: '100%',
+						},
+					},
+					'& .slick-dots': {
+						bottom: '-28px !important',
+						'& li': {
+							margin: '0 !important',
+							'& button::before': {
+								display: 'none',
+							},
+						},
+					},
+					'& .slick-arrow': {
+						width: '20px',
+						height: '20px',
+						'&:before': {
+							display: 'none',
+						},
+						'&:hover, &:focus': {
+							opacity: 0.8,
+						},
+					},
+					'& .slick-prev': {
+						left: { xxs: '-25px', sm: '-30px', md: '-40px' },
+					},
+					'& .slick-next': {
+						right: { xxs: '-25px', sm: '-30px', md: '-40px' },
+					},
+				}}
+			>
+				<Slider {...settings}>
+					{slides.map((slide, index) => (
+						<Box
+							key={index}
+							sx={{
+								display: 'flex !important',
+								justifyContent: 'center',
+								height: '100%',
+							}}
+						>
+							<Box
+								component='div'
+								ref={setSlideRef(index)}
+								sx={{
+									width: '378px',
+									height: '232px',
+									display: 'flex',
+									flexDirection: 'column',
+									borderRadius: '15px',
+									bgcolor: '#FFFFFF',
+									color: '#000000',
+									overflow: 'hidden',
+								}}
+							>
+								<Box
+									sx={{
+										height: '100%',
+										display: 'flex',
+										flexDirection: 'column',
+									}}
+								>
+									<Box
+										sx={{
+											m: '20px 30px 0px 30px',
+											display: 'flex',
+											alignItems: 'center',
+											gap: '15px',
+										}}
+									>
+										<Circle size={55} color='#3AA2FF' />
+										<Box>
+											<Typography
+												sx={{
+													fontFamily: 'Manrope',
+													fontSize: '15px',
+													fontWeight: 700,
+													lineHeight: 1,
+												}}
+											>
+												{slide.name}
+											</Typography>
+											<Typography
+												sx={{
+													mt: '2px',
+													fontFamily: 'Manrope',
+													fontSize: '10px',
+													fontWeight: 400,
+													lineHeight: 1,
+												}}
+											>
+												Freelancer
+											</Typography>
+										</Box>
+									</Box>
+									<Typography
+										sx={{
+											m: '10px 30px 20px 30px',
+											fontFamily: 'Manrope',
+											fontSize: '13px',
+											fontStyle: 'italic',
+											flexGrow: 1,
+											overflow: 'hidden',
+										}}
+									>
+										{slide.feedback}
+									</Typography>
+								</Box>
+							</Box>
+						</Box>
+					))}
+				</Slider>
+			</Box>
+		</Box>
+	)
+}
+
+export default FeedbackBlock
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\FeedbackBlock\index.tsx
+----
+export { default } from './FeedbackBlock'
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\HowFixBlock\HowFixBlock.tsx
+----
+import { Box, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import { titleStyles, cardStyles, textStyles } from './style'
+
+const HowFixBlock = () => {
+	const { t } = useTranslation()
+
+	return (
+		<Box
+			sx={{
+				display: 'flex',
+				flexDirection: 'column',
+				alignItems: 'center',
+				overflow: 'hidden',
+			}}
+		>
+			<Typography
+				sx={{
+					background: 'linear-gradient(90deg, #74AFFF, #0096FF)',
+					...titleStyles,
+				}}
+			>
+				{t('why')}
+			</Typography>
+			<Typography
+				sx={{
+					background: 'linear-gradient(90deg, #A7A7A7, #3B3B3B)',
+					...titleStyles,
+				}}
+			>
+				{t('fix')}
+			</Typography>
+			<Typography
+				sx={{
+					maxWidth: '458px',
+					mt: '10px',
+					fontFamily: 'Manrope',
+					fontSize: '23px',
+					lineHeight: 1,
+					textAlign: 'center',
+					color: '#868686',
+				}}
+			>
+				{t('made it easy')}
+			</Typography>
+			<Box sx={{ width: '100%', position: 'relative' }}>
+				<Box
+					component='img'
+					src='vector-line.svg'
+					sx={{ minWidth: '1280px', width: '100%', display: 'block' }}
+				/>
+				<Box
+					sx={{
+						position: 'absolute',
+						top: '50%',
+						left: '50%',
+						transform: 'translate(-50%, -50%)',
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						gap: '80px',
+						width: '100%',
+						pointerEvents: 'none',
+					}}
+				>
+					<Box sx={{ ...cardStyles, transform: 'translateY(20px)' }}>
+						<Box component='img' src='cash.svg' sx={{ mt: '35px' }} />
+						<Typography sx={{ ...textStyles, maxWidth: '304px' }}>
+							{t('we know')}
+						</Typography>
+					</Box>
+					<Box sx={{ ...cardStyles, transform: 'translateY(-20px)' }}>
+						<Box component='img' src='no-cash.svg' sx={{ mt: '35px' }} />
+						<Typography sx={textStyles}>{t('too high')}</Typography>
+					</Box>
+				</Box>
+			</Box>
+		</Box>
+	)
+}
+
+export default HowFixBlock
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\HowFixBlock\index.tsx
+----
+export { default } from './HowFixBlock'
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\HowFixBlock\style.ts
+----
+export const titleStyles = {
+	fontFamily: 'Manrope',
+	fontSize: '57px',
+	fontWeight: 700,
+	lineHeight: 1,
+	textAlign: 'center',
+	WebkitBackgroundClip: 'text',
+	WebkitTextFillColor: 'transparent',
+}
+
+export const cardStyles = {
+	width: '397px',
+	height: '280px',
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: 'center',
+	background:
+		'linear-gradient(180deg, rgba(0, 62, 147, 0.75), rgba(0, 40, 84, 0.75))',
+	backdropFilter: 'blur(12px)',
+	WebkitBackdropFilter: 'blur(12px)',
+	borderRadius: '60px',
+	pointerEvents: 'auto',
+}
+
+export const textStyles = {
+	maxWidth: '320px',
+	mt: '20px',
+	fontFamily: 'Manrope',
+	fontSize: '18px',
+	fontWeight: 200,
+	lineHeight: 1.2,
+	color: '#FFFFFF',
+	textAlign: 'center',
+}
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\HowWorkBlock\HowWorkBlock.tsx
+----
+import Circle from '../Circle'
+import { Box, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import {
+	titleStyles,
+	numberStyles,
+	cardStyles,
+	descriptionStyles,
+} from './style'
+
+const HowWorkBlock = () => {
+	const { t } = useTranslation()
+
+	const steps = [
+		{
+			text: t('left'),
+			hasBreaks: true,
+		},
+		{
+			text: t('analyze'),
+		},
+		{
+			text: t('money arrives'),
+		},
+	]
+
+	return (
+		<Box>
+			<Box sx={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+				<Typography
+					sx={{
+						background: 'linear-gradient(90deg, #323030, #B1B1B1)',
+						...titleStyles,
+					}}
+				>
+					{t('how does')}
+				</Typography>
+				<Typography
+					sx={{
+						background: 'linear-gradient(90deg, #45A5FF, #31A0FF)',
+						...titleStyles,
+					}}
+				>
+					{t('it work')}
+				</Typography>
+			</Box>
+			<Box
+				sx={{
+					my: '50px',
+					position: 'relative',
+					display: 'flex',
+					justifyContent: 'center',
+					gap: '60px',
+				}}
+			>
+				{steps.map((step, index) => (
+					<Box key={index + 1} sx={cardStyles}>
+						<Typography
+							sx={{
+								background: 'linear-gradient(90deg, #111111, #B3B3B3)',
+								...numberStyles,
+							}}
+						>
+							{index + 1}
+						</Typography>
+						<Typography sx={descriptionStyles}>
+							{step.hasBreaks ? (
+								<>
+									<br />
+									{step.text}
+									<br />
+								</>
+							) : (
+								step.text
+							)}
+						</Typography>
+					</Box>
+				))}
+				<Circle
+					size={145}
+					color='linear-gradient(135deg, #0044FF, #77C4F9)'
+					sx={{
+						position: 'absolute',
+						top: '-70px',
+						right: '135px',
+						zIndex: -1,
+					}}
+				/>
+				<Circle
+					size={145}
+					color='linear-gradient(135deg, #0044FF, #77C4F9)'
+					sx={{
+						position: 'absolute',
+						bottom: '-35px',
+						left: '90px',
+						zIndex: -1,
+					}}
+				/>
+				<Circle
+					size={91}
+					color='linear-gradient(135deg, #0044FF, #77C4F9)'
+					sx={{
+						position: 'absolute',
+						bottom: '-40px',
+						right: '42%',
+						zIndex: -1,
+					}}
+				/>
+			</Box>
+		</Box>
+	)
+}
+
+export default HowWorkBlock
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\HowWorkBlock\index.tsx
+----
+export { default } from './HowWorkBlock'
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\HowWorkBlock\style.ts
+----
+export const titleStyles = {
+	fontFamily: 'Manrope',
+	fontSize: '73px',
+	fontWeight: 700,
+	textAlign: 'center',
+	WebkitBackgroundClip: 'text',
+	WebkitTextFillColor: 'transparent',
+}
+
+export const numberStyles = {
+	mt: '10px',
+	fontFamily: 'Public Sans',
+	fontSize: '96px',
+	fontWeight: 900,
+	lineHeight: 1,
+	textAlign: 'center',
+	WebkitBackgroundClip: 'text',
+	WebkitTextFillColor: 'transparent',
+}
+
+export const cardStyles = {
+	width: '284px',
+	height: '231px',
+	backgroundColor: '#FFFFFF',
+	border: '1px solid #9A9A9A',
+	borderRadius: '23px',
+	textAlign: 'center',
+}
+
+export const descriptionStyles = {
+	mt: '10px',
+	mx: '15px',
+	fontFamily: 'Manrope',
+	fontSize: '20px',
+	lineHeight: 1.1,
+	color: '#363636',
+}
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\index.tsx
+----
+export { default as BenefitsBlock } from './BenefitsBlock'
+export { default as CardBlock } from './CardBlock'
+export { default as ConnectionBlock } from './ConnectionBlock'
+export { default as FAQBlock } from './FAQBlock'
+export { default as FeedbackBlock } from './FeedbackBlock'
+export { default as HowFixBlock } from './HowFixBlock'
+export { default as HowWorkBlock } from './HowWorkBlock'
+export { default as LandingFooter } from './LandingFooter'
+export { default as LandingHeader } from './LandingHeader'
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\LandingFooter\index.tsx
+----
+export { default } from './LandingFooter'
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\LandingFooter\LandingFooter.tsx
+----
+import { Box, Button, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import {
+	footerStyles,
+	contactsBoxStyles,
+	contactTextStyles,
+	buttonStyles,
+} from './style'
+
+const LandingFooter = () => {
+	const { t } = useTranslation()
+
+	return (
+		<Box sx={footerStyles}>
+			<Box sx={{ display: 'flex', gap: '30px' }}>
+				<Box sx={contactsBoxStyles}>
+					<Typography
+						sx={{
+							...contactTextStyles,
+							color: '#3AA2FF',
+						}}
+					>
+						email:
+					</Typography>
+					<Typography
+						sx={{
+							...contactTextStyles,
+							color: '#FFFFFF',
+						}}
+					>
+						styxcash@gmail.com
+					</Typography>
+				</Box>
+				<Box sx={contactsBoxStyles}>
+					<Typography
+						sx={{
+							...contactTextStyles,
+							color: '#3AA2FF',
+						}}
+					>
+						{t('phone')}
+					</Typography>
+					<Typography
+						sx={{
+							...contactTextStyles,
+							color: '#3AA2FF',
+						}}
+					>
+						+ 1 123 456 78
+					</Typography>
+				</Box>
+			</Box>
+			<Button sx={buttonStyles}>{t('support')}</Button>
+		</Box>
+	)
+}
+
+export default LandingFooter
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\LandingFooter\style.ts
+----
+import { SxProps } from '@mui/material'
+
+export const footerStyles: SxProps = {
+	py: '50px',
+	display: 'flex',
+	flexDirection: 'column',
+	alignItems: 'center',
+	background: 'linear-gradient(120deg, #3B3B3B, #161A1A)',
+}
+
+export const contactsBoxStyles: SxProps = {
+	width: '335px',
+	height: '74px',
+	display: 'flex',
+	justifyContent: 'center',
+	alignItems: 'center',
+	gap: '8px',
+	borderRadius: '12px',
+	background: 'linear-gradient(120deg, #1D1D1D, #000000)',
+}
+
+export const contactTextStyles: SxProps = {
+	fontFamily: 'Manrope',
+	fontSize: '20px',
+	fontWeight: 300,
+}
+
+export const buttonStyles: SxProps = {
+	width: '335px',
+	height: '74px',
+	mt: '20px',
+	borderRadius: '12px',
+	fontFamily: 'Manrope',
+	fontSize: '20px',
+	fontWeight: 300,
+	color: '#3AA2FF',
+	textTransform: 'none',
+	background: 'linear-gradient(120deg, #1D1D1D, #000000)',
+}
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\LandingHeader\index.tsx
+----
+export { default } from './LandingHeader'
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\components\LandingHeader\LandingHeader.tsx
+----
+import { useState } from 'react'
+import { LanguageSwitcher } from '@/components'
+import { Box, IconButton, Typography } from '@mui/material'
+import { RegisterModal } from '@/pages'
+
+const LandingHeader = () => {
+	const [modalOpen, setModalOpen] = useState(false)
+	return (
+		<Box
+			sx={{
+				width: '100%',
+				py: '20px',
+				position: 'fixed',
+				display: 'flex',
+				justifyContent: 'space-between',
+				backgroundColor: '#FFFFFF',
+				zIndex: 100,
+			}}
+		>
+			<Box
+				sx={{
+					width: 'fit-content',
+					ml: '50px',
+					p: '10px',
+					bgcolor: '#EFEFEF',
+					borderRadius: '30px',
+				}}
+			>
+				<Typography
+					sx={{
+						fontFamily: 'Benzin',
+						fontSize: '16px',
+						fontWeight: 700,
+						lineHeight: '31px',
+						background: 'linear-gradient(90deg, #0044FF, #002999)',
+						WebkitBackgroundClip: 'text',
+						WebkitTextFillColor: 'transparent',
+						display: 'inline-block',
+					}}
+				>
+					Styx Cash
+				</Typography>
+			</Box>
+			<Box
+				sx={{ mr: '50px', display: 'flex', alignItems: 'center', gap: '20px' }}
+			>
+				<LanguageSwitcher />
+				<IconButton onClick={() => setModalOpen(true)}>
+					<Box component='img' src='person.svg' />
+				</IconButton>
+			</Box>
+			<RegisterModal open={modalOpen} onClose={() => setModalOpen(false)} />
+		</Box>
+	)
+}
+
+export default LandingHeader
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\index.tsx
+----
+export { default } from './LandingPage'
+
+----
+D:\Coding\styx-cash\src\pages\LandingPage\LandingPage.tsx
+----
+import { Box } from '@mui/material'
+import {
+	BenefitsBlock,
+	CardBlock,
+	ConnectionBlock,
+	FAQBlock,
+	FeedbackBlock,
+	HowFixBlock,
+	HowWorkBlock,
+	LandingFooter,
+	LandingHeader,
+} from './components'
+
+const LandingPage = () => {
+	return (
+		<Box>
+			<LandingHeader />
+			<Box sx={{ height: '84px' }} />
+			<CardBlock />
+			<HowFixBlock />
+			<HowWorkBlock />
+			<BenefitsBlock />
+			<ConnectionBlock />
+			<FeedbackBlock />
+			<FAQBlock />
+			<LandingFooter />
+		</Box>
+	)
+}
+
+export default LandingPage
+
+----
+D:\Coding\styx-cash\src\pages\NotFoundPage\index.tsx
+----
+export { default } from './NotFoundPage'
+
+----
+D:\Coding\styx-cash\src\pages\NotFoundPage\NotFoundPage.tsx
+----
+import { Typography } from '@mui/material'
+
+const NotFoundPage = () => {
+	return <Typography variant='h4'>Ошибка 404 - Страница не найдена</Typography>
+}
+
+export default NotFoundPage
+
+----
+D:\Coding\styx-cash\src\pages\ProfilePage\index.tsx
+----
+export { default } from './ProfilePage'
+
+----
+D:\Coding\styx-cash\src\pages\ProfilePage\ProfilePage.tsx
+----
+const ProfilePage = () => {
+	return <div>ProfilePage</div>
+}
+
+export default ProfilePage
+
+----
+D:\Coding\styx-cash\src\pages\RegisterModal\countries.json
+----
+[
+	{ "code": "AF", "label": "Afghanistan" },
+	{ "code": "AL", "label": "Albania" },
+	{ "code": "DZ", "label": "Algeria" },
+	{ "code": "AS", "label": "American Samoa" },
+	{ "code": "AD", "label": "Andorra" },
+	{ "code": "AO", "label": "Angola" },
+	{ "code": "AI", "label": "Anguilla" },
+	{ "code": "AQ", "label": "Antarctica" },
+	{ "code": "AG", "label": "Antigua and Barbuda" },
+	{ "code": "AR", "label": "Argentina" },
+	{ "code": "AM", "label": "Armenia" },
+	{ "code": "AW", "label": "Aruba" },
+	{ "code": "AU", "label": "Australia" },
+	{ "code": "AT", "label": "Austria" },
+	{ "code": "AZ", "label": "Azerbaijan" },
+	{ "code": "BS", "label": "Bahamas" },
+	{ "code": "BH", "label": "Bahrain" },
+	{ "code": "BD", "label": "Bangladesh" },
+	{ "code": "BB", "label": "Barbados" },
+	{ "code": "BY", "label": "Belarus" },
+	{ "code": "BE", "label": "Belgium" },
+	{ "code": "BZ", "label": "Belize" },
+	{ "code": "BJ", "label": "Benin" },
+	{ "code": "BM", "label": "Bermuda" },
+	{ "code": "BT", "label": "Bhutan" },
+	{ "code": "BO", "label": "Bolivia" },
+	{ "code": "BA", "label": "Bosnia and Herzegovina" },
+	{ "code": "BW", "label": "Botswana" },
+	{ "code": "BR", "label": "Brazil" },
+	{ "code": "BN", "label": "Brunei Darussalam" },
+	{ "code": "BG", "label": "Bulgaria" },
+	{ "code": "BF", "label": "Burkina Faso" },
+	{ "code": "BI", "label": "Burundi" },
+	{ "code": "KH", "label": "Cambodia" },
+	{ "code": "CM", "label": "Cameroon" },
+	{ "code": "CA", "label": "Canada" },
+	{ "code": "CV", "label": "Cape Verde" },
+	{ "code": "CF", "label": "Central African Republic" },
+	{ "code": "TD", "label": "Chad" },
+	{ "code": "CL", "label": "Chile" },
+	{ "code": "CN", "label": "China" },
+	{ "code": "CO", "label": "Colombia" },
+	{ "code": "KM", "label": "Comoros" },
+	{ "code": "CG", "label": "Congo" },
+	{ "code": "CD", "label": "Congo, Democratic Republic" },
+	{ "code": "CR", "label": "Costa Rica" },
+	{ "code": "CI", "label": "Côte d'Ivoire" },
+	{ "code": "HR", "label": "Croatia" },
+	{ "code": "CU", "label": "Cuba" },
+	{ "code": "CY", "label": "Cyprus" },
+	{ "code": "CZ", "label": "Czech Republic" },
+	{ "code": "DK", "label": "Denmark" },
+	{ "code": "DJ", "label": "Djibouti" },
+	{ "code": "DM", "label": "Dominica" },
+	{ "code": "DO", "label": "Dominican Republic" },
+	{ "code": "EC", "label": "Ecuador" },
+	{ "code": "EG", "label": "Egypt" },
+	{ "code": "SV", "label": "El Salvador" },
+	{ "code": "GQ", "label": "Equatorial Guinea" },
+	{ "code": "ER", "label": "Eritrea" },
+	{ "code": "EE", "label": "Estonia" },
+	{ "code": "ET", "label": "Ethiopia" },
+	{ "code": "FJ", "label": "Fiji" },
+	{ "code": "FI", "label": "Finland" },
+	{ "code": "FR", "label": "France" },
+	{ "code": "GA", "label": "Gabon" },
+	{ "code": "GM", "label": "Gambia" },
+	{ "code": "GE", "label": "Georgia" },
+	{ "code": "DE", "label": "Germany" },
+	{ "code": "GH", "label": "Ghana" },
+	{ "code": "GR", "label": "Greece" },
+	{ "code": "GT", "label": "Guatemala" },
+	{ "code": "GN", "label": "Guinea" },
+	{ "code": "GW", "label": "Guinea-Bissau" },
+	{ "code": "GY", "label": "Guyana" },
+	{ "code": "HT", "label": "Haiti" },
+	{ "code": "HN", "label": "Honduras" },
+	{ "code": "HK", "label": "Hong Kong" },
+	{ "code": "HU", "label": "Hungary" },
+	{ "code": "IS", "label": "Iceland" },
+	{ "code": "IN", "label": "India" },
+	{ "code": "ID", "label": "Indonesia" },
+	{ "code": "IR", "label": "Iran" },
+	{ "code": "IQ", "label": "Iraq" },
+	{ "code": "IE", "label": "Ireland" },
+	{ "code": "IL", "label": "Israel" },
+	{ "code": "IT", "label": "Italy" },
+	{ "code": "JM", "label": "Jamaica" },
+	{ "code": "JP", "label": "Japan" },
+	{ "code": "JO", "label": "Jordan" },
+	{ "code": "KZ", "label": "Kazakhstan" },
+	{ "code": "KE", "label": "Kenya" },
+	{ "code": "KI", "label": "Kiribati" },
+	{ "code": "KR", "label": "Korea, South" },
+	{ "code": "KW", "label": "Kuwait" },
+	{ "code": "KG", "label": "Kyrgyzstan" },
+	{ "code": "LA", "label": "Laos" },
+	{ "code": "LV", "label": "Latvia" },
+	{ "code": "LB", "label": "Lebanon" },
+	{ "code": "LS", "label": "Lesotho" },
+	{ "code": "LR", "label": "Liberia" },
+	{ "code": "LY", "label": "Libya" },
+	{ "code": "LI", "label": "Liechtenstein" },
+	{ "code": "LT", "label": "Lithuania" },
+	{ "code": "LU", "label": "Luxembourg" },
+	{ "code": "MO", "label": "Macao" },
+	{ "code": "MK", "label": "North Macedonia" },
+	{ "code": "MG", "label": "Madagascar" },
+	{ "code": "MW", "label": "Malawi" },
+	{ "code": "MY", "label": "Malaysia" },
+	{ "code": "MV", "label": "Maldives" },
+	{ "code": "ML", "label": "Mali" },
+	{ "code": "MT", "label": "Malta" },
+	{ "code": "MH", "label": "Marshall Islands" },
+	{ "code": "MR", "label": "Mauritania" },
+	{ "code": "MU", "label": "Mauritius" },
+	{ "code": "MX", "label": "Mexico" },
+	{ "code": "FM", "label": "Micronesia" },
+	{ "code": "MD", "label": "Moldova" },
+	{ "code": "MC", "label": "Monaco" },
+	{ "code": "MN", "label": "Mongolia" },
+	{ "code": "ME", "label": "Montenegro" },
+	{ "code": "MA", "label": "Morocco" },
+	{ "code": "MZ", "label": "Mozambique" },
+	{ "code": "MM", "label": "Myanmar" },
+	{ "code": "NA", "label": "Namibia" },
+	{ "code": "NR", "label": "Nauru" },
+	{ "code": "NP", "label": "Nepal" },
+	{ "code": "NL", "label": "Netherlands" },
+	{ "code": "NZ", "label": "New Zealand" },
+	{ "code": "NI", "label": "Nicaragua" },
+	{ "code": "NE", "label": "Niger" },
+	{ "code": "NG", "label": "Nigeria" },
+	{ "code": "NO", "label": "Norway" },
+	{ "code": "OM", "label": "Oman" },
+	{ "code": "PK", "label": "Pakistan" },
+	{ "code": "PW", "label": "Palau" },
+	{ "code": "PA", "label": "Panama" },
+	{ "code": "PG", "label": "Papua New Guinea" },
+	{ "code": "PY", "label": "Paraguay" },
+	{ "code": "PE", "label": "Peru" },
+	{ "code": "PH", "label": "Philippines" },
+	{ "code": "PL", "label": "Poland" },
+	{ "code": "PT", "label": "Portugal" },
+	{ "code": "QA", "label": "Qatar" },
+	{ "code": "RO", "label": "Romania" },
+	{ "code": "RU", "label": "Russia" },
+	{ "code": "RW", "label": "Rwanda" },
+	{ "code": "KN", "label": "Saint Kitts and Nevis" },
+	{ "code": "LC", "label": "Saint Lucia" },
+	{ "code": "VC", "label": "Saint Vincent and the Grenadines" },
+	{ "code": "WS", "label": "Samoa" },
+	{ "code": "SM", "label": "San Marino" },
+	{ "code": "ST", "label": "Sao Tome and Principe" },
+	{ "code": "SA", "label": "Saudi Arabia" },
+	{ "code": "SN", "label": "Senegal" },
+	{ "code": "RS", "label": "Serbia" },
+	{ "code": "SC", "label": "Seychelles" },
+	{ "code": "SL", "label": "Sierra Leone" },
+	{ "code": "SG", "label": "Singapore" },
+	{ "code": "SK", "label": "Slovakia" },
+	{ "code": "SI", "label": "Slovenia" },
+	{ "code": "SB", "label": "Solomon Islands" },
+	{ "code": "SO", "label": "Somalia" },
+	{ "code": "ZA", "label": "South Africa" },
+	{ "code": "ES", "label": "Spain" },
+	{ "code": "LK", "label": "Sri Lanka" },
+	{ "code": "SD", "label": "Sudan" },
+	{ "code": "SR", "label": "Suriname" },
+	{ "code": "SE", "label": "Sweden" },
+	{ "code": "CH", "label": "Switzerland" },
+	{ "code": "SY", "label": "Syria" },
+	{ "code": "TW", "label": "Taiwan" },
+	{ "code": "TJ", "label": "Tajikistan" },
+	{ "code": "TZ", "label": "Tanzania" },
+	{ "code": "TH", "label": "Thailand" },
+	{ "code": "TG", "label": "Togo" },
+	{ "code": "TO", "label": "Tonga" },
+	{ "code": "TT", "label": "Trinidad and Tobago" },
+	{ "code": "TN", "label": "Tunisia" },
+	{ "code": "TR", "label": "Turkey" },
+	{ "code": "TM", "label": "Turkmenistan" },
+	{ "code": "TV", "label": "Tuvalu" },
+	{ "code": "UG", "label": "Uganda" },
+	{ "code": "UA", "label": "Ukraine" },
+	{ "code": "AE", "label": "United Arab Emirates" },
+	{ "code": "GB", "label": "United Kingdom" },
+	{ "code": "US", "label": "United States" },
+	{ "code": "UY", "label": "Uruguay" },
+	{ "code": "UZ", "label": "Uzbekistan" },
+	{ "code": "VU", "label": "Vanuatu" },
+	{ "code": "VE", "label": "Venezuela" },
+	{ "code": "VN", "label": "Vietnam" },
+	{ "code": "YE", "label": "Yemen" },
+	{ "code": "ZM", "label": "Zambia" },
+	{ "code": "ZW", "label": "Zimbabwe" }
+]
+
+----
+D:\Coding\styx-cash\src\pages\RegisterModal\index.tsx
+----
+export { default } from './RegisterModal'
+
+----
+D:\Coding\styx-cash\src\pages\RegisterModal\RegisterModal.tsx
+----
+import React from 'react'
+import {
+	Dialog,
+	DialogContent,
+	DialogActions,
+	Button,
+	TextField,
+	IconButton,
+	Typography,
+	Checkbox,
+	Box,
+	CircularProgress,
+	Autocomplete,
+} from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import { useTranslation } from 'react-i18next'
+
+import countries from './countries.json'
+import { useRegisterModal } from './useRegisterModal'
+import { AuthModalProps } from './types'
+import {
+	dialogStyles,
+	closeButtonStyles,
+	textFieldStyles,
+	agreementTextStyles,
+	linkStyles,
+	primaryButtonStyles,
+	secondaryButtonStyles,
+	footerTextStyles,
+} from './styles'
+
+const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
+	const { t } = useTranslation()
+	const {
+		isLoginForm,
+		email,
+		password,
+		confirmPassword,
+		firstName,
+		lastName,
+		phone,
+		country,
+		agree,
+		loading,
+		error,
+		setEmail,
+		setPassword,
+		setConfirmPassword,
+		setFirstName,
+		setLastName,
+		setPhone,
+		setCountry,
+		setAgree,
+		handlePhoneChange,
+		handleSubmit,
+		switchAuthMode,
+		resetForm,
+	} = useRegisterModal()
+
+	const handleClose = () => {
+		resetForm()
+		onClose()
+	}
+
+	return (
+		<Dialog
+			open={open}
+			onClose={handleClose}
+			maxWidth='xs'
+			fullWidth
+			PaperProps={dialogStyles.PaperProps}
+		>
+			<IconButton onClick={handleClose} sx={closeButtonStyles}>
+				<CloseIcon />
+			</IconButton>
+
+			<form onSubmit={handleSubmit}>
+				<DialogContent sx={{ mt: '30px', pb: 0 }}>
+					{error && (
+						<Typography color='error' gutterBottom>
+							{error}
+						</Typography>
+					)}
+
+					{!isLoginForm && (
+						<>
+							<TextField
+								variant='standard'
+								required
+								fullWidth
+								placeholder={t('name')}
+								value={firstName}
+								onChange={e => setFirstName(e.target.value)}
+								sx={textFieldStyles}
+							/>
+							<TextField
+								variant='standard'
+								required
+								fullWidth
+								placeholder={t('surname')}
+								value={lastName}
+								onChange={e => setLastName(e.target.value)}
+								sx={textFieldStyles}
+							/>
+						</>
+					)}
+
+					<TextField
+						variant='standard'
+						required
+						fullWidth
+						placeholder={isLoginForm ? t('your email') : 'Email'}
+						type='email'
+						autoComplete='email'
+						value={email}
+						onChange={e => setEmail(e.target.value)}
+						disabled={loading}
+						sx={textFieldStyles}
+					/>
+
+					{!isLoginForm && (
+						<>
+							<TextField
+								variant='standard'
+								required
+								fullWidth
+								placeholder={t('phone number')}
+								value={phone}
+								onChange={e => handlePhoneChange(e.target.value)}
+								// inputProps={{
+								// 	pattern: '[0-9]*',
+								// }}
+								sx={textFieldStyles}
+							/>
+
+							<Autocomplete
+								options={countries}
+								getOptionLabel={option => option.label}
+								value={country}
+								onChange={(_, newValue) => setCountry(newValue)}
+								renderInput={params => (
+									<TextField
+										{...params}
+										variant='standard'
+										placeholder={t('country')}
+										required
+									/>
+								)}
+								sx={{ mb: 2 }}
+							/>
+						</>
+					)}
+
+					<TextField
+						variant='standard'
+						required
+						fullWidth
+						placeholder={isLoginForm ? t('password') : t('make up password')}
+						type='password'
+						autoComplete={isLoginForm ? 'current-password' : 'new-password'}
+						value={password}
+						onChange={e => setPassword(e.target.value)}
+						disabled={loading}
+						sx={textFieldStyles}
+					/>
+
+					{!isLoginForm && (
+						<>
+							<TextField
+								variant='standard'
+								required
+								fullWidth
+								placeholder={t('repeat password')}
+								type='password'
+								autoComplete='new-password'
+								value={confirmPassword}
+								onChange={e => setConfirmPassword(e.target.value)}
+								error={password !== confirmPassword && confirmPassword !== ''}
+								disabled={loading}
+								sx={textFieldStyles}
+							/>
+
+							<Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
+								<Checkbox
+									checked={agree}
+									onChange={e => setAgree(e.target.checked)}
+									disabled={loading}
+									sx={{ mt: '-9px', ml: '-11px' }}
+								/>
+								<Typography sx={agreementTextStyles}>
+									{t('aknowledge')}{' '}
+									<span style={linkStyles}>{t('agreement')}</span> {t('and')}{' '}
+									<span style={linkStyles}>{t('statement')}</span>{' '}
+									{t('legal age')}
+								</Typography>
+							</Box>
+						</>
+					)}
+
+					{isLoginForm && (
+						<Typography sx={{ ...footerTextStyles, cursor: 'pointer' }}>
+							{t('forgot password')}
+						</Typography>
+					)}
+				</DialogContent>
+
+				<DialogActions sx={{ flexDirection: 'column', px: 3, pb: 3, pt: 0 }}>
+					<Button
+						type='submit'
+						fullWidth
+						variant='contained'
+						disabled={loading}
+						sx={primaryButtonStyles}
+					>
+						{loading ? (
+							<CircularProgress size={24} color='inherit' />
+						) : isLoginForm ? (
+							t('log in')
+						) : (
+							t('register')
+						)}
+					</Button>
+
+					{isLoginForm && (
+						<Typography sx={footerTextStyles}>
+							{t('log in button')}{' '}
+							<span style={{ textDecoration: 'underline', cursor: 'pointer' }}>
+								{t('personal data')}
+							</span>
+						</Typography>
+					)}
+
+					<Typography sx={{ ...footerTextStyles, cursor: 'pointer' }}>
+						{isLoginForm ? t('no account') : t('have account')}
+					</Typography>
+
+					<Button
+						fullWidth
+						variant='outlined'
+						onClick={switchAuthMode}
+						disabled={loading}
+						sx={secondaryButtonStyles}
+					>
+						{isLoginForm ? t('register') : t('log in')}
+					</Button>
+				</DialogActions>
+			</form>
+		</Dialog>
+	)
+}
+
+export default React.memo(RegisterModal)
+
+----
+D:\Coding\styx-cash\src\pages\RegisterModal\styles.ts
+----
+export const dialogStyles = {
+	PaperProps: { sx: { borderRadius: '20px' } },
+}
+
+export const closeButtonStyles = {
+	position: 'absolute',
+	top: '5px',
+	right: '5px',
+}
+
+export const textFieldStyles = {
+	mb: 2,
+	InputProps: {
+		sx: { fontFamily: 'Manrope' },
+	},
+}
+
+export const agreementTextStyles = {
+	fontSize: '12px',
+	fontFamily: 'Manrope',
+	color: '#0C0C0C90',
+}
+
+export const linkStyles = {
+	fontWeight: 500,
+	color: '#0044FF',
+}
+
+export const primaryButtonStyles = {
+	height: '56px',
+	mt: '20px',
+	border: '1px solid #414141',
+	borderRadius: '6px',
+	background: 'linear-gradient(90deg, #58A9FF, #0044FF)',
+	fontFamily: 'Manrope',
+	fontSize: '22px',
+	fontWeight: 500,
+	textTransform: 'none',
+}
+
+export const secondaryButtonStyles = {
+	height: '56px',
+	mt: '10px',
+	border: '1px solid #414141',
+	borderRadius: '6px',
+	fontFamily: 'Manrope',
+	fontSize: '22px',
+	fontWeight: 500,
+	textTransform: 'none',
+	color: '#333333',
+}
+
+export const footerTextStyles = {
+	width: '100%',
+	mt: '20px',
+	fontFamily: 'Manrope',
+	fontSize: '12px',
+	fontWeight: 300,
+	color: '#0C0C0C90',
+}
+
+----
+D:\Coding\styx-cash\src\pages\RegisterModal\types.ts
+----
+export interface CountryOption {
+	code: string
+	label: string
+}
+
+export interface AuthModalProps {
+	open: boolean
+	onClose: () => void
+}
+
+----
+D:\Coding\styx-cash\src\pages\RegisterModal\useRegisterModal.ts
+----
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { CountryOption } from './types'
+import routes from '@/router/routes.json'
+
+export const useRegisterModal = () => {
+	const navigate = useNavigate()
+	const [isLoginForm, setIsLoginForm] = useState(true)
+	const [email, setEmail] = useState('')
+	const [password, setPassword] = useState('')
+	const [confirmPassword, setConfirmPassword] = useState('')
+	const [firstName, setFirstName] = useState('')
+	const [lastName, setLastName] = useState('')
+	const [phone, setPhone] = useState('')
+	const [country, setCountry] = useState<CountryOption | null>(null)
+	const [agree, setAgree] = useState(false)
+	const [loading, setLoading] = useState(false)
+	const [error, setError] = useState('')
+
+	const resetForm = () => {
+		setEmail('')
+		setPassword('')
+		setConfirmPassword('')
+		setFirstName('')
+		setLastName('')
+		setPhone('')
+		setCountry(null)
+		setAgree(false)
+		setError('')
+	}
+
+	const handlePhoneChange = (value: string) => {
+		const digits = value.replace(/\D/g, '')
+		setPhone(digits.length === 0 ? '' : `+${digits}`)
+	}
+
+	const switchAuthMode = () => {
+		setIsLoginForm(!isLoginForm)
+		resetForm()
+	}
+
+	const handleSubmit = async (e: React.FormEvent) => {
+		e.preventDefault()
+		setLoading(true)
+		setError('')
+
+		try {
+			if (!email || !password) throw new Error('Заполните все поля')
+
+			if (!isLoginForm) {
+				if (!firstName || !lastName || !phone || !country) {
+					throw new Error('Заполните все поля регистрации')
+				}
+				if (password !== confirmPassword) {
+					throw new Error('Пароли не совпадают')
+				}
+				if (!agree) {
+					throw new Error('Подтвердите согласие')
+				}
+			}
+
+			await new Promise(resolve => setTimeout(resolve, 1000))
+
+			navigate(routes.HomePage.path)
+
+			if (isLoginForm) {
+				console.log('Логин с:', email, password)
+			} else {
+				console.log('Регистрация с:', {
+					email,
+					password,
+					firstName,
+					lastName,
+					phone,
+					country,
+				})
+			}
+		} catch (err) {
+			setError(err instanceof Error ? err.message : 'Произошла ошибка')
+		} finally {
+			setLoading(false)
+		}
+	}
+
+	return {
+		isLoginForm,
+		email,
+		password,
+		confirmPassword,
+		firstName,
+		lastName,
+		phone,
+		country,
+		agree,
+		loading,
+		error,
+		setEmail,
+		setPassword,
+		setConfirmPassword,
+		setFirstName,
+		setLastName,
+		setPhone,
+		setCountry,
+		setAgree,
+		handlePhoneChange,
+		handleSubmit,
+		switchAuthMode,
+		resetForm,
+	}
+}
+
+----
+D:\Coding\styx-cash\src\pages\TopUpPage\index.tsx
+----
+export { default } from './TopUpPage'
+
+----
+D:\Coding\styx-cash\src\pages\TopUpPage\TopUpPage.tsx
+----
+const TopUpPage = () => {
+	return <div>TopUpPage</div>
+}
+
+export default TopUpPage
+
+----
+D:\Coding\styx-cash\src\pages\transactions.json
+----
+[
+	{
+		"id": "100001",
+		"date": "25.06.25 12:34",
+		"status": "Completed",
+		"type": "Deposit",
+		"paymentMethod": "PayPal",
+		"amount": 1500,
+		"balance": 4500
+	},
+	{
+		"id": "100002",
+		"date": "24.06.25 09:12",
+		"status": "Pending",
+		"type": "Withdrawal",
+		"paymentMethod": "Wire transfer",
+		"amount": 3200,
+		"balance": 6700
+	},
+	{
+		"id": "100003",
+		"date": "23.06.25 18:47",
+		"status": "Canceled",
+		"type": "Deposit",
+		"paymentMethod": "Zelle",
+		"amount": 800,
+		"balance": 1900
+	},
+	{
+		"id": "100004",
+		"date": "22.06.25 14:30",
+		"status": "Completed",
+		"type": "Withdrawal",
+		"paymentMethod": "Wallet",
+		"amount": 5000,
+		"balance": 10000,
+		"wallet": "wal12345678abcdef12345678"
+	},
+	{
+		"id": "100005",
+		"date": "21.06.25 11:15",
+		"status": "Pending",
+		"type": "Deposit",
+		"paymentMethod": "PayPal",
+		"amount": 275,
+		"balance": 1275
+	},
+	{
+		"id": "100006",
+		"date": "20.06.25 16:44",
+		"status": "Completed",
+		"type": "Deposit",
+		"paymentMethod": "Zelle",
+		"amount": 650,
+		"balance": 1800
+	},
+	{
+		"id": "100007",
+		"date": "19.06.25 13:10",
+		"status": "Canceled",
+		"type": "Withdrawal",
+		"paymentMethod": "Wire transfer",
+		"amount": 210000,
+		"balance": 4300000
+	},
+	{
+		"id": "100008",
+		"date": "18.06.25 17:05",
+		"status": "Completed",
+		"type": "Withdrawal",
+		"paymentMethod": "Wallet",
+		"amount": 1500,
+		"balance": 2900,
+		"wallet": "wal7890qwerty4567zxcvb"
+	},
+	{
+		"id": "100009",
+		"date": "17.06.25 19:00",
+		"status": "Completed",
+		"type": "Deposit",
+		"paymentMethod": "PayPal",
+		"amount": 320,
+		"balance": 850
+	},
+	{
+		"id": "100010",
+		"date": "16.06.25 08:25",
+		"status": "Pending",
+		"type": "Withdrawal",
+		"paymentMethod": "Zelle",
+		"amount": 900,
+		"balance": 2400
+	},
+	{
+		"id": "100011",
+		"date": "15.06.25 21:45",
+		"status": "Completed",
+		"type": "Deposit",
+		"paymentMethod": "Wallet",
+		"amount": 2000,
+		"balance": 4800,
+		"wallet": "walwxyzabc123456"
+	},
+	{
+		"id": "100012",
+		"date": "14.06.25 10:10",
+		"status": "Canceled",
+		"type": "Withdrawal",
+		"paymentMethod": "PayPal",
+		"amount": 300,
+		"balance": 700
+	},
+	{
+		"id": "100013",
+		"date": "13.06.25 13:33",
+		"status": "Pending",
+		"type": "Deposit",
+		"paymentMethod": "Wire transfer",
+		"amount": 1250,
+		"balance": 3750
+	},
+	{
+		"id": "100014",
+		"date": "12.06.25 15:20",
+		"status": "Completed",
+		"type": "Withdrawal",
+		"paymentMethod": "Zelle",
+		"amount": 1900,
+		"balance": 5600
+	},
+	{
+		"id": "100015",
+		"date": "11.06.25 07:30",
+		"status": "Canceled",
+		"type": "Deposit",
+		"paymentMethod": "Wallet",
+		"amount": 1100,
+		"balance": 3100,
+		"wallet": "walcancel987654321"
+	},
+	{
+		"id": "100016",
+		"date": "10.06.25 22:11",
+		"status": "Completed",
+		"type": "Deposit",
+		"paymentMethod": "PayPal",
+		"amount": 500,
+		"balance": 1450
+	},
+	{
+		"id": "100017",
+		"date": "09.06.25 05:50",
+		"status": "Pending",
+		"type": "Withdrawal",
+		"paymentMethod": "Wire transfer",
+		"amount": 2200,
+		"balance": 4000
+	},
+	{
+		"id": "100018",
+		"date": "08.06.25 11:11",
+		"status": "Completed",
+		"type": "Withdrawal",
+		"paymentMethod": "Zelle",
+		"amount": 1000,
+		"balance": 3600
+	},
+	{
+		"id": "100019",
+		"date": "07.06.25 20:20",
+		"status": "Completed",
+		"type": "Deposit",
+		"paymentMethod": "Wallet",
+		"amount": 1700,
+		"balance": 4900,
+		"wallet": "walletxyz0987654321"
+	},
+	{
+		"id": "100020",
+		"date": "06.06.25 06:06",
+		"status": "Canceled",
+		"type": "Withdrawal",
+		"paymentMethod": "PayPal",
+		"amount": 750,
+		"balance": 1400
+	}
+]
+
+----
+D:\Coding\styx-cash\src\pages\TransactionsPage\index.tsx
+----
+export { default } from './TransactionsPage'
+
+----
+D:\Coding\styx-cash\src\pages\TransactionsPage\TransactionsPage.tsx
+----
+import { Box, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import jsonTransactions from '@/pages/transactions.json'
+import { TransactionCard } from '@/components'
+import { TransactionCardProps } from '@/components/TransactionCard/TransactionCard'
+
+const TransactionsPage = () => {
+	const { t } = useTranslation()
+
+	const parseDate = (dateStr: string) => {
+		const [day, month, yearAndTime] = dateStr.split('.')
+		const [year, time] = yearAndTime.split(' ')
+		return new Date(`20${year}-${month}-${day}T${time}`)
+	}
+
+	const sortedTransactions = [
+		...(jsonTransactions as TransactionCardProps[]),
+	].sort((a, b) => parseDate(b.date).getTime() - parseDate(a.date).getTime())
+
+	return (
+		<Box>
+			<Typography
+				sx={{
+					ml: '2px',
+					fontFamily: 'Manrope',
+					fontSize: '14px',
+				}}
+			>
+				<span style={{ opacity: 0.5 }}>{t('home')}</span> |{' '}
+				{t('transaction history')}
+			</Typography>
+			<Typography
+				sx={{
+					mt: '60px',
+					fontFamily: 'Manrope',
+					fontSize: '22px',
+					fontWeight: 700,
+					lineHeight: 1,
+					textTransform: 'uppercase',
+				}}
+			>
+				{t('transaction history')}
+			</Typography>
+			<Box
+				sx={{
+					mt: '40px',
+					display: 'flex',
+					flexDirection: 'column',
+					gap: '25px',
+				}}
+			>
+				{sortedTransactions.map(tx => (
+					<TransactionCard key={`${tx.id}-${tx.date}`} {...tx} />
+				))}
+			</Box>
+		</Box>
+	)
+}
+
+export default TransactionsPage
+
+----
+D:\Coding\styx-cash\src\pages\WithdrawPage\index.tsx
+----
+export { default } from './WithdrawPage'
+
+----
+D:\Coding\styx-cash\src\pages\WithdrawPage\WithdrawPage.tsx
+----
+const WithdrawPage = () => {
+	return <div>WithdrawPage</div>
+}
+
+export default WithdrawPage
+
+----
+D:\Coding\styx-cash\src\router\ProtectedRoute.tsx
+----
+import { Navigate } from 'react-router-dom'
+
+interface ProtectedRouteProps {
+	children: JSX.Element
+}
+
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+	const token = localStorage.getItem('authToken')
+	const isAuthenticated = !!token
+
+	return isAuthenticated ? children : <Navigate to='/' replace />
+}
+
+export default ProtectedRoute
+
+----
+D:\Coding\styx-cash\src\router\routerConfig.tsx
+----
+import { lazy, Suspense } from 'react'
+import { RouteObject } from 'react-router-dom'
+import routes from './routes.json'
+import ProtectedRoute from './ProtectedRoute'
+import MainLayout from '@/layouts/MainLayout'
+import { Loader } from '@/components'
+
+interface LayoutProps {
+	children: React.ReactNode
+}
+
+const lazyLoad = (componentName: string) =>
+	lazy(
+		() =>
+			import(
+				/* @vite-ignore */ `../pages/${componentName}/${componentName}.tsx`
+			)
+	)
+
+const isLayoutRoute = (route: any): route is { layout: string } => {
+	return 'layout' in route
+}
+
+const isPrivateRoute = (route: any): route is { private: boolean } => {
+	return 'private' in route
+}
+
+export const generateRoutes = (): RouteObject[] => {
+	return Object.values(routes).map(route => {
+		const Component = lazyLoad(route.component)
+
+		// Определяем Layout
+		const Layout =
+			isLayoutRoute(route) && route.layout === 'MainLayout'
+				? MainLayout
+				: ({ children }: LayoutProps) => <>{children}</>
+
+		const element = (
+			<Layout>
+				<Suspense fallback={<Loader />}>
+					<Component />
+				</Suspense>
+			</Layout>
+		)
+
+		return {
+			path: route.path,
+			element:
+				isPrivateRoute(route) && route.private ? (
+					<ProtectedRoute>{element}</ProtectedRoute>
+				) : (
+					element
+				),
+		}
+	})
+}
+
+----
+D:\Coding\styx-cash\src\router\RouterContent.tsx
+----
+import { Routes, Route } from 'react-router-dom'
+import { generateRoutes } from './routerConfig'
+import useRouteTitle from '@/hooks/useRouteTitle'
+
+const RouterContent = () => {
+	useRouteTitle()
+
+	return (
+		<Routes>
+			{generateRoutes().map((route, index) => (
+				<Route key={index} path={route.path} element={route.element} />
+			))}
+		</Routes>
+	)
+}
+
+export default RouterContent
+
+----
+D:\Coding\styx-cash\src\router\routes.json
+----
+{
+	"LandingPage": {
+		"path": "/",
+		"component": "LandingPage",
+		"title": "Styx Cash"
+	},
+	"HomePage": {
+		"path": "/home",
+		"component": "HomePage",
+		"title": "Home",
+		"layout": "MainLayout"
+	},
+	"TransactionsPage": {
+		"path": "/transactions",
+		"component": "TransactionsPage",
+		"title": "Transactions",
+		"layout": "MainLayout"
+	},
+	"ProfilePage": {
+		"path": "/profile",
+		"component": "ProfilePage",
+		"title": "Profile",
+		"layout": "MainLayout"
+	},
+	"CustomerSupportPage": {
+		"path": "/support",
+		"component": "CustomerSupportPage",
+		"title": "Customer Support",
+		"layout": "MainLayout"
+	},
+	"TopUpPage": {
+		"path": "/top-up",
+		"component": "TopUpPage",
+		"title": "Top-Up",
+		"layout": "MainLayout"
+	},
+	"WithdrawPage": {
+		"path": "/withdraw",
+		"component": "WithdrawPage",
+		"title": "Withdraw",
+		"layout": "MainLayout"
+	},
+	"ClientsPage": {
+		"path": "/clients",
+		"component": "ClientsPage",
+		"title": "Clients",
+		"layout": "MainLayout",
+		"private": true
+	},
+	"ClientPage": {
+		"path": "/clients/:id",
+		"component": "ClientPage",
+		"title": "Clients",
+		"layout": "MainLayout",
+		"private": true
+	},
+	"NotFoundPage": {
+		"path": "*",
+		"component": "NotFoundPage",
+		"title": "Страница не найдена"
+	}
+}
+
+----
+D:\Coding\styx-cash\src\types\routes.d.ts
+----
+interface BaseRoute {
+	path: string
+	component: string
+	title: string
+}
+
+interface LayoutRoute extends BaseRoute {
+	layout: string
+}
+
+interface PrivateRoute extends LayoutRoute {
+	private: true
+}
+
+type RouteConfig = BaseRoute | LayoutRoute | PrivateRoute
+
+declare module '@/router/routes.json' {
+	const routes: Record<string, RouteConfig>
+	export default routes
+}
+
+----
+D:\Coding\styx-cash\tsconfig.app.json
+----
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["src"]
+}
+
+----
+D:\Coding\styx-cash\tsconfig.json
+----
+{
+	"compilerOptions": {
+		"target": "ESNext",
+		"module": "ESNext",
+		"types": ["vite/client", "react/experimental", "react-dom/experimental"],
+		"jsx": "react-jsx",
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"moduleResolution": "Node",
+		"resolveJsonModule": true,
+		"allowSyntheticDefaultImports": true,
+		"baseUrl": "./",
+		"paths": {
+			"@/*": ["src/*"],
+			"@assets/*": ["src/assets/*"],
+			"@components/*": ["src/components/*"],
+			"@config/*": ["src/config/*"],
+			"@hooks/*": ["src/hooks/*"],
+			"@layouts/*": ["src/layouts/*"],
+			"@pages/*": ["src/pages/*"],
+			"@router/*": ["src/router/*"],
+			"@store/*": ["src/store/*"],
+			"@styles/*": ["src/styles/*"],
+			"@types/*": ["src/types/*"],
+			"@utils/*": ["src/utils/*"],
+			"@fonts/*": ["public/fonts/*"]
+		}
+	}
+}
+
+----
+D:\Coding\styx-cash\tsconfig.node.json
+----
+{
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
+    "target": "ES2022",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "moduleDetection": "force",
+    "noEmit": true,
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "erasableSyntaxOnly": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedSideEffectImports": true
+  },
+  "include": ["vite.config.ts"]
+}
+
+----
+D:\Coding\styx-cash\vite.config.ts
+----
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+	plugins: [react()],
+	resolve: {
+		alias: {
+			'@': '/src',
+			'@assets': '/src/assets',
+			'@components': '/src/components',
+			'@config': '/src/config',
+			'@hooks': '/src/hooks',
+			'@layouts': '/src/layouts',
+			'@pages': '/src/pages',
+			'@router': '/src/router',
+			'@store': '/src/store',
+			'@styles': '/src/styles',
+			'@types': '/src/types',
+			'@utils': '/src/utils',
+			'@fonts': '/src/fonts',
+		},
+	},
+	build: {
+		rollupOptions: {
+			output: {
+				manualChunks: {
+					react: ['react', 'react-dom', 'react-router-dom'],
+				},
+			},
+		},
+	},
+})
+

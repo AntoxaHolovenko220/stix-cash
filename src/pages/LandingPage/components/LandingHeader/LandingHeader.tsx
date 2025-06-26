@@ -1,8 +1,10 @@
+import { useState } from 'react'
 import { LanguageSwitcher } from '@/components'
-import { Box, Typography } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Box, IconButton, Typography } from '@mui/material'
+import { RegisterModal } from '@/pages'
 
 const LandingHeader = () => {
+	const [modalOpen, setModalOpen] = useState(false)
 	return (
 		<Box
 			sx={{
@@ -29,7 +31,7 @@ const LandingHeader = () => {
 						fontFamily: 'Benzin',
 						fontSize: '16px',
 						fontWeight: 700,
-						lineHeight: '20px',
+						lineHeight: '31px',
 						background: 'linear-gradient(90deg, #0044FF, #002999)',
 						WebkitBackgroundClip: 'text',
 						WebkitTextFillColor: 'transparent',
@@ -43,10 +45,11 @@ const LandingHeader = () => {
 				sx={{ mr: '50px', display: 'flex', alignItems: 'center', gap: '20px' }}
 			>
 				<LanguageSwitcher />
-				<Link to='/login'>
+				<IconButton onClick={() => setModalOpen(true)}>
 					<Box component='img' src='person.svg' />
-				</Link>
+				</IconButton>
 			</Box>
+			<RegisterModal open={modalOpen} onClose={() => setModalOpen(false)} />
 		</Box>
 	)
 }

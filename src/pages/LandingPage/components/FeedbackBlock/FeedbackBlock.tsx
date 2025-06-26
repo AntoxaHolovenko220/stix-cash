@@ -102,18 +102,6 @@ const FeedbackBlock = () => {
 		},
 	]
 
-	// Цветовая палитра
-	const colors = {
-		primary: '#5f27cd',
-		primaryLight: '#7d4ce6',
-		background: '#f8f5ff',
-		cardBg: '#ffffff',
-		textDark: '#181818',
-		textLight: '#5f27cd',
-		accentText: '#e0d6ff',
-		divider: alpha('#5f27cd', 0.2),
-	}
-
 	React.useEffect(() => {
 		const updateMaxHeight = () => {
 			const heights = slideRefs.current
