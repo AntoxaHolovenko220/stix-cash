@@ -190,7 +190,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 						sx={{
 							maxWidth:
 								index === 0
-									? '114px'
+									? '117px'
 									: index === 1
 									? '110px'
 									: index === 2

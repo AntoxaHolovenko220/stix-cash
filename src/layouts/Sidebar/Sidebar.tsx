@@ -12,7 +12,7 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-import { clearTokens } from '@/api/authService'
+import { clearTokens, getUserData } from '@/api/authService'
 import routes from '@/router/routes.json'
 
 interface SidebarProps {
@@ -26,6 +26,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 	const location = useLocation()
 	const [activePath, setActivePath] = useState(location.pathname)
 	const isWideScreen = useMediaQuery('(min-width:1280px)')
+	const userData = getUserData()
 
 	useEffect(() => {
 		setActivePath(location.pathname)
@@ -36,6 +37,11 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 		{ label: t('transactions'), path: routes.TransactionsPage.path },
 		{ label: t('profile'), path: routes.ProfilePage.path },
 		{ label: t('customer support'), path: routes.CustomerSupportPage.path },
+	]
+
+	const adminNavItems = [
+		{ label: t('clients'), path: routes.ClientsPage.path },
+		{ label: t('transactions'), path: routes.AdminTransactionsPage.path },
 	]
 
 	const handleLogout = () => {
@@ -194,9 +200,127 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 				})}
 			</List>
 
+			{userData?.roles?.includes('admin') && (
+				<Box sx={{ mt: '40px' }}>
+					<Typography
+						sx={{
+							fontFamily: 'Manrope',
+							fontSize: '18px',
+							color: '#FFFFFF',
+							opacity: 0.5,
+						}}
+					>
+						{t('admin menu')}
+					</Typography>
+					<List
+						sx={{
+							mt: '10px',
+							display: 'flex',
+							flexDirection: 'column',
+							gap: '30px',
+							color: '#FFFFFF',
+							fontFamily: 'Manrope',
+							fontSize: '18px',
+							lineHeight: 1,
+						}}
+					>
+						{adminNavItems.map(item => {
+							const isActive = activePath === item.path
+
+							return (
+								<Box
+									key={item.path}
+									sx={{
+										position: 'relative',
+										'&:hover': {
+											'& .nav-item': {
+												borderTopRightRadius: !isActive ? '50px' : '0',
+												borderBottomRightRadius: !isActive ? '50px' : '0',
+												backgroundColor: !isActive
+													? 'rgba(255, 255, 255, 0.1)'
+													: '#FFFFFF',
+											},
+										},
+									}}
+								>
+									<ListItem
+										className='nav-item'
+										onClick={() => {
+											navigate(item.path)
+											onClose()
+										}}
+										sx={{
+											cursor: 'pointer',
+											backgroundColor: isActive ? '#FFFFFF' : 'transparent',
+											color: isActive ? '#0C3E9C' : '#FFFFFF',
+											borderTopLeftRadius: '50px',
+											borderBottomLeftRadius: '50px',
+
+											px: '20px',
+											py: '12px',
+											position: 'relative',
+											zIndex: 1,
+										}}
+									>
+										{item.label}
+									</ListItem>
+
+									{isActive && (
+										<>
+											<Box
+												sx={{
+													position: 'absolute',
+													right: '42px',
+													top: '-62px',
+													bottom: '0',
+													width: '20px',
+													backgroundColor: '#FFFFFF',
+													transform: 'rotate(-90deg)',
+													zIndex: 0,
+												}}
+											>
+												<Box
+													sx={{
+														width: '100%',
+														height: '100%',
+														backgroundColor: '#0C3E9C',
+														borderBottomLeftRadius: '50px',
+													}}
+												/>
+											</Box>
+											<Box
+												sx={{
+													position: 'absolute',
+													right: '42px',
+													top: '0',
+													bottom: '-62px',
+													width: '20px',
+													backgroundColor: '#FFFFFF',
+													transform: 'rotate(90deg)',
+													zIndex: 0,
+												}}
+											>
+												<Box
+													sx={{
+														width: '100%',
+														height: '100%',
+														backgroundColor: '#0C3E9C',
+														borderTopLeftRadius: '50px',
+													}}
+												/>
+											</Box>
+										</>
+									)}
+								</Box>
+							)
+						})}
+					</List>
+				</Box>
+			)}
+
 			<Box
 				sx={{
-					mt: '30px',
+					mt: '50px',
 					width: 'fit-content',
 					display: 'flex',
 					alignItems: 'center',

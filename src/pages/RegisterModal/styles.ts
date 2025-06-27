@@ -9,13 +9,34 @@ export const closeButtonStyles = {
 }
 
 export const textFieldStyles = {
-	mb: 2,
-	InputProps: {
-		sx: { fontFamily: 'Manrope' },
+	'& .MuiInput-root': {
+		'&:before': {
+			borderBottomColor: '#E0E0E0',
+		},
+		'&:hover:not(.Mui-disabled):before': {
+			borderBottomColor: '#BDBDBD',
+		},
+	},
+	'& .MuiInput-input': {
+		fontFamily: 'Manrope',
+	},
+	'& .Mui-error': {
+		'& .MuiInput-root': {
+			'&:before': {
+				borderBottomColor: '#d32f2f',
+			},
+			'&:after': {
+				borderBottomColor: '#d32f2f',
+			},
+			'&:hover:not(.Mui-disabled):before': {
+				borderBottomColor: '#d32f2f',
+			},
+		},
 	},
 }
 
 export const agreementTextStyles = {
+	mb: '5px',
 	fontSize: '12px',
 	fontFamily: 'Manrope',
 	color: '#0C0C0C90',
@@ -36,6 +57,9 @@ export const primaryButtonStyles = {
 	fontSize: '22px',
 	fontWeight: 500,
 	textTransform: 'none',
+	'&:disabled': {
+		background: '#E0E0E0',
+	},
 }
 
 export const secondaryButtonStyles = {

@@ -53,6 +53,13 @@
 		"layout": "MainLayout",
 		"private": true
 	},
+	"AdminTransactionsPage": {
+		"path": "/admin-transactions",
+		"component": "AdminTransactionsPage",
+		"title": "Transactions",
+		"layout": "MainLayout",
+		"private": true
+	},
 	"ClientPage": {
 		"path": "/clients/:id",
 		"component": "ClientPage",

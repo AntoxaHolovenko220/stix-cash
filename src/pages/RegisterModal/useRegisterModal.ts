@@ -16,9 +16,9 @@ export const useRegisterModal = () => {
 	const [lastName, setLastName] = useState('')
 	const [phone, setPhone] = useState('')
 	const [country, setCountry] = useState<CountryOption | null>(null)
-	const [isTermsAccepted, setІsTermsAccepted] = useState(true)
+	const [isTermsAccepted, setІsTermsAccepted] = useState(false)
 	const [loading, setLoading] = useState(false)
-	const [error, setError] = useState('')
+	const [errors, setErrors] = useState<Record<string, string>>({})
 
 	const resetForm = () => {
 		setEmail('')
@@ -29,7 +29,30 @@ export const useRegisterModal = () => {
 		setPhone('')
 		setCountry(null)
 		setІsTermsAccepted(false)
-		setError('')
+		setErrors({})
+	}
+
+	const validateForm = () => {
+		const newErrors: Record<string, string> = {}
+
+		if (!email) newErrors.email = t('email required')
+		if (!password) newErrors.password = t('password required')
+
+		if (!isLoginForm) {
+			if (!firstName) newErrors.firstName = t('name required')
+			if (!lastName) newErrors.lastName = t('surname required')
+			if (!phone) newErrors.phone = t('phone required')
+			if (!country) newErrors.country = t('country required')
+			if (password !== confirmPassword) {
+				newErrors.confirmPassword = t('passwords do not match')
+			}
+			if (!isTermsAccepted) {
+				newErrors.terms = t('agree to terms')
+			}
+		}
+
+		setErrors(newErrors)
+		return Object.keys(newErrors).length === 0
 	}
 
 	const handlePhoneChange = (value: string) => {
@@ -39,31 +62,29 @@ export const useRegisterModal = () => {
 
 	const switchAuthMode = () => {
 		setIsLoginForm(!isLoginForm)
-		resetForm()
+		setErrors({})
 	}
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
 		setLoading(true)
-		setError('')
+		setErrors({})
+
+		if (!validateForm()) {
+			setLoading(false)
+			return
+		}
 
 		try {
-			if (!email || !password) {
-				throw new Error(t('incorrect email'))
-			}
+			if (isLoginForm) {
+				const loginData = { email, password }
+				const tokens = await loginUser(loginData)
+				storeTokens(tokens)
+				await new Promise(resolve => setTimeout(resolve, 1000))
+				navigate(routes.HomePage.path)
+			} else {
+				if (!country) throw new Error(t('country required'))
 
-			if (!isLoginForm) {
-				if (!firstName || !lastName || !phone || !country) {
-					throw new Error(t('fill all fields'))
-				}
-				if (password !== confirmPassword) {
-					throw new Error(t('incorrect password'))
-				}
-				if (!isTermsAccepted) {
-					throw new Error(t('agree to terms'))
-				}
-
-				// Регистрация
 				const registerData = {
 					firstName,
 					lastName,
@@ -73,26 +94,28 @@ export const useRegisterModal = () => {
 					password,
 					isTermsAccepted,
 				}
-				console.log(registerData)
 
 				const tokens = await registerUser(registerData)
 				storeTokens(tokens)
-			} else {
-				// Логин
-				const loginData = {
-					email,
-					password,
-				}
-
-				const tokens = await loginUser(loginData)
-				storeTokens(tokens)
+				await new Promise(resolve => setTimeout(resolve, 1000))
+				navigate(routes.HomePage.path)
 			}
-
-			navigate(routes.HomePage.path)
 		} catch (err: any) {
-			setError(
-				err.response?.data?.message || err.message || t('error occurred')
-			)
+			const errorMessage = err.response?.data?.message || err.message
+
+			if (
+				errorMessage.includes('пароль') ||
+				errorMessage.includes('password')
+			) {
+				setErrors({ password: t('incorrect password') })
+			} else if (
+				errorMessage.includes('Пользователь') ||
+				errorMessage.includes('User')
+			) {
+				setErrors({ email: t('user not found') })
+			} else {
+				setErrors({ form: errorMessage })
+			}
 		} finally {
 			setLoading(false)
 		}
@@ -109,7 +132,7 @@ export const useRegisterModal = () => {
 		country,
 		isTermsAccepted,
 		loading,
-		error,
+		errors,
 		setEmail,
 		setPassword,
 		setConfirmPassword,

@@ -12,6 +12,7 @@ import {
 	Box,
 	CircularProgress,
 	Autocomplete,
+	FormHelperText,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { useTranslation } from 'react-i18next'
@@ -43,7 +44,7 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 		country,
 		isTermsAccepted,
 		loading,
-		error,
+		errors,
 		setEmail,
 		setPassword,
 		setConfirmPassword,
@@ -59,12 +60,30 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 	} = useRegisterModal()
 
 	useEffect(() => {
-		console.log('Agree updated:', isTermsAccepted)
-	}, [isTermsAccepted])
+		if (!open) {
+			resetForm()
+		}
+	}, [open, resetForm])
 
 	const handleClose = () => {
 		resetForm()
 		onClose()
+	}
+
+	const getTextFieldProps = (fieldName: string) => {
+		const hasError = !!errors[fieldName]
+		return {
+			error: hasError,
+			helperText: errors[fieldName],
+			FormHelperTextProps: { sx: { color: 'red', mt: 0.5 } },
+			sx: {
+				...textFieldStyles,
+				mb: hasError ? '0px' : '23.901px', // Используем hasError вместо error
+				'& .MuiInput-underline:after': {
+					borderBottomColor: hasError ? 'red' : undefined,
+				},
+			},
+		}
 	}
 
 	return (
@@ -81,9 +100,9 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 
 			<form onSubmit={handleSubmit}>
 				<DialogContent sx={{ mt: '30px', pb: 0 }}>
-					{error && (
+					{errors.form && (
 						<Typography color='error' gutterBottom>
-							{error}
+							{errors.form}
 						</Typography>
 					)}
 
@@ -91,28 +110,25 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 						<>
 							<TextField
 								variant='standard'
-								required
 								fullWidth
 								placeholder={t('name')}
 								value={firstName}
 								onChange={e => setFirstName(e.target.value)}
-								sx={textFieldStyles}
+								{...getTextFieldProps('firstName')}
 							/>
 							<TextField
 								variant='standard'
-								required
 								fullWidth
 								placeholder={t('surname')}
 								value={lastName}
 								onChange={e => setLastName(e.target.value)}
-								sx={textFieldStyles}
+								{...getTextFieldProps('lastName')}
 							/>
 						</>
 					)}
 
 					<TextField
 						variant='standard'
-						required
 						fullWidth
 						placeholder={isLoginForm ? t('your email') : 'Email'}
 						type='email'
@@ -120,22 +136,18 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 						value={email}
 						onChange={e => setEmail(e.target.value)}
 						disabled={loading}
-						sx={textFieldStyles}
+						{...getTextFieldProps('email')}
 					/>
 
 					{!isLoginForm && (
 						<>
 							<TextField
 								variant='standard'
-								required
 								fullWidth
 								placeholder={t('phone number')}
 								value={phone}
 								onChange={e => handlePhoneChange(e.target.value)}
-								// inputProps={{
-								// 	pattern: '[0-9]*',
-								// }}
-								sx={textFieldStyles}
+								{...getTextFieldProps('phone')}
 							/>
 
 							<Autocomplete
@@ -148,17 +160,24 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 										{...params}
 										variant='standard'
 										placeholder={t('country')}
-										required
+										error={!!errors.country}
+										helperText={errors.country}
+										FormHelperTextProps={{ sx: { color: 'red', mt: 0.5 } }}
+										sx={{
+											...textFieldStyles,
+											mb: !!errors.country ? '0px' : '23.901px',
+											'& .MuiInput-underline:after': {
+												borderBottomColor: errors.country ? 'red' : undefined,
+											},
+										}}
 									/>
 								)}
-								sx={{ mb: 2 }}
 							/>
 						</>
 					)}
 
 					<TextField
 						variant='standard'
-						required
 						fullWidth
 						placeholder={isLoginForm ? t('password') : t('make up password')}
 						type='password'
@@ -166,26 +185,30 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 						value={password}
 						onChange={e => setPassword(e.target.value)}
 						disabled={loading}
-						sx={textFieldStyles}
+						{...getTextFieldProps('password')}
 					/>
 
 					{!isLoginForm && (
 						<>
 							<TextField
 								variant='standard'
-								required
 								fullWidth
 								placeholder={t('repeat password')}
 								type='password'
 								autoComplete='new-password'
 								value={confirmPassword}
 								onChange={e => setConfirmPassword(e.target.value)}
-								error={password !== confirmPassword && confirmPassword !== ''}
 								disabled={loading}
-								sx={textFieldStyles}
+								{...getTextFieldProps('confirmPassword')}
 							/>
 
-							<Box sx={{ display: 'flex', alignItems: 'flex-start', mb: 2 }}>
+							<Box
+								sx={{
+									display: 'flex',
+									alignItems: 'flex-start',
+									mb: errors.terms ? '4px' : '23.901px',
+								}}
+							>
 								<Checkbox
 									checked={isTermsAccepted}
 									onChange={() => setІsTermsAccepted(!isTermsAccepted)}
@@ -199,6 +222,11 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 									{t('legal age')}
 								</Typography>
 							</Box>
+							{errors.terms && (
+								<FormHelperText error sx={{ mt: -1, mb: 1 }}>
+									{errors.terms}
+								</FormHelperText>
+							)}
 						</>
 					)}
 
