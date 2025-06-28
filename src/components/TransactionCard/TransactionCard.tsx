@@ -183,7 +183,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 						),
 					},
 					{ label: t('amount'), value: formatNumber(amount) },
-					{ label: t('balance'), value: formatNumber(balance) },
+					{ label: t('yourbalance'), value: formatNumber(balance) },
 				].map((item, index) => (
 					<Box
 						key={index}

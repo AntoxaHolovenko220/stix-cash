@@ -60,7 +60,7 @@ export const enTranslations = {
 	date: 'Date:',
 	status: 'Status:',
 	type: 'Type:',
-	balance: 'Your balance:',
+	yourbalance: 'Your balance:',
 	amount: 'Amount:',
 	withdrawal: 'Withdrawal',
 	'execution time': 'Execution time ≈',
@@ -113,4 +113,9 @@ export const enTranslations = {
 	'surname required': '*surname is required',
 	'phone required': '*phone is required',
 	'country required': '*country is required',
+	found: 'found',
+	'first name': 'First Name',
+	'last name': 'Last Name',
+	wallet: 'Wallet',
+	balance: 'Balance',
 }

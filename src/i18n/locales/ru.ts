@@ -63,7 +63,7 @@ export const ruTranslations = {
 	date: 'Дата:',
 	status: 'Статус:',
 	type: 'Тип:',
-	balance: 'Ваш баланс:',
+	yourbalance: 'Ваш баланс:',
 	amount: 'Сумма:',
 	withdrawal: 'Вывод',
 	'execution time': 'Время выполнения ≈',
@@ -116,4 +116,9 @@ export const ruTranslations = {
 	'surname required': '*фамилия обязательна',
 	'phone required': '*телефон обязателен',
 	'country required': '*страна обязательна',
+	found: 'найдено',
+	'first name': 'Имя',
+	'last name': 'Фамилия',
+	wallet: 'Кошелек',
+	balance: 'Баланс',
 }
