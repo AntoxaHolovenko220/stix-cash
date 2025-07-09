@@ -23,13 +23,13 @@ export const textFieldStyles = {
 	'& .Mui-error': {
 		'& .MuiInput-root': {
 			'&:before': {
-				borderBottomColor: '#d32f2f',
+				borderBottomColor: '#DE0000',
 			},
 			'&:after': {
-				borderBottomColor: '#d32f2f',
+				borderBottomColor: '#DE0000',
 			},
 			'&:hover:not(.Mui-disabled):before': {
-				borderBottomColor: '#d32f2f',
+				borderBottomColor: '#DE0000',
 			},
 		},
 	},

@@ -56,7 +56,7 @@ const Header = ({ onLogoClick }: HeaderProps) => {
 			>
 				<LanguageSwitcher color='#FFFFFF' />
 				<IconButton onClick={() => navigate(`${routes.HomePage.path}`)}>
-					<Box component='img' src='person-white.svg' />
+					<Box component='img' src='/person-white.svg' />
 				</IconButton>
 			</Box>
 		</Box>

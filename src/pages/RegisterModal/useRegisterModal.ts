@@ -63,6 +63,7 @@ export const useRegisterModal = () => {
 	const switchAuthMode = () => {
 		setIsLoginForm(!isLoginForm)
 		setErrors({})
+		resetForm()
 	}
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -80,7 +81,7 @@ export const useRegisterModal = () => {
 				const loginData = { email, password }
 				const tokens = await loginUser(loginData)
 				storeTokens(tokens)
-				await new Promise(resolve => setTimeout(resolve, 1000))
+				await new Promise(resolve => setTimeout(resolve, 500))
 				navigate(routes.HomePage.path)
 			} else {
 				if (!country) throw new Error(t('country required'))
@@ -96,9 +97,10 @@ export const useRegisterModal = () => {
 				}
 
 				const tokens = await registerUser(registerData)
-				storeTokens(tokens)
-				await new Promise(resolve => setTimeout(resolve, 1000))
-				navigate(routes.HomePage.path)
+				await new Promise(resolve => setTimeout(resolve, 500))
+				setIsLoginForm(true) // Переключаем на форму входа
+				resetForm()
+				return { success: true } // Возвращаем успешный статус
 			}
 		} catch (err: any) {
 			const errorMessage = err.response?.data?.message || err.message

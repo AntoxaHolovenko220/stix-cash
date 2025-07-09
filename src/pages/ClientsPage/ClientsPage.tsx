@@ -1,14 +1,16 @@
-// src/pages/ClientsPage/ClientsPage.tsx
 import { Box, IconButton, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import CreateIcon from '@mui/icons-material/Create'
 import { useEffect, useState } from 'react'
-import { getClients } from '@/api/clientService'
+import { getClients, Client } from '@/api/clientService'
 import { Loader } from '@/components'
+import { useNavigate } from 'react-router-dom'
+import { getDecimalValue } from '@/hooks/useDecimalValue'
 
 const ClientsPage = () => {
 	const { t } = useTranslation()
-	const [clients, setClients] = useState<any[]>([])
+	const navigate = useNavigate()
+	const [clients, setClients] = useState<Client[]>([])
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState('')
 
@@ -160,8 +162,12 @@ const ClientsPage = () => {
 									alignItems: 'center',
 								}}
 							>
-								<Typography sx={cellStyles}>{client.balance}</Typography>
-								<IconButton>
+								<Typography sx={cellStyles}>
+									{getDecimalValue(
+										client.balance as { $numberDecimal: string }
+									)}
+								</Typography>
+								<IconButton onClick={() => navigate(`/clients/${client._id}`)}>
 									<CreateIcon
 										sx={{ width: '18px', height: '18px', color: '#0246FF' }}
 									/>

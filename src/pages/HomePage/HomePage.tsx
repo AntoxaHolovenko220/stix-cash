@@ -1,15 +1,64 @@
+import { useState, useEffect } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import routes from '@/router/routes.json'
 import CardBalance from './CardBalance'
-import { TransactionCard } from '@/components'
+import { TransactionCard, VerificationBlock, Loader } from '@/components'
 import jsonTransactions from '@/pages/transactions.json'
 import { TransactionCardProps } from '@/components/TransactionCard/TransactionCard'
+import { getProfile, Client } from '@/api/clientService'
+import { getUserData } from '@/api/authService'
+import { getDecimalValue } from '@/hooks/useDecimalValue'
 
 const HomePage = () => {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
+	const [profile, setProfile] = useState<Client>()
+	const [loading, setLoading] = useState(true)
+	const [error, setError] = useState('')
+
+	const userData = getUserData()
+	const isUser = userData?.roles?.includes('user')
+
+	useEffect(() => {
+		if (!isUser) {
+			setProfile({
+				isVerified: true,
+				balance: { $numberDecimal: '99999' },
+				showBTCBalance: true,
+				balanceBTC: { $numberDecimal: '9.9999999999' },
+			} as Client)
+			setLoading(false)
+			return
+		}
+
+		const fetchProfile = async () => {
+			try {
+				const data = await getProfile()
+				setProfile(data)
+			} catch (err) {
+				setError(t('error occurred'))
+				console.error('Failed to fetch profile:', err)
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		fetchProfile()
+	}, [t, isUser])
+
+	if (loading) {
+		return <Loader />
+	}
+
+	if (error) {
+		return <Typography color='error'>{error}</Typography>
+	}
+
+	if (!profile) {
+		return <Typography>{t('error occurred')}</Typography>
+	}
 
 	const parseDate = (dateStr: string) => {
 		const [day, month, yearAndTime] = dateStr.split('.')
@@ -48,7 +97,6 @@ const HomePage = () => {
 					ml: '2px',
 					fontFamily: 'Manrope',
 					fontSize: '14px',
-					// color: '#232323',
 				}}
 			>
 				{t('home')}
@@ -64,10 +112,18 @@ const HomePage = () => {
 					<Typography sx={{ ...gradientText, mt: '15px', fontSize: '26px' }}>
 						{t('bridge')}
 					</Typography>
+					<VerificationBlock
+						verified={isUser ? profile.isVerified : true}
+						sx={{ mt: '50px' }}
+					/>
 				</Box>
 
 				<Box sx={{ maxWidth: '420px', width: '100%' }}>
-					<CardBalance balance={50.95} />
+					<CardBalance
+						balance={Number(profile.balance.$numberDecimal).toFixed(2)}
+						showBtcBalance={isUser ? profile.showBTCBalance : true}
+						BTCbalance={Number(profile.balanceBTC.$numberDecimal).toFixed(8)}
+					/>
 					<Box
 						sx={{
 							mt: '60px',

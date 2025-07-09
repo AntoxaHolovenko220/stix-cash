@@ -7,48 +7,19 @@ import axios from 'axios'
 
 interface CardBalanceProps {
 	balance: number | string
+	BTCbalance: number | string
 	showBtcBalance?: boolean
 }
 
 const CardBalance = ({
-	balance = '50,000',
-	showBtcBalance = true,
+	balance,
+	BTCbalance,
+	showBtcBalance,
 }: CardBalanceProps) => {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
-	const [btcRate, setBtcRate] = useState<number | null>(null)
-	const [loading, setLoading] = useState(true)
+
 	const [error, setError] = useState('')
-
-	useEffect(() => {
-		const fetchBtcRate = async () => {
-			try {
-				const response = await axios.get(
-					'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
-				)
-				setBtcRate(response.data.bitcoin.usd)
-				setLoading(false)
-			} catch (error) {
-				setError(error instanceof Error ? error.message : 'Unknown error')
-				setLoading(false)
-			}
-		}
-
-		fetchBtcRate()
-		const interval = setInterval(fetchBtcRate, 60000)
-		return () => clearInterval(interval)
-	}, [])
-
-	const calculateBtcBalance = () => {
-		if (!btcRate || !showBtcBalance) return null
-
-		const numericBalance =
-			typeof balance === 'string'
-				? parseFloat(balance.replace(/,/g, ''))
-				: balance
-		const btcValue = numericBalance / btcRate
-		return btcValue.toFixed(10)
-	}
 
 	const formatBalance = () => {
 		return typeof balance === 'number' ? balance.toLocaleString() : balance
@@ -62,22 +33,16 @@ const CardBalance = ({
 		textTransform: 'uppercase',
 	}
 
-	if (loading) {
-		return <Typography>Loading...</Typography>
-	}
-
 	if (error) {
 		return <Typography color='error'>Error: {error}</Typography>
 	}
-
-	const btcBalance = calculateBtcBalance()
 
 	return (
 		<Box
 			sx={{
 				maxWidth: '420px',
 				aspectRatio: '1 / 0.4758',
-				backgroundImage: 'url(/public/balance-card.svg)',
+				backgroundImage: 'url(/balance-card.svg)',
 				backgroundSize: 'cover',
 				backgroundPosition: 'center',
 				p: '20px',
@@ -93,16 +58,20 @@ const CardBalance = ({
 				</Typography>
 
 				<Box sx={{ mt: '25px' }}>
-					{showBtcBalance && btcBalance && (
+					{showBtcBalance && (
 						<Typography
 							sx={{
-								...commonTextStyles,
+								fontFamily: 'Manrope',
+								fontWeight: 700,
+								lineHeight: 1,
+								color: '#FFFFFF',
+								textTransform: 'uppercase',
 								fontSize: '32px',
 								mb: '10px',
 								letterSpacing: '-1px',
 							}}
 						>
-							{btcBalance} BTC
+							{BTCbalance} BTC
 						</Typography>
 					)}
 					<Typography

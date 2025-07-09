@@ -192,7 +192,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 								index === 0
 									? '117px'
 									: index === 1
-									? '110px'
+									? '116px'
 									: index === 2
 									? '108px'
 									: index === 3
