@@ -2,9 +2,18 @@ import { useEffect, useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
-import { Loader } from '@/components'
+import { Loader, TransactionCard } from '@/components'
 import { Client, getClient } from '@/api/clientService'
 import { ClientEditForm, CreateTransactionForm } from './components'
+import {
+	getUserTransactionAdmin,
+	TransactionData,
+} from '@/api/transactionService'
+import {
+	PaymentMethod,
+	TransactionStatus,
+	TransactionType,
+} from '@/components/TransactionCard/TransactionCard'
 
 const ClientPage = () => {
 	const { t } = useTranslation()
@@ -13,6 +22,7 @@ const ClientPage = () => {
 	const [error, setError] = useState('')
 
 	const [client, setClient] = useState<Client>()
+	const [transactions, setTransactions] = useState<TransactionData[]>([])
 
 	useEffect(() => {
 		const fetchClient = async () => {
@@ -23,6 +33,8 @@ const ClientPage = () => {
 				}
 				const data = await getClient(id)
 				setClient(data)
+				const transactionData = await getUserTransactionAdmin(id)
+				setTransactions(transactionData)
 			} catch (err) {
 				setError(t('error occurred'))
 				console.error('Failed to fetch client:', err)
@@ -33,6 +45,8 @@ const ClientPage = () => {
 
 		fetchClient()
 	}, [id, t])
+
+	console.log(transactions)
 
 	if (loading) return <Loader />
 	if (error || !client) return <Typography color='error'>{error}</Typography>
@@ -46,9 +60,7 @@ const ClientPage = () => {
 				| {id}
 			</Typography>
 
-			<Box
-				sx={{ mt: '30px', display: 'flex', justifyContent: 'space-between' }}
-			>
+			<Box sx={{ mt: '30px', display: 'flex', justifyContent: 'space-around' }}>
 				<ClientEditForm
 					client={client}
 					loading={loading}
@@ -56,7 +68,26 @@ const ClientPage = () => {
 					id={id}
 					setClient={setClient}
 				/>
-				<CreateTransactionForm />
+				<CreateTransactionForm
+					clientId={id!}
+					onTransactionCreated={newTransaction => {
+						setTransactions(prev => [newTransaction, ...prev])
+					}}
+				/>
+			</Box>
+			<Box sx={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
+				{transactions.map((transaction, index) => (
+					<TransactionCard
+						key={index}
+						id={transaction.transactionId}
+						date={transaction.date}
+						status={transaction.status as TransactionStatus}
+						type={transaction.type as TransactionType}
+						paymentMethod={transaction.method as PaymentMethod}
+						amount={transaction.amount}
+						balance={transaction.balance}
+					/>
+				))}
 			</Box>
 		</Box>
 	)

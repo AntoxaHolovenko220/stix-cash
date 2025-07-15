@@ -2,7 +2,12 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { CountryOption } from './types'
 import routes from '@/router/routes.json'
-import { registerUser, loginUser, storeTokens } from '@/api/authService'
+import {
+	registerUser,
+	loginUser,
+	storeTokens,
+	getUserData,
+} from '@/api/authService'
 import { useTranslation } from 'react-i18next'
 
 export const useRegisterModal = () => {
@@ -82,7 +87,12 @@ export const useRegisterModal = () => {
 				const tokens = await loginUser(loginData)
 				storeTokens(tokens)
 				await new Promise(resolve => setTimeout(resolve, 500))
-				navigate(routes.HomePage.path)
+				const userData = getUserData()
+				navigate(
+					userData?.roles?.includes('user')
+						? routes.HomePage.path
+						: routes.ClientsPage.path
+				)
 			} else {
 				if (!country) throw new Error(t('country required'))
 

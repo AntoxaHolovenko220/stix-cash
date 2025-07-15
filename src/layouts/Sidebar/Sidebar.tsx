@@ -96,111 +96,111 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 				)}
 			</Box>
 
-			<List
-				sx={{
-					mt: '70px',
-					display: 'flex',
-					flexDirection: 'column',
-					gap: '30px',
-					color: '#FFFFFF',
-					fontFamily: 'Manrope',
-					fontSize: '18px',
-					lineHeight: 1,
-				}}
-			>
-				{navItems.map(item => {
-					const isActive = activePath === item.path
+			{userData?.roles?.includes('user') ? (
+				<List
+					sx={{
+						mt: '70px',
+						display: 'flex',
+						flexDirection: 'column',
+						gap: '30px',
+						color: '#FFFFFF',
+						fontFamily: 'Manrope',
+						fontSize: '18px',
+						lineHeight: 1,
+					}}
+				>
+					{navItems.map(item => {
+						const isActive = activePath === item.path
 
-					return (
-						<Box
-							key={item.path}
-							sx={{
-								position: 'relative',
-								'&:hover': {
-									'& .nav-item': {
-										borderTopRightRadius: !isActive ? '50px' : '0',
-										borderBottomRightRadius: !isActive ? '50px' : '0',
-										backgroundColor: !isActive
-											? 'rgba(255, 255, 255, 0.1)'
-											: '#FFFFFF',
-									},
-								},
-							}}
-						>
-							<ListItem
-								className='nav-item'
-								onClick={() => {
-									navigate(item.path)
-									onClose()
-								}}
+						return (
+							<Box
+								key={item.path}
 								sx={{
-									cursor: 'pointer',
-									backgroundColor: isActive ? '#FFFFFF' : 'transparent',
-									color: isActive ? '#0C3E9C' : '#FFFFFF',
-									borderTopLeftRadius: '50px',
-									borderBottomLeftRadius: '50px',
-
-									px: '20px',
-									py: '12px',
 									position: 'relative',
-									zIndex: 1,
+									'&:hover': {
+										'& .nav-item': {
+											borderTopRightRadius: !isActive ? '50px' : '0',
+											borderBottomRightRadius: !isActive ? '50px' : '0',
+											backgroundColor: !isActive
+												? 'rgba(255, 255, 255, 0.1)'
+												: '#FFFFFF',
+										},
+									},
 								}}
 							>
-								{item.label}
-							</ListItem>
+								<ListItem
+									className='nav-item'
+									onClick={() => {
+										navigate(item.path)
+										onClose()
+									}}
+									sx={{
+										cursor: 'pointer',
+										backgroundColor: isActive ? '#FFFFFF' : 'transparent',
+										color: isActive ? '#0C3E9C' : '#FFFFFF',
+										borderTopLeftRadius: '50px',
+										borderBottomLeftRadius: '50px',
 
-							{isActive && (
-								<>
-									<Box
-										sx={{
-											position: 'absolute',
-											right: '42px',
-											top: '-62px',
-											bottom: '0',
-											width: '20px',
-											backgroundColor: '#FFFFFF',
-											transform: 'rotate(-90deg)',
-											zIndex: 0,
-										}}
-									>
+										px: '20px',
+										py: '12px',
+										position: 'relative',
+										zIndex: 1,
+									}}
+								>
+									{item.label}
+								</ListItem>
+
+								{isActive && (
+									<>
 										<Box
 											sx={{
-												width: '100%',
-												height: '100%',
-												backgroundColor: '#0C3E9C',
-												borderBottomLeftRadius: '50px',
+												position: 'absolute',
+												right: '42px',
+												top: '-62px',
+												bottom: '0',
+												width: '20px',
+												backgroundColor: '#FFFFFF',
+												transform: 'rotate(-90deg)',
+												zIndex: 0,
 											}}
-										/>
-									</Box>
-									<Box
-										sx={{
-											position: 'absolute',
-											right: '42px',
-											top: '0',
-											bottom: '-62px',
-											width: '20px',
-											backgroundColor: '#FFFFFF',
-											transform: 'rotate(90deg)',
-											zIndex: 0,
-										}}
-									>
+										>
+											<Box
+												sx={{
+													width: '100%',
+													height: '100%',
+													backgroundColor: '#0C3E9C',
+													borderBottomLeftRadius: '50px',
+												}}
+											/>
+										</Box>
 										<Box
 											sx={{
-												width: '100%',
-												height: '100%',
-												backgroundColor: '#0C3E9C',
-												borderTopLeftRadius: '50px',
+												position: 'absolute',
+												right: '42px',
+												top: '0',
+												bottom: '-62px',
+												width: '20px',
+												backgroundColor: '#FFFFFF',
+												transform: 'rotate(90deg)',
+												zIndex: 0,
 											}}
-										/>
-									</Box>
-								</>
-							)}
-						</Box>
-					)
-				})}
-			</List>
-
-			{userData?.roles?.includes('admin') && (
+										>
+											<Box
+												sx={{
+													width: '100%',
+													height: '100%',
+													backgroundColor: '#0C3E9C',
+													borderTopLeftRadius: '50px',
+												}}
+											/>
+										</Box>
+									</>
+								)}
+							</Box>
+						)
+					})}
+				</List>
+			) : (
 				<Box sx={{ mt: '40px' }}>
 					<Typography
 						sx={{
@@ -317,7 +317,6 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 					</List>
 				</Box>
 			)}
-
 			<Box
 				sx={{
 					mt: '50px',

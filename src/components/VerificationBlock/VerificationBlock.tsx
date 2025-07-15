@@ -3,21 +3,30 @@ import LabelIcon from '@mui/icons-material/Label'
 import { useTranslation } from 'react-i18next'
 
 interface VerificationProps {
-	verified: boolean
+	status: string
 	sx?: SxProps<Theme>
 }
 
-const VerificationBlock = ({ verified = false, sx }: VerificationProps) => {
+const VerificationBlock = ({
+	status = 'unverified',
+	sx,
+}: VerificationProps) => {
 	const { t } = useTranslation()
 	return (
 		<Box
 			sx={{
 				width: '192px',
 				height: '38px',
-				px: '10px',
+				px: '8px',
 				border: '1px solid',
 				borderRadius: '10px',
-				borderColor: verified ? '#52BC37' : '#D72828',
+				boxSizing: 'border-box',
+				borderColor:
+					status === 'verified'
+						? '#52BC37'
+						: status === 'pending'
+						? '#F4D800'
+						: '#D72828',
 				display: 'flex',
 				alignItems: 'center',
 				justifyContent: 'space-between',
@@ -28,16 +37,30 @@ const VerificationBlock = ({ verified = false, sx }: VerificationProps) => {
 			<Typography
 				sx={{
 					fontFamily: 'Manrope',
-					fontSize: '16px',
+					fontSize: '15px',
 					lineHeight: 1.3,
-					color: verified ? '#52BC37' : '#D72828',
+					color:
+						status === 'verified'
+							? '#52BC37'
+							: status === 'pending'
+							? '#F4D800'
+							: '#D72828',
 				}}
 			>
-				{verified ? t('verified') : t('no-verified')}
+				{status === 'verified'
+					? t('verified')
+					: status === 'pending'
+					? t('pending')
+					: t('no-verified')}
 			</Typography>
 			<LabelIcon
 				sx={{
-					color: verified ? '#52BC37' : '#D72828',
+					color:
+						status === 'verified'
+							? '#52BC37'
+							: status === 'pending'
+							? '#F4D800'
+							: '#D72828',
 					transform: 'rotate(90deg)',
 				}}
 			/>

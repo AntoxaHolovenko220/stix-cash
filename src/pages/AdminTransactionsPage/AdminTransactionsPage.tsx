@@ -1,22 +1,41 @@
 import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import jsonTransactions from '@/pages/transactions.json'
-import { TransactionCard } from '@/components'
-import { TransactionCardProps } from '@/components/TransactionCard/TransactionCard'
+import { Loader, TransactionCard } from '@/components'
+import { useEffect, useState } from 'react'
+import { getTransactionAdmin, TransactionData } from '@/api/transactionService'
+import {
+	PaymentMethod,
+	TransactionStatus,
+	TransactionType,
+} from '@/components/TransactionCard/TransactionCard'
 
 const AdminTransactionsPage = () => {
 	const { t } = useTranslation()
 
-	const parseDate = (dateStr: string) => {
-		const [day, month, yearAndTime] = dateStr.split('.')
-		const [year, time] = yearAndTime.split(' ')
-		return new Date(`20${year}-${month}-${day}T${time}`)
-	}
+	const [loading, setLoading] = useState(true)
+	const [error, setError] = useState('')
 
-	const sortedTransactions = [
-		...(jsonTransactions as TransactionCardProps[]),
-	].sort((a, b) => parseDate(b.date).getTime() - parseDate(a.date).getTime())
+	const [transactions, setTransactions] = useState<TransactionData[]>([])
 
+	useEffect(() => {
+		const fetchTransactions = async () => {
+			try {
+				const data = await getTransactionAdmin()
+				setTransactions(data)
+			} catch (err) {
+				setError(t('error occurred'))
+				console.error('Failed to fetch transactions:', err)
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		fetchTransactions()
+	}, [t])
+
+	if (loading) return <Loader />
+	if (error || !transactions)
+		return <Typography color='error'>{error}</Typography>
 	return (
 		<Box>
 			<Typography
@@ -49,8 +68,17 @@ const AdminTransactionsPage = () => {
 					gap: '25px',
 				}}
 			>
-				{sortedTransactions.map(tx => (
-					<TransactionCard key={`${tx.id}-${tx.date}`} {...tx} />
+				{transactions.map((transaction, index) => (
+					<TransactionCard
+						key={index}
+						id={transaction.transactionId}
+						date={transaction.date}
+						status={transaction.status as TransactionStatus}
+						type={transaction.type as TransactionType}
+						paymentMethod={transaction.method as PaymentMethod}
+						amount={transaction.amount}
+						balance={transaction.balance}
+					/>
 				))}
 			</Box>
 		</Box>

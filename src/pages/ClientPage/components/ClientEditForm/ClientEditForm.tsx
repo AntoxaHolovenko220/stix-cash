@@ -29,6 +29,25 @@ interface Props {
 	setClient: Dispatch<SetStateAction<Client | undefined>>
 }
 
+type Option = {
+	label?: string
+	labelImage?: string
+	value: string
+	color?: string
+	image?: string
+}
+
+type InputField = {
+	name?: string
+	key: string
+	value: any
+	onchange?: (val: string) => void
+	type?: string
+	inputType?: string
+	options?: Option[]
+	img?: string
+}
+
 const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 	const { t } = useTranslation()
 	const inputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({})
@@ -36,7 +55,9 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 	const [firstName, setFirstName] = useState(client.firstName)
 	const [lastName, setLastName] = useState(client.lastName)
 	const [phone, setPhone] = useState(client.phone)
-	const [isVerified, setIsVerified] = useState(client.isVerified)
+	const [verificationStatus, setVerificationStatus] = useState(
+		client.verificationStatus
+	)
 	const [walletBTCAddress, setWalletBTCAddress] = useState(
 		client.walletBTCAddress
 	)
@@ -64,11 +85,9 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 	const [zellePhone, setZellePhone] = useState(client.zelleTransfer.phone)
 	const [country, setCountry] = useState(client.country)
 	const [password, setPassword] = useState('')
-	const [balance, setBalance] = useState(
-		Number(client.balance.$numberDecimal).toFixed(2)
-	)
+	const [balance, setBalance] = useState(client.balance)
 	const [balanceBTC, setBalanceBTC] = useState(
-		Number(client.balanceBTC.$numberDecimal).toFixed(8)
+		Number(client.balanceBTC).toFixed(8).toString()
 	)
 	const [showBTCBalance, setShowBTCBalance] = useState(client.showBTCBalance)
 
@@ -181,7 +200,7 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 		}
 	}
 
-	const inputs = [
+	const inputs: InputField[] = [
 		{
 			name: t('first name'),
 			key: 'firstName',
@@ -205,14 +224,15 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 		},
 		{
 			name: t('verification status'),
-			key: 'isVerified',
-			value: isVerified.toString(),
-			onchange: (val: string) => setIsVerified(val === 'true'),
-			type: 'boolean',
-			select: true,
+			key: 'verificationStatus',
+			value: verificationStatus,
+			onchange: (val: string) => setVerificationStatus(val),
+			type: 'string',
+			inputType: 'select',
 			options: [
-				{ label: t('verified'), value: true },
-				{ label: t('no-verified'), value: false },
+				{ label: t('verified'), value: 'verified', color: '#52BC37' },
+				{ label: t('pending'), value: 'pending', color: '#F4D800' },
+				{ label: t('no-verified'), value: 'unverified', color: '#D72828' },
 			],
 		},
 		{
@@ -275,429 +295,421 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 	if (error || !client) return <Typography color='error'>{error}</Typography>
 
 	return (
-		<Box sx={{ maxWidth: '375px', width: '100%' }}>
-			<Box sx={{ maxWidth: '375px', width: '100%' }}>
-				<Box
+		<Box sx={{ maxWidth: '390px', width: '100%' }}>
+			<Box
+				sx={{
+					display: 'flex',
+					alignItems: 'center',
+					flexWrap: 'wrap',
+					gap: '15px',
+				}}
+			>
+				<Typography
 					sx={{
-						display: 'flex',
-						alignItems: 'center',
-						gap: '15px',
+						fontFamily: 'Manrope',
+						fontSize: '22px',
+						fontWeight: 700,
+						lineHeight: 1,
+						textTransform: 'uppercase',
+						whiteSpace: 'nowrap',
 					}}
 				>
-					<Typography
-						sx={{
-							fontFamily: 'Manrope',
-							fontSize: '22px',
-							fontWeight: 700,
-							lineHeight: 1,
-							textTransform: 'uppercase',
-						}}
-					>
-						{t('client information')}
-					</Typography>
-					<Typography
-						sx={{
-							fontFamily: 'Manrope',
-							fontSize: '13px',
-							fontWeight: 400,
-							lineHeight: 1,
-							color: '#232323',
-							opacity: 0.5,
-						}}
-					>
-						{client.firstName} {client.lastName}
-					</Typography>
-				</Box>
+					{t('client information')}
+				</Typography>
+				<Typography
+					sx={{
+						fontFamily: 'Manrope',
+						fontSize: '13px',
+						fontWeight: 400,
+						lineHeight: 1,
+						color: '#232323',
+						opacity: 0.5,
+						whiteSpace: 'nowrap',
+					}}
+				>
+					{client.firstName} {client.lastName}
+				</Typography>
+			</Box>
 
-				<Box
-					sx={{
-						maxWidth: '375px',
-						width: '100%',
-						mt: '30px',
-						boxSizing: 'border-box',
-					}}
-				>
-					{inputs.map(input => (
-						<Box
-							key={input.key}
-							sx={{
-								width: '100%',
-								height: '32px',
-								px: '10px',
-								display: 'flex',
-								justifyContent: 'space-between',
-								alignItems: 'center',
-								borderRadius: '8px',
-								backgroundColor: '#F7F9FF',
-								mb: '10px',
-								boxSizing: 'border-box',
-							}}
-						>
-							<Box sx={{ display: 'flex', gap: '5px' }}>
-								{input.key === 'walletBTCAddress' && (
-									<Box component='img' src='/wallet.svg' />
-								)}
-								{input.key === 'wire transfer' && (
-									<Box component='img' src='/wire-transfer.svg' />
-								)}
-								{input.img ? (
-									<Box component='img' src={input.img} />
-								) : (
-									<Typography
-										sx={{
-											fontFamily: 'Manrope',
-											fontSize: '13px',
-											fontWeight: 700,
-										}}
-									>
-										{input.name}
-									</Typography>
-								)}
-							</Box>
-							<Box sx={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-								{input.inputType === 'modal' ? (
-									<Typography
-										sx={{
-											width: '165px',
-											fontFamily: 'Manrope',
-											fontSize: '13px',
-											color: 'rgba(0, 0, 0, 0.38);',
-										}}
-									>
-										{input.key === 'walletBTCAddress'
-											? input.value
-											: input.key === 'paypal'
-											? input.value
-											: 'details...'}
-									</Typography>
-								) : input.key === 'isVerified' ? (
-									<Select
-										variant='standard'
-										value={isVerified.toString()}
-										onChange={e => input.onchange?.(e.target.value)}
-										displayEmpty
-										inputRef={el => (inputRefs.current[input.key] = el)}
-										onKeyDown={e => {
-											if (e.key === 'Enter') {
+			<Box
+				sx={{
+					maxWidth: '375px',
+					width: '100%',
+					mt: '30px',
+					boxSizing: 'border-box',
+				}}
+			>
+				{inputs.map(input => (
+					<Box
+						key={input.key}
+						sx={{
+							width: '100%',
+							height: '32px',
+							px: '10px',
+							display: 'flex',
+							justifyContent: 'space-between',
+							alignItems: 'center',
+							borderRadius: '8px',
+							backgroundColor: '#F7F9FF',
+							mb: '10px',
+							boxSizing: 'border-box',
+						}}
+					>
+						<Box sx={{ display: 'flex', gap: '5px' }}>
+							{input.key === 'walletBTCAddress' && (
+								<Box component='img' src='/wallet.svg' />
+							)}
+							{input.key === 'wire transfer' && (
+								<Box component='img' src='/wire-transfer.svg' />
+							)}
+							{input.img ? (
+								<Box component='img' src={input.img} />
+							) : (
+								<Typography
+									sx={{
+										fontFamily: 'Manrope',
+										fontSize: '13px',
+										fontWeight: 700,
+									}}
+								>
+									{input.name}
+								</Typography>
+							)}
+						</Box>
+						<Box sx={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+							{input.inputType === 'modal' ? (
+								<Typography
+									sx={{
+										width: '165px',
+										fontFamily: 'Manrope',
+										fontSize: '13px',
+										color: 'rgba(0, 0, 0, 0.38)',
+										whiteSpace: 'nowrap',
+										overflow: 'hidden',
+										textOverflow: 'ellipsis',
+									}}
+								>
+									{input.key === 'walletBTCAddress'
+										? input.value
+										: input.key === 'paypal'
+										? input.value
+										: 'details...'}
+								</Typography>
+							) : input.key === 'verificationStatus' ? (
+								<Select
+									variant='standard'
+									value={verificationStatus}
+									onChange={e => input.onchange?.(e.target.value)}
+									displayEmpty
+									inputRef={el => (inputRefs.current[input.key] = el)}
+									onKeyDown={e => {
+										if (e.key === 'Enter') {
+											e.preventDefault()
+											setIsEditing(prev => ({
+												...prev,
+												[input.key]: false,
+											}))
+										}
+									}}
+									MenuProps={{
+										PaperProps: {
+											sx: {
+												width: '172px',
+												ml: '-12px',
+											},
+										},
+										// Запрещаем открытие меню при isEditing false
+										onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => {
+											if (!isEditing[input.key]) {
 												e.preventDefault()
-												setIsEditing(prev => ({
-													...prev,
-													[input.key]: false,
-												}))
+												e.stopPropagation()
 											}
-										}}
-										MenuProps={{
-											PaperProps: {
-												sx: {
-													width: '172px',
-													ml: '-12px',
-												},
-											},
-											// Запрещаем открытие меню при isEditing false
-											onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => {
-												if (!isEditing[input.key]) {
-													e.preventDefault()
-													e.stopPropagation()
-												}
-											},
-										}}
-										renderValue={selected => {
-											const option = input.options?.find(
-												opt => opt.value.toString() === selected
-											)
-											if (!option) return ''
+										},
+									}}
+									renderValue={selected => {
+										const option = input.options?.find(
+											opt => opt.value.toString() === selected
+										)
+										if (!option) return ''
 
-											return (
-												<Box
-													sx={{
-														display: 'flex',
-														alignItems: 'cente',
-														justifyContent: 'space-between',
-														gap: '8px',
-														// Запрещаем события мыши при неактивном состоянии
-														pointerEvents: isEditing[input.key]
-															? 'auto'
-															: 'none',
-													}}
-												>
-													<Typography
-														sx={{
-															fontFamily: 'Manrope',
-															fontSize: '13px',
-															color:
-																option.value === true ? '#52BC37' : '#D72828',
-															opacity: '1 !important',
-														}}
-													>
-														{option.label}
-													</Typography>
-
-													<LabelIcon
-														sx={{
-															width: '18px',
-															height: '18px',
-															color:
-																option.value === true ? '#52BC37' : '#D72828',
-															transform: 'rotate(90deg)',
-															opacity: '1 !important',
-														}}
-													/>
-												</Box>
-											)
-										}}
-										inputProps={{
-											disableUnderline: true,
-											readOnly: !isEditing[input.key],
-										}}
-										sx={{
-											width: '165px',
-											fontSize: '13px',
-											fontFamily: 'Manrope',
-											padding: 0,
-											backgroundColor: 'transparent',
-											'& .MuiSelect-icon': {
-												display: isEditing[input.key] ? 'block' : 'none',
-											},
-											'&::before': {
-												borderBottom: 'none !important',
-											},
-											'&::after': {
-												borderBottom: 'none !important',
-											},
-											'&.Mui-disabled': {
-												opacity: 1,
-												color: 'inherit',
-											},
-											// Запрещаем события мыши при неактивном состоянии
-											pointerEvents: isEditing[input.key] ? 'auto' : 'none',
-											cursor: isEditing[input.key] ? 'pointer' : 'default',
-										}}
-									>
-										{input.options?.map(option => (
-											<MenuItem
-												key={option.value.toString()}
-												value={option.value.toString()}
+										return (
+											<Box
 												sx={{
 													display: 'flex',
-													alignItems: 'center',
+													alignItems: 'cente',
 													justifyContent: 'space-between',
+													gap: '8px',
+													// Запрещаем события мыши при неактивном состоянии
+													pointerEvents: isEditing[input.key] ? 'auto' : 'none',
 												}}
 											>
 												<Typography
 													sx={{
 														fontFamily: 'Manrope',
 														fontSize: '13px',
-														color:
-															option.value === true ? '#52BC37' : '#D72828',
+														color: option.color,
+														opacity: '1 !important',
 													}}
 												>
 													{option.label}
 												</Typography>
+
 												<LabelIcon
 													sx={{
 														width: '18px',
 														height: '18px',
-														color:
-															option.value === true ? '#52BC37' : '#D72828',
+														color: option.color,
 														transform: 'rotate(90deg)',
+														opacity: '1 !important',
 													}}
 												/>
-											</MenuItem>
-										))}
-									</Select>
-								) : input.key === 'country' ? (
-									<Autocomplete
-										freeSolo
-										options={countries.map(option => option.label)}
-										value={country}
-										onChange={(event, newValue) => setCountry(newValue || '')}
-										disabled={!isEditing.country}
-										renderInput={params => (
-											<TextField
-												{...params}
-												variant='standard'
-												inputRef={el => (inputRefs.current['country'] = el)}
-												InputProps={{
-													...params.InputProps,
-													onKeyDown: (
-														e: React.KeyboardEvent<HTMLInputElement>
-													) => handleKeyDown(e, 'country'),
-													disableUnderline: true,
-													sx: {
-														width: '165px',
-														fontSize: '13px',
-														fontFamily: 'Manrope',
-														padding: 0,
-														backgroundColor: 'transparent',
-													},
+											</Box>
+										)
+									}}
+									inputProps={{
+										disableUnderline: true,
+										readOnly: !isEditing[input.key],
+									}}
+									sx={{
+										width: '165px',
+										fontSize: '13px',
+										fontFamily: 'Manrope',
+										padding: 0,
+										backgroundColor: 'transparent',
+										'& .MuiSelect-icon': {
+											display: isEditing[input.key] ? 'block' : 'none',
+										},
+										'&::before': {
+											borderBottom: 'none !important',
+										},
+										'&::after': {
+											borderBottom: 'none !important',
+										},
+										'&.Mui-disabled': {
+											opacity: 1,
+											color: 'inherit',
+										},
+										// Запрещаем события мыши при неактивном состоянии
+										pointerEvents: isEditing[input.key] ? 'auto' : 'none',
+										cursor: isEditing[input.key] ? 'pointer' : 'default',
+									}}
+								>
+									{input.options?.map(option => (
+										<MenuItem
+											key={option.value.toString()}
+											value={option.value.toString()}
+											sx={{
+												display: 'flex',
+												alignItems: 'center',
+												justifyContent: 'space-between',
+											}}
+										>
+											<Typography
+												sx={{
+													fontFamily: 'Manrope',
+													fontSize: '13px',
+													color: option.color,
+												}}
+											>
+												{option.label}
+											</Typography>
+											<LabelIcon
+												sx={{
+													width: '18px',
+													height: '18px',
+													color: option.color,
+													transform: 'rotate(90deg)',
 												}}
 											/>
-										)}
-									/>
-								) : (
-									<TextField
-										variant='standard'
-										value={input.value}
-										onChange={e => {
-											const val = e.target.value
-											if (
-												input.key === 'balance' ||
-												input.key === 'balanceBTC'
-											) {
-												let cleaned = val.replace(/[^0-9.]/g, '')
-												const parts = cleaned.split('.')
-												if (parts.length > 2) {
-													cleaned = parts[0] + '.' + parts.slice(1).join('')
-												}
-												input.onchange?.(cleaned)
-											} else {
-												input.onchange?.(val)
-											}
-										}}
-										disabled={!isEditing[input.key]}
-										inputRef={el => (inputRefs.current[input.key] = el)}
-										InputProps={{
-											disableUnderline: true,
-											type: input.type ?? 'text',
-											sx: {
-												width: '165px',
-												fontSize: '13px',
-												fontFamily: 'Manrope',
-												padding: 0,
-												backgroundColor: 'transparent',
-											},
-										}}
-										inputProps={{
-											onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) =>
-												handleKeyDown(e, input.key),
-										}}
-									/>
-								)}
-								{input.inputType === 'modal' ? (
-									<IconButton
-										onClick={() => {
-											setModalInputKey(input.key)
-											if (input.key === 'wire transfer') {
-												setModalWireValues({
-													firstName: wireTransferFirstName,
-													lastName: wireTransferLastName,
-													accountNumber: wireTransferAccountNumber,
-													routingNumber: wireTransferRoutingNumber,
-													bankName: wireTransferBankName,
-													address: wireTransferAddress,
-												})
-											} else if (input.key === 'zelle') {
-												setModalZelleValues({
-													name: zelleName,
-													email: zelleEmail,
-													phone: zellePhone,
-												})
-											} else {
-												setModalInputValue(input.value)
-											}
-											setIsWalletModalOpen(true)
-											setModalName(input.key)
-										}}
-										sx={{ mr: '-10px' }}
-									>
-										<EditIcon
-											sx={{ width: '19px', height: '19px', color: '#0246FF' }}
+										</MenuItem>
+									))}
+								</Select>
+							) : input.key === 'country' ? (
+								<Autocomplete
+									freeSolo
+									options={countries.map(option => option.label)}
+									value={country}
+									onChange={(event, newValue) => setCountry(newValue || '')}
+									disabled={!isEditing.country}
+									renderInput={params => (
+										<TextField
+											{...params}
+											variant='standard'
+											inputRef={el => (inputRefs.current['country'] = el)}
+											InputProps={{
+												...params.InputProps,
+												onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) =>
+													handleKeyDown(e, 'country'),
+												disableUnderline: true,
+												sx: {
+													width: '165px',
+													fontSize: '13px',
+													fontFamily: 'Manrope',
+													padding: 0,
+													backgroundColor: 'transparent',
+												},
+											}}
 										/>
-									</IconButton>
-								) : (
-									<IconButton
-										onClick={async () => {
-											if (isEditing[input.key]) {
-												// Сохраняем изменения
-												try {
-													let valueToSave: any
-													if (input.key === 'firstName') valueToSave = firstName
-													else if (input.key === 'lastName')
-														valueToSave = lastName
-													else if (input.key === 'phone') valueToSave = phone
-													else if (input.key === 'country')
-														valueToSave = country
-													else if (input.key === 'password')
-														valueToSave = password
-													else if (input.key === 'balance')
-														valueToSave = Number(balance)
-													else if (input.key === 'balanceBTC')
-														valueToSave = Number(balanceBTC)
-													else if (input.key === 'isVerified')
-														valueToSave = isVerified
+									)}
+								/>
+							) : (
+								<TextField
+									variant='standard'
+									value={input.value}
+									onChange={e => {
+										const val = e.target.value
+										if (input.key === 'balance' || input.key === 'balanceBTC') {
+											let cleaned = val.replace(/[^0-9.]/g, '')
+											const parts = cleaned.split('.')
+											if (parts.length > 2) {
+												cleaned = parts[0] + '.' + parts.slice(1).join('')
+											}
+											input.onchange?.(cleaned)
+										} else {
+											input.onchange?.(val)
+										}
+									}}
+									disabled={!isEditing[input.key]}
+									inputRef={el => (inputRefs.current[input.key] = el)}
+									InputProps={{
+										disableUnderline: true,
+										type: input.type ?? 'text',
+										sx: {
+											width: '165px',
+											fontSize: '13px',
+											fontFamily: 'Manrope',
+											padding: 0,
+											backgroundColor: 'transparent',
+										},
+									}}
+									inputProps={{
+										onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) =>
+											handleKeyDown(e, input.key),
+									}}
+								/>
+							)}
+							{input.inputType === 'modal' ? (
+								<IconButton
+									onClick={() => {
+										setModalInputKey(input.key)
+										if (input.key === 'wire transfer') {
+											setModalWireValues({
+												firstName: wireTransferFirstName,
+												lastName: wireTransferLastName,
+												accountNumber: wireTransferAccountNumber,
+												routingNumber: wireTransferRoutingNumber,
+												bankName: wireTransferBankName,
+												address: wireTransferAddress,
+											})
+										} else if (input.key === 'zelle') {
+											setModalZelleValues({
+												name: zelleName,
+												email: zelleEmail,
+												phone: zellePhone,
+											})
+										} else {
+											setModalInputValue(input.value)
+										}
+										setIsWalletModalOpen(true)
+										setModalName(input.key)
+									}}
+									sx={{ mr: '-10px' }}
+								>
+									<EditIcon
+										sx={{ width: '19px', height: '19px', color: '#0246FF' }}
+									/>
+								</IconButton>
+							) : (
+								<IconButton
+									onClick={async () => {
+										if (isEditing[input.key]) {
+											try {
+												let valueToSave: any
+												if (input.key === 'firstName') valueToSave = firstName
+												else if (input.key === 'lastName')
+													valueToSave = lastName
+												else if (input.key === 'phone') valueToSave = phone
+												else if (input.key === 'country') valueToSave = country
+												else if (input.key === 'password')
+													valueToSave = password
+												else if (input.key === 'balance')
+													valueToSave = Number(balance).toFixed(2)
+												else if (input.key === 'balanceBTC')
+													valueToSave = Number(balanceBTC).toFixed(8)
+												else if (input.key === 'verificationStatus')
+													valueToSave = verificationStatus
 
-													await handleSaveField(input.key, valueToSave)
+												await handleSaveField(input.key, valueToSave)
 
-													setIsEditing(prev => ({
-														...prev,
-														[input.key]: false,
-													}))
-												} catch (err) {
-													console.error('Failed to save field:', err)
-												}
-											} else {
 												setIsEditing(prev => ({
 													...prev,
-													[input.key]: true,
+													[input.key]: false,
 												}))
-												focusInput(input.key)
+											} catch (err) {
+												console.error('Failed to save field:', err)
 											}
-										}}
-										sx={{ mr: '-10px' }}
-									>
-										{isEditing[input.key] ? (
-											<CheckIcon
-												sx={{
-													width: '19px',
-													height: '19px',
-													color: '#52BC37',
-												}}
-											/>
-										) : (
-											<EditIcon
-												sx={{
-													width: '19px',
-													height: '19px',
-													color: '#0246FF',
-												}}
-											/>
-										)}
-									</IconButton>
-								)}
-							</Box>
+										} else {
+											setIsEditing(prev => ({
+												...prev,
+												[input.key]: true,
+											}))
+											focusInput(input.key)
+										}
+									}}
+									sx={{ mr: '-10px' }}
+								>
+									{isEditing[input.key] ? (
+										<CheckIcon
+											sx={{
+												width: '19px',
+												height: '19px',
+												color: '#52BC37',
+											}}
+										/>
+									) : (
+										<EditIcon
+											sx={{
+												width: '19px',
+												height: '19px',
+												color: '#0246FF',
+											}}
+										/>
+									)}
+								</IconButton>
+							)}
 						</Box>
-					))}
+					</Box>
+				))}
 
-					<Box
+				<Box
+					sx={{
+						display: 'flex',
+						alignItems: 'center',
+					}}
+				>
+					<Checkbox
+						checked={showBTCBalance}
+						onChange={async () => {
+							const newValue = !showBTCBalance
+							try {
+								await handleSaveField('showBTCBalance', newValue)
+								setShowBTCBalance(newValue)
+							} catch (err) {
+								console.error('Failed to update showBTCBalance:', err)
+							}
+						}}
+						sx={{ ml: '-11px' }}
+					/>
+					<Typography
 						sx={{
-							display: 'flex',
-							alignItems: 'center',
+							fontFamily: 'Manrope',
+							fontSize: '13px',
+							fontWeight: 700,
+							lineHeight: 1,
 						}}
 					>
-						<Checkbox
-							checked={showBTCBalance}
-							onChange={async () => {
-								const newValue = !showBTCBalance
-								try {
-									await handleSaveField('showBTCBalance', newValue)
-									setShowBTCBalance(newValue)
-								} catch (err) {
-									console.error('Failed to update showBTCBalance:', err)
-								}
-							}}
-							sx={{ ml: '-11px' }}
-						/>
-						<Typography
-							sx={{
-								fontFamily: 'Manrope',
-								fontSize: '13px',
-								fontWeight: 700,
-								lineHeight: 1,
-							}}
-						>
-							{t('showBTCBalance')}
-						</Typography>
-					</Box>
+						{t('showBTCBalance')}
+					</Typography>
 				</Box>
 			</Box>
 			<WalletModal

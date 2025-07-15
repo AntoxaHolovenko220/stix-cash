@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, useMediaQuery } from '@mui/material'
 import { Loader } from '@/components'
 import { useTranslation } from 'react-i18next'
 import { getProfile, Client } from '@/api/clientService'
@@ -11,6 +11,9 @@ const ProfilePage = () => {
 	const [profile, setProfile] = useState<Client>()
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState('')
+	const [showDocument, setShowDocument] = useState(false)
+
+	const isMobile = useMediaQuery('(max-width:480px)')
 
 	useEffect(() => {
 		const fetchProfile = async () => {
@@ -43,10 +46,20 @@ const ProfilePage = () => {
 					display: 'flex',
 					gap: '20px',
 					justifyContent: 'space-around',
+					boxShadow: 'border-box',
 				}}
 			>
-				<UserInfoBlock profile={profile} />
-				{profile.isVerified === false && <DocumentVerificationBlock />}
+				{!showDocument && (
+					<UserInfoBlock
+						profile={profile}
+						setProfile={setProfile}
+						setShowDocument={setShowDocument}
+					/>
+				)}
+				{profile.verificationStatus === 'unverified' && !isMobile && (
+					<DocumentVerificationBlock />
+				)}
+				{showDocument && <DocumentVerificationBlock />}
 			</Box>
 		</Box>
 	)

@@ -11,12 +11,15 @@ interface HeaderProps {
 const Header = ({ onLogoClick }: HeaderProps) => {
 	const navigate = useNavigate()
 	const isWideScreen = useMediaQuery('(min-width:1280px)')
+	const isMobile = useMediaQuery('(max-width:480px)')
 
 	return (
 		<Box
 			sx={{
 				width: '100%',
 				py: '20px',
+				px: isMobile ? '20px' : '50px',
+				boxSizing: 'border-box',
 				display: 'flex',
 				justifyContent: !isWideScreen ? 'space-between' : 'flex-end',
 				backgroundColor: '#0246FF',
@@ -28,7 +31,6 @@ const Header = ({ onLogoClick }: HeaderProps) => {
 					onClick={onLogoClick}
 					sx={{
 						width: 'fit-content',
-						ml: '50px',
 						p: '10px',
 						bgcolor: '#EFEFEF',
 						borderRadius: '30px',
@@ -51,11 +53,12 @@ const Header = ({ onLogoClick }: HeaderProps) => {
 					</Typography>
 				</Box>
 			)}
-			<Box
-				sx={{ mr: '50px', display: 'flex', alignItems: 'center', gap: '20px' }}
-			>
+			<Box sx={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
 				<LanguageSwitcher color='#FFFFFF' />
-				<IconButton onClick={() => navigate(`${routes.HomePage.path}`)}>
+				<IconButton
+					// onClick={() => navigate(`${routes.HomePage.path}`)}
+					sx={{ p: 0 }}
+				>
 					<Box component='img' src='/person-white.svg' />
 				</IconButton>
 			</Box>

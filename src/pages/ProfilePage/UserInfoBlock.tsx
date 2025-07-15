@@ -4,17 +4,26 @@ import {
 	TextField,
 	IconButton,
 	Autocomplete,
+	useMediaQuery,
+	Button,
 } from '@mui/material'
 import EditIcon from '@mui/icons-material/Edit'
 import CheckIcon from '@mui/icons-material/Check'
-import { useRef, useState, useCallback } from 'react'
+import { useRef, useState, useCallback, Dispatch, SetStateAction } from 'react'
 import { useTranslation } from 'react-i18next'
 import VerificationBlock from '@/components/VerificationBlock'
 import countries from '@/pages/RegisterModal/countries.json'
-import { Client } from '@/api/clientService'
+import { Client, updateProfileField } from '@/api/clientService'
 
-const UserInfoBlock = ({ profile }: { profile: Client }) => {
+interface Props {
+	profile: Client
+	setProfile: Dispatch<SetStateAction<Client | undefined>>
+	setShowDocument: Dispatch<SetStateAction<boolean>>
+}
+const UserInfoBlock = ({ profile, setProfile, setShowDocument }: Props) => {
 	const { t } = useTranslation()
+
+	const isMobile = useMediaQuery('(max-width:480px)')
 
 	const [isEditing, setIsEditing] = useState<{ [key: string]: boolean }>({})
 	const [firstName, setFirstName] = useState(profile.firstName)
@@ -51,6 +60,17 @@ const UserInfoBlock = ({ profile }: { profile: Client }) => {
 		setPhone(digits.length === 0 ? '' : `+${digits}`)
 	}
 
+	const handleSaveField = async (field: string, value: any) => {
+		try {
+			console.log('Sending update:', { [field]: value })
+			await updateProfileField({ [field]: value })
+
+			setProfile(prev => (prev ? { ...prev, [field]: value } : prev))
+		} catch (err) {
+			console.error('Failed to update field:', err)
+		}
+	}
+
 	const inputsText = [
 		{
 			name: t('first name'),
@@ -74,43 +94,51 @@ const UserInfoBlock = ({ profile }: { profile: Client }) => {
 	]
 
 	return (
-		<Box sx={{ maxWidth: '360px', width: '100%' }}>
-			<Box
-				sx={{
-					width: '150px',
-					height: '35px',
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center',
-					backgroundColor: '#F0F4FF',
-					borderTopRightRadius: '16px',
-					borderTopLeftRadius: '16px',
-				}}
-			>
-				<Typography
+		<Box
+			sx={{
+				maxWidth: isMobile ? '100%' : '360px',
+				width: '100%',
+				boxSizing: 'border-box',
+			}}
+		>
+			{!isMobile && (
+				<Box
 					sx={{
-						fontFamily: 'Manrope',
-						fontSize: '18px',
-						fontWeight: 500,
-						color: '#0246FF',
+						width: '150px',
+						height: '35px',
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						backgroundColor: '#F0F4FF',
+						borderTopRightRadius: '16px',
+						borderTopLeftRadius: '16px',
 					}}
 				>
-					{t('info')}
-				</Typography>
-			</Box>
+					<Typography
+						sx={{
+							fontFamily: 'Manrope',
+							fontSize: '18px',
+							fontWeight: 500,
+							color: '#0246FF',
+						}}
+					>
+						{t('info')}
+					</Typography>
+				</Box>
+			)}
 
 			<Box
 				sx={{
-					maxWidth: '320px',
 					width: '100%',
-					height: '553px',
+					minHeight: '594px',
 					p: '20px',
 					display: 'flex',
 					flexDirection: 'column',
 					alignItems: 'center',
 					borderRadius: '16px',
-					borderTopLeftRadius: '0px',
+					borderTopLeftRadius: !isMobile ? '0px' : '16px',
 					backgroundColor: '#F0F4FF',
+					boxSizing: 'border-box',
 				}}
 			>
 				<Box
@@ -131,7 +159,7 @@ const UserInfoBlock = ({ profile }: { profile: Client }) => {
 						sx={{ width: '55px', height: 'auto' }}
 					/>
 				</Box>
-				<VerificationBlock verified={profile.isVerified} />
+				<VerificationBlock status={profile.verificationStatus} />
 				<Typography
 					sx={{
 						mt: '15px',
@@ -144,10 +172,7 @@ const UserInfoBlock = ({ profile }: { profile: Client }) => {
 					{profile.firstName} {profile.lastName}
 				</Typography>
 				{inputsText.map((input, index) => (
-					<Box
-						key={index}
-						sx={{ mt: '20px', maxWidth: '320px', width: '100%' }}
-					>
+					<Box key={index} sx={{ mt: '20px', width: '100%' }}>
 						<Typography
 							sx={{
 								mb: '3px',
@@ -187,10 +212,10 @@ const UserInfoBlock = ({ profile }: { profile: Client }) => {
 									onChange={e => input.onchange(e.target.value)}
 									disabled={!isEditing[input.key]}
 									inputRef={el => (inputRefs.current[input.key] = el)}
+									sx={{ width: isMobile ? '90%' : '250px' }}
 									InputProps={{
 										disableUnderline: true,
 										sx: {
-											width: '250px',
 											fontSize: '13px',
 											fontFamily: 'Manrope',
 											padding: 0,
@@ -203,12 +228,18 @@ const UserInfoBlock = ({ profile }: { profile: Client }) => {
 									}}
 								/>
 								<IconButton
-									onClick={() => {
+									onClick={async () => {
 										if (isEditing[input.key]) {
-											setIsEditing(prev => ({
-												...prev,
-												[input.key]: false,
-											}))
+											try {
+												await handleSaveField(input.key, input.value)
+
+												setIsEditing(prev => ({
+													...prev,
+													[input.key]: false,
+												}))
+											} catch (err) {
+												console.error('Failed to save field:', err)
+											}
 										} else {
 											setIsEditing(prev => ({
 												...prev,
@@ -241,7 +272,7 @@ const UserInfoBlock = ({ profile }: { profile: Client }) => {
 						</Box>
 					</Box>
 				))}
-				<Box sx={{ mt: '20px', maxWidth: '320px', width: '100%' }}>
+				<Box sx={{ mt: '20px', width: '100%' }}>
 					<Typography
 						sx={{
 							mb: '3px',
@@ -265,6 +296,9 @@ const UserInfoBlock = ({ profile }: { profile: Client }) => {
 						}}
 					>
 						<Autocomplete
+							sx={{
+								width: isMobile ? '95%' : '250px',
+							}}
 							freeSolo
 							options={countries.map(option => option.label)}
 							value={country}
@@ -281,7 +315,6 @@ const UserInfoBlock = ({ profile }: { profile: Client }) => {
 											handleKeyDown(e, 'country'),
 										disableUnderline: true,
 										sx: {
-											width: '250px',
 											fontSize: '13px',
 											fontFamily: 'Manrope',
 											padding: 0,
@@ -292,8 +325,9 @@ const UserInfoBlock = ({ profile }: { profile: Client }) => {
 							)}
 						/>
 						<IconButton
-							onClick={() => {
+							onClick={async () => {
 								if (isEditing.country) {
+									await handleSaveField('country', country)
 									setIsEditing(prev => ({ ...prev, country: false }))
 								} else {
 									setIsEditing(prev => ({ ...prev, country: true }))
@@ -322,6 +356,26 @@ const UserInfoBlock = ({ profile }: { profile: Client }) => {
 						</IconButton>
 					</Box>
 				</Box>
+				{isMobile && profile.verificationStatus === 'unverified' && (
+					<Button
+						sx={{
+							width: '100%',
+							height: '56px',
+							mt: '35px',
+							border: '1px solid #232323',
+							borderRadius: '6px',
+							background: 'linear-gradient(180deg, #58A9FF, #0044FF)',
+							fontFamily: 'Manrope',
+							fontSize: '22px',
+							fontWeight: 700,
+							textTransform: 'none',
+							color: '#FFF',
+						}}
+						onClick={() => setShowDocument(true)}
+					>
+						{t('verify')}
+					</Button>
+				)}
 			</Box>
 		</Box>
 	)

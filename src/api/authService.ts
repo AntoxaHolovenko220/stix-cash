@@ -38,7 +38,7 @@ export const registerUser = async (
 }
 
 export const loginUser = async (data: LoginData): Promise<AuthResponse> => {
-	const response = await axios.post(`${API_URL}/admin/auth/login`, data)
+	const response = await axios.post(`${API_URL}/user/auth/login`, data)
 	return response.data
 }
 
@@ -123,6 +123,7 @@ axios.interceptors.response.use(
 	response => response,
 	async error => {
 		const originalRequest = error.config
+		const userData = getUserData()
 
 		if (
 			error.response?.status === 401 &&
@@ -147,9 +148,12 @@ axios.interceptors.response.use(
 
 			try {
 				const refreshToken = localStorage.getItem('refreshToken')
-				const res = await axios.post(`${API_URL}/admin/auth/refresh`, {
-					refreshToken,
-				})
+				const res = await axios.post(
+					`${API_URL}/${userData?.roles[0]}/auth/refresh`,
+					{
+						refreshToken,
+					}
+				)
 
 				const newAccessToken = res.data.accessToken
 				const newRefreshToken = res.data.refreshToken

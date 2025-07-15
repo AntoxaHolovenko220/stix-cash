@@ -1,21 +1,50 @@
 import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import jsonTransactions from '@/pages/transactions.json'
-import { TransactionCard } from '@/components'
-import { TransactionCardProps } from '@/components/TransactionCard/TransactionCard'
+import { Loader, TransactionCard } from '@/components'
+import { useEffect, useState } from 'react'
+import {
+	getProfileTransaction,
+	TransactionData,
+} from '@/api/transactionService'
+import {
+	PaymentMethod,
+	TransactionStatus,
+	TransactionType,
+} from '@/components/TransactionCard/TransactionCard'
 
 const TransactionsPage = () => {
 	const { t } = useTranslation()
+	const [transactions, setTransactions] = useState<TransactionData[]>([])
+	const [loading, setLoading] = useState(true)
+	const [error, setError] = useState('')
 
-	const parseDate = (dateStr: string) => {
-		const [day, month, yearAndTime] = dateStr.split('.')
-		const [year, time] = yearAndTime.split(' ')
-		return new Date(`20${year}-${month}-${day}T${time}`)
+	useEffect(() => {
+		const fetchTransactions = async () => {
+			try {
+				const transactionData = await getProfileTransaction()
+				setTransactions(transactionData)
+			} catch (err) {
+				setError(t('error occurred'))
+				console.error('Failed to fetch transactions:', err)
+			} finally {
+				setLoading(false)
+			}
+		}
+
+		fetchTransactions()
+	}, [t])
+
+	if (loading) {
+		return <Loader />
 	}
 
-	const sortedTransactions = [
-		...(jsonTransactions as TransactionCardProps[]),
-	].sort((a, b) => parseDate(b.date).getTime() - parseDate(a.date).getTime())
+	if (error) {
+		return <Typography color='error'>{error}</Typography>
+	}
+
+	if (!transactions) {
+		return <Typography>{t('error occurred')}</Typography>
+	}
 
 	return (
 		<Box>
@@ -49,8 +78,17 @@ const TransactionsPage = () => {
 					gap: '25px',
 				}}
 			>
-				{sortedTransactions.map(tx => (
-					<TransactionCard key={`${tx.id}-${tx.date}`} {...tx} />
+				{transactions.map((transaction, index) => (
+					<TransactionCard
+						key={index}
+						id={transaction.transactionId}
+						date={transaction.date}
+						status={transaction.status as TransactionStatus}
+						type={transaction.type as TransactionType}
+						paymentMethod={transaction.method as PaymentMethod}
+						amount={transaction.amount}
+						balance={transaction.balance}
+					/>
 				))}
 			</Box>
 		</Box>

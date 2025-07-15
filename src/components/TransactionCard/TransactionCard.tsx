@@ -1,9 +1,13 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, useMediaQuery } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-type TransactionType = 'Deposit' | 'Withdrawal'
-type TransactionStatus = 'Completed' | 'Canceled' | 'Pending'
-type PaymentMethod = 'Zelle' | 'PayPal' | 'Wire transfer' | 'Wallet'
+export type TransactionType = 'deposit' | 'withdrawal'
+export type TransactionStatus = 'completed' | 'canceled' | 'pending'
+export type PaymentMethod =
+	| 'zelleTransfer'
+	| 'paypalAddress'
+	| 'wireTransfer'
+	| 'walletBTCAddress'
 
 interface PaymentMethodConfig {
 	icon: string
@@ -16,8 +20,8 @@ export interface TransactionCardProps {
 	status: TransactionStatus
 	type: TransactionType
 	paymentMethod: PaymentMethod
-	amount: number
-	balance: number
+	amount: string
+	balance: string
 	wallet?: string
 }
 
@@ -33,28 +37,23 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 }) => {
 	const { t } = useTranslation()
 
-	// Форматирование чисел
-	const formatNumber = (num: number) =>
-		new Intl.NumberFormat('en-US', {
-			minimumFractionDigits: 2,
-			maximumFractionDigits: 2,
-		}).format(num)
+	const isMobile = useMediaQuery('(max-width:480px)')
 
 	// Конфигурация статусов
 	const statusConfig = {
-		Completed: { color: '#52BC37', icon: '/completed.svg' },
-		Canceled: { color: '#D72828', icon: '/canceled.svg' },
-		Pending: { color: '#F4D800', icon: '/pending.svg' },
+		completed: { color: '#52BC37', icon: '/completed.svg' },
+		canceled: { color: '#D72828', icon: '/canceled.svg' },
+		pending: { color: '#F4D800', icon: '/pending.svg' },
 	}
 
 	// Конфигурация методов оплаты
 	const paymentMethodConfig: Record<PaymentMethod, PaymentMethodConfig> = {
-		PayPal: { icon: '/paypal.svg' },
-		Zelle: { icon: '/zelle.svg' },
-		'Wire transfer': { icon: '/wire-transfer.svg', label: 'Wire transfer' },
-		Wallet: {
+		paypalAddress: { icon: '/paypal.svg' },
+		zelleTransfer: { icon: '/zelle.svg' },
+		wireTransfer: { icon: '/wire-transfer.svg', label: 'Wire transfer' },
+		walletBTCAddress: {
 			icon: '/wallet.svg',
-			label: type === 'Deposit' ? 'From wallet' : 'To wallet',
+			label: type === 'deposit' ? 'From wallet' : 'To wallet',
 		},
 	}
 
@@ -68,12 +67,25 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 	// Получаем конфигурацию для текущего метода оплаты
 	const currentPaymentMethod = paymentMethodConfig[paymentMethod]
 
+	const formattedDate = new Intl.DateTimeFormat('uk-UA', {
+		year: 'numeric',
+		month: '2-digit',
+		day: '2-digit',
+		hour: '2-digit',
+		minute: '2-digit',
+		hourCycle: 'h23',
+	})
+		.format(new Date(date))
+		.replace(',', '')
+
 	return (
 		<Box
 			sx={{
-				width: 'calc(100% - 30px)',
+				width: '100%',
 				minHeight: '98px',
+				boxSizing: 'border-box',
 				backgroundColor: '#F7F9FF',
+				borderRadius: isMobile ? '6px' : 0,
 				p: '25px 15px',
 			}}
 		>
@@ -93,11 +105,11 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 					component='img'
 					src='/transaction-arrow.svg'
 					sx={{
-						transform: type === 'Deposit' ? 'rotate(0deg)' : 'rotate(180deg)',
+						transform: type === 'deposit' ? 'rotate(0deg)' : 'rotate(180deg)',
 					}}
 				/>
 				<Typography sx={{ ...commonStyles, fontWeight: 500, color: '#FFFFFF' }}>
-					{type === 'Deposit' ? t('top-up') : t('withdrawal')}
+					{type === 'deposit' ? t('top-up') : t('withdrawal')}
 				</Typography>
 				<Box sx={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
 					<Box component='img' src={currentPaymentMethod.icon} />
@@ -111,10 +123,20 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 				</Box>
 			</Box>
 
-			<Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+			<Box
+				sx={{
+					display: 'flex',
+					justifyContent: 'space-between',
+					'@media (max-width:900px)': {
+						flexDirection: 'column',
+						alignItems: 'center',
+						gap: '20px',
+					},
+				}}
+			>
 				{[
 					{ label: t('id transaction'), value: id },
-					{ label: t('date'), value: date },
+					{ label: t('date'), value: formattedDate },
 					{
 						label: t('status'),
 						value: (
@@ -128,7 +150,11 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 										color: statusConfig[status].color,
 									}}
 								>
-									{status}
+									{status === 'completed'
+										? 'Completed'
+										: status === 'canceled'
+										? 'Canceled'
+										: 'Pending'}
 								</Typography>
 								<Box component='img' src={statusConfig[status].icon} />
 							</Box>
@@ -141,10 +167,10 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 								sx={{
 									...commonStyles,
 									fontWeight: 600,
-									color: type === 'Deposit' ? '#52BC37' : '#000000',
+									color: type === 'deposit' ? '#52BC37' : '#000000',
 								}}
 							>
-								{type}
+								{type === 'deposit' ? 'Deposit' : 'Withdrawal'}
 							</Typography>
 						),
 					},
@@ -173,7 +199,14 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 									)}
 								</Box>
 								<Typography
-									sx={{ ...commonStyles, fontWeight: 400, mt: '15px' }}
+									sx={{
+										...commonStyles,
+										fontWeight: 400,
+										mt: '15px',
+										'@media (max-width:900px)': {
+											mt: '0px',
+										},
+									}}
 								>
 									{wallet
 										? `${wallet.slice(0, 4)}...${wallet.slice(-6)}`
@@ -182,8 +215,8 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 							</>
 						),
 					},
-					{ label: t('amount'), value: formatNumber(amount) },
-					{ label: t('yourbalance'), value: formatNumber(balance) },
+					{ label: t('amount'), value: amount },
+					{ label: t('yourbalance'), value: balance },
 				].map((item, index) => (
 					<Box
 						key={index}
@@ -192,7 +225,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 								index === 0
 									? '117px'
 									: index === 1
-									? '116px'
+									? '128px'
 									: index === 2
 									? '108px'
 									: index === 3
@@ -203,20 +236,40 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 									? '85px'
 									: '105px',
 							width: '100%',
+							'@media (max-width:900px)': {
+								maxWidth: '100%',
+								display: 'flex',
+								justifyContent: 'space-between',
+								alignItems: 'center',
+							},
 						}}
 					>
 						{item.label && (
-							<Typography sx={{ ...commonStyles, fontWeight: 600, mb: '15px' }}>
-								{item.label}
+							<Typography
+								sx={{
+									...commonStyles,
+									fontWeight: 600,
+									mb: '15px',
+									'@media (max-width:900px)': {
+										mb: '0px',
+									},
+								}}
+							>
+								{item.label}:
 							</Typography>
 						)}
-						{typeof item.value === 'string' ? (
-							<Typography sx={{ ...commonStyles, fontWeight: 400 }}>
-								{item.value}
-							</Typography>
-						) : (
-							item.value
-						)}
+						<Typography
+							sx={{
+								...commonStyles,
+								fontWeight: 400,
+							}}
+						>
+							{item.label === t('amount')
+								? Number(item.value).toFixed(2)
+								: item.label === t('yourbalance')
+								? Number(item.value).toFixed(2)
+								: item.value}
+						</Typography>
 					</Box>
 				))}
 			</Box>

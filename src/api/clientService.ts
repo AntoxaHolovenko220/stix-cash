@@ -3,10 +3,6 @@ import axios from 'axios'
 
 const API_URL = 'http://localhost:3000'
 
-export interface Balance {
-	$numberDecimal: string
-}
-
 export interface WireTransfer {
 	firstName: string
 	lastName: string
@@ -34,11 +30,11 @@ export interface Client {
 	password: string
 	isTermsAccepted: boolean
 	roles: string[]
-	isVerified: boolean
+	verificationStatus: string
 	documents: string[]
 	googleDriveFolderId: string
-	balance: Balance
-	balanceBTC: Balance
+	balance: string
+	balanceBTC: string
 	showBTCBalance: boolean
 	walletBTCAddress: string
 	paypalAddress: string
@@ -87,16 +83,12 @@ export const verifyDocuments = async (files: File[]) => {
 		formData.append('file', file)
 	})
 
-	const response = await axios.post(
-		'http://localhost:3000/user/documents',
-		formData,
-		{
-			headers: {
-				Authorization: `Bearer ${token}`,
-				'Content-Type': 'multipart/form-data',
-			},
-		}
-	)
+	const response = await axios.post(`${API_URL}/user/documents`, formData, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+			'Content-Type': 'multipart/form-data',
+		},
+	})
 
 	return response.data
 }
@@ -108,7 +100,19 @@ export const updateClientField = async (
 	const token = localStorage.getItem('accessToken')
 	if (!token) throw new Error('No token found')
 
-	return axios.patch(`http://localhost:3000/admin/users/${id}`, payload, {
+	return axios.patch(`${API_URL}/admin/users/${id}`, payload, {
+		headers: {
+			Authorization: `Bearer ${token}`,
+			'Content-Type': 'application/json',
+		},
+	})
+}
+
+export const updateProfileField = async (payload: Record<string, any>) => {
+	const token = localStorage.getItem('accessToken')
+	if (!token) throw new Error('No token found')
+
+	return axios.patch(`${API_URL}/user/me`, payload, {
 		headers: {
 			Authorization: `Bearer ${token}`,
 			'Content-Type': 'application/json',

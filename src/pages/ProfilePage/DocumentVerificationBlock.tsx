@@ -9,6 +9,7 @@ import {
 	Dialog,
 	DialogContent,
 	DialogActions,
+	useMediaQuery,
 } from '@mui/material'
 import UploadIcon from '@mui/icons-material/Upload'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
@@ -20,6 +21,8 @@ import { verifyDocuments } from '@/api/clientService'
 
 const DocumentVerificationBlock = () => {
 	const { t } = useTranslation()
+
+	const isMobile = useMediaQuery('(max-width:480px)')
 
 	const [selectedOption, setSelectedOption] = useState<'passport' | 'license'>(
 		'passport'
@@ -70,41 +73,44 @@ const DocumentVerificationBlock = () => {
 	}
 
 	return (
-		<Box sx={{ maxWidth: '460px', width: '100%' }}>
-			<Box
-				sx={{
-					width: '180px',
-					height: '35px',
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center',
-					backgroundColor: '#F0F4FF',
-					borderTopRightRadius: '16px',
-					borderTopLeftRadius: '16px',
-				}}
-			>
-				<Typography
+		<Box sx={{ maxWidth: '460px', width: '100%', boxSizing: 'border-box' }}>
+			{!isMobile && (
+				<Box
 					sx={{
-						fontFamily: 'Manrope',
-						fontSize: '18px',
-						fontWeight: 500,
-						color: '#0246FF',
+						width: '180px',
+						height: '35px',
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+						backgroundColor: '#F0F4FF',
+						borderTopRightRadius: '16px',
+						borderTopLeftRadius: '16px',
+						boxSizing: 'border-box',
 					}}
 				>
-					{t('documents')}
-				</Typography>
-			</Box>
+					<Typography
+						sx={{
+							fontFamily: 'Manrope',
+							fontSize: '18px',
+							fontWeight: 500,
+							color: '#0246FF',
+						}}
+					>
+						{t('documents')}
+					</Typography>
+				</Box>
+			)}
 			<Box
 				sx={{
-					maxWidth: '420px',
 					width: '100%',
-					height: '553px',
+					minHeight: '594px',
 					p: '20px',
 					display: 'flex',
 					flexDirection: 'column',
 					borderRadius: '16px',
-					borderTopLeftRadius: '0px',
+					borderTopLeftRadius: !isMobile ? '0px' : '16px',
 					backgroundColor: '#F0F4FF',
+					boxSizing: 'border-box',
 				}}
 			>
 				<Typography
@@ -313,7 +319,7 @@ const DocumentVerificationBlock = () => {
 					</Box>
 				)}
 
-				<Box sx={{ mt: '15px', display: 'flex', gap: '10px' }}>
+				<Box sx={{ mt: 'auto', display: 'flex', gap: '10px' }}>
 					<InfoOutlinedIcon />
 					<Typography
 						sx={{

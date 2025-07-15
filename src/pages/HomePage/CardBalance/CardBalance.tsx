@@ -2,8 +2,7 @@ import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import routes from '@/router/routes.json'
-import { useEffect, useState } from 'react'
-import axios from 'axios'
+import { useState } from 'react'
 
 interface CardBalanceProps {
 	balance: number | string
@@ -20,10 +19,6 @@ const CardBalance = ({
 	const navigate = useNavigate()
 
 	const [error, setError] = useState('')
-
-	const formatBalance = () => {
-		return typeof balance === 'number' ? balance.toLocaleString() : balance
-	}
 
 	const commonTextStyles = {
 		fontFamily: 'Manrope',
@@ -58,6 +53,15 @@ const CardBalance = ({
 				</Typography>
 
 				<Box sx={{ mt: '25px' }}>
+					<Typography
+						sx={{
+							...commonTextStyles,
+							fontSize: '26px',
+							letterSpacing: '-1px',
+						}}
+					>
+						$ {balance}
+					</Typography>
 					{showBtcBalance && (
 						<Typography
 							sx={{
@@ -67,22 +71,13 @@ const CardBalance = ({
 								color: '#FFFFFF',
 								textTransform: 'uppercase',
 								fontSize: '32px',
-								mb: '10px',
+								mt: '10px',
 								letterSpacing: '-1px',
 							}}
 						>
 							{BTCbalance} BTC
 						</Typography>
 					)}
-					<Typography
-						sx={{
-							...commonTextStyles,
-							fontSize: '26px',
-							letterSpacing: '-1px',
-						}}
-					>
-						$ {formatBalance()}
-					</Typography>
 				</Box>
 			</Box>
 

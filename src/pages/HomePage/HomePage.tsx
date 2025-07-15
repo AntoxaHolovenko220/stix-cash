@@ -1,42 +1,38 @@
 import { useState, useEffect } from 'react'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Typography, useMediaQuery } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import routes from '@/router/routes.json'
 import CardBalance from './CardBalance'
 import { TransactionCard, VerificationBlock, Loader } from '@/components'
-import jsonTransactions from '@/pages/transactions.json'
-import { TransactionCardProps } from '@/components/TransactionCard/TransactionCard'
 import { getProfile, Client } from '@/api/clientService'
-import { getUserData } from '@/api/authService'
-import { getDecimalValue } from '@/hooks/useDecimalValue'
+import {
+	getProfileTransaction,
+	TransactionData,
+} from '@/api/transactionService'
+import {
+	PaymentMethod,
+	TransactionStatus,
+	TransactionType,
+} from '@/components/TransactionCard/TransactionCard'
 
 const HomePage = () => {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
 	const [profile, setProfile] = useState<Client>()
+	const [transactions, setTransactions] = useState<TransactionData[]>([])
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState('')
 
-	const userData = getUserData()
-	const isUser = userData?.roles?.includes('user')
+	const isMobile = useMediaQuery('(max-width:480px)')
 
 	useEffect(() => {
-		if (!isUser) {
-			setProfile({
-				isVerified: true,
-				balance: { $numberDecimal: '99999' },
-				showBTCBalance: true,
-				balanceBTC: { $numberDecimal: '9.9999999999' },
-			} as Client)
-			setLoading(false)
-			return
-		}
-
 		const fetchProfile = async () => {
 			try {
 				const data = await getProfile()
 				setProfile(data)
+				const transactionData = await getProfileTransaction()
+				setTransactions(transactionData)
 			} catch (err) {
 				setError(t('error occurred'))
 				console.error('Failed to fetch profile:', err)
@@ -46,7 +42,11 @@ const HomePage = () => {
 		}
 
 		fetchProfile()
-	}, [t, isUser])
+	}, [t])
+
+	const sortedTransactions = [...transactions]
+		.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+		.slice(0, 5)
 
 	if (loading) {
 		return <Loader />
@@ -59,16 +59,6 @@ const HomePage = () => {
 	if (!profile) {
 		return <Typography>{t('error occurred')}</Typography>
 	}
-
-	const parseDate = (dateStr: string) => {
-		const [day, month, yearAndTime] = dateStr.split('.')
-		const [year, time] = yearAndTime.split(' ')
-		return new Date(`20${year}-${month}-${day}T${time}`)
-	}
-
-	const latestTransactions = [...(jsonTransactions as TransactionCardProps[])]
-		.sort((a, b) => parseDate(b.date).getTime() - parseDate(a.date).getTime())
-		.slice(0, 4)
 
 	const gradientText = {
 		background: 'linear-gradient(90deg, #0246FF, #666666)',
@@ -90,6 +80,8 @@ const HomePage = () => {
 		background: 'linear-gradient(90deg, #58A9FF, #0044FF)',
 	}
 
+	console.log(profile)
+
 	return (
 		<Box>
 			<Typography
@@ -103,26 +95,85 @@ const HomePage = () => {
 			</Typography>
 
 			<Box
-				sx={{ mt: '60px', display: 'flex', justifyContent: 'space-between' }}
+				sx={{
+					mt: isMobile ? '35px' : '60px',
+					display: 'flex',
+					justifyContent: 'space-between',
+					'@media (max-width:768px)': {
+						flexDirection: 'column',
+						alignItems: 'center',
+					},
+				}}
 			>
-				<Box sx={{ maxWidth: '393px', width: '100%' }}>
-					<Typography sx={{ ...gradientText, fontSize: '40px' }}>
-						{t('nice to see')}
-					</Typography>
-					<Typography sx={{ ...gradientText, mt: '15px', fontSize: '26px' }}>
-						{t('bridge')}
-					</Typography>
+				<Box sx={{ maxWidth: isMobile ? '420px' : '393px', width: '100%' }}>
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'space-between',
+							alignItems: 'center',
+						}}
+					>
+						{isMobile && (
+							<Box
+								sx={{
+									width: '100px',
+									height: '80px',
+									display: 'flex',
+									justifyContent: 'center',
+									alignItems: 'center',
+									borderRadius: '20px',
+									background: 'linear-gradient(180deg, #58A9FF, #0044FF)',
+								}}
+							>
+								<Box
+									component='img'
+									src='/person-white.svg'
+									sx={{ width: '55px', height: 'auto' }}
+								/>
+							</Box>
+						)}
+						<Box sx={{ maxWidth: isMobile ? '244px' : '100%' }}>
+							<Typography
+								sx={{ ...gradientText, fontSize: isMobile ? '22px' : '40px' }}
+							>
+								{t('nice to see')}
+							</Typography>
+							<Typography
+								sx={{
+									...gradientText,
+									mt: '15px',
+									fontSize: isMobile ? '14px' : '26px',
+								}}
+							>
+								{t('bridge')}
+							</Typography>
+						</Box>
+					</Box>
 					<VerificationBlock
-						verified={isUser ? profile.isVerified : true}
-						sx={{ mt: '50px' }}
+						status={profile.verificationStatus}
+						sx={{ mt: isMobile ? '10px' : '50px' }}
 					/>
+					{isMobile && (
+						<Typography
+							sx={{
+								mt: '5px',
+								ml: '11px',
+								mb: '30px',
+								fontFamily: 'Manrope',
+								fontSize: '18px',
+								lineHeight: 1,
+							}}
+						>
+							{profile.firstName} {profile.lastName}
+						</Typography>
+					)}
 				</Box>
 
 				<Box sx={{ maxWidth: '420px', width: '100%' }}>
 					<CardBalance
-						balance={Number(profile.balance.$numberDecimal).toFixed(2)}
-						showBtcBalance={isUser ? profile.showBTCBalance : true}
-						BTCbalance={Number(profile.balanceBTC.$numberDecimal).toFixed(8)}
+						balance={Number(profile.balance).toFixed(2)}
+						showBtcBalance={profile.showBTCBalance}
+						BTCbalance={Number(profile.balanceBTC).toFixed(8)}
 					/>
 					<Box
 						sx={{
@@ -192,35 +243,73 @@ const HomePage = () => {
 			<Box
 				sx={{ display: 'flex', justifyContent: 'space-between', mt: '60px' }}
 			>
-				<Typography sx={{ ...gradientText, fontSize: '22px', lineHeight: 1.2 }}>
-					{t('transaction history')}
-				</Typography>
 				<Typography
 					sx={{
 						fontFamily: 'Manrope',
-						fontSize: '20px',
-						borderBottom: '1px solid #000000',
-						cursor: 'pointer',
-						'&:hover': { opacity: 0.7 },
+						fontSize: '22px',
+						fontWeight: 500,
+						lineHeight: 1.2,
 					}}
-					onClick={() => navigate(routes.TransactionsPage.path)}
 				>
-					{t('all transactions')}
+					{t('transaction history')}
 				</Typography>
+				{!isMobile && (
+					<Typography
+						sx={{
+							fontFamily: 'Manrope',
+							fontSize: '20px',
+							borderBottom: '1px solid #000000',
+							cursor: 'pointer',
+							'&:hover': { opacity: 0.7 },
+						}}
+						onClick={() => navigate(routes.TransactionsPage.path)}
+					>
+						{t('all transactions')}
+					</Typography>
+				)}
 			</Box>
 
 			<Box
 				sx={{
-					mt: '50px',
+					mt: isMobile ? '30px' : '50px',
 					display: 'flex',
 					flexDirection: 'column',
-					gap: '20px',
+					gap: '25px',
 				}}
 			>
-				{latestTransactions.map(tx => (
-					<TransactionCard key={`${tx.id}-${tx.date}`} {...tx} />
+				{sortedTransactions.map((transaction, index) => (
+					<TransactionCard
+						key={index}
+						id={transaction.transactionId}
+						date={transaction.date}
+						status={transaction.status as TransactionStatus}
+						type={transaction.type as TransactionType}
+						paymentMethod={transaction.method as PaymentMethod}
+						amount={transaction.amount}
+						balance={transaction.balance}
+					/>
 				))}
 			</Box>
+
+			{isMobile && (
+				<Button
+					sx={{
+						width: '100%',
+						height: '56px',
+						mt: '30px',
+						border: '1px solid #EBEBEB',
+						borderRadius: '6px',
+						fontFamily: 'Manrope',
+						fontSize: '22px',
+						fontWeight: 700,
+						textTransform: 'none',
+						color: '#000000',
+					}}
+					onClick={() => navigate(routes.TransactionsPage.path)}
+				>
+					{t('all transactions')}
+				</Button>
+			)}
 		</Box>
 	)
 }
