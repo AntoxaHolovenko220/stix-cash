@@ -59,6 +59,9 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 		setCountry,
 		setІsTermsAccepted,
 		handlePhoneChange,
+		handleFieldChange,
+		handleCountryChange,
+		handleTermsChange,
 		handleSubmit: handleSubmitHook,
 		switchAuthMode,
 		resetForm,
@@ -131,7 +134,7 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 									fullWidth
 									placeholder={t('name')}
 									value={firstName}
-									onChange={e => setFirstName(e.target.value)}
+									onChange={e => handleFieldChange('firstName', e.target.value)}
 									{...getTextFieldProps('firstName')}
 								/>
 								<TextField
@@ -139,7 +142,7 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 									fullWidth
 									placeholder={t('surname')}
 									value={lastName}
-									onChange={e => setLastName(e.target.value)}
+									onChange={e => handleFieldChange('lastName', e.target.value)}
 									{...getTextFieldProps('lastName')}
 								/>
 							</>
@@ -152,7 +155,7 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 							type='email'
 							autoComplete='email'
 							value={email}
-							onChange={e => setEmail(e.target.value)}
+							onChange={e => handleFieldChange('email', e.target.value)}
 							disabled={loading}
 							{...getTextFieldProps('email')}
 						/>
@@ -164,7 +167,7 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 									fullWidth
 									placeholder={t('phone number')}
 									value={phone}
-									onChange={e => handlePhoneChange(e.target.value)}
+									onChange={e => handleFieldChange('phone', e.target.value)}
 									{...getTextFieldProps('phone')}
 								/>
 
@@ -172,7 +175,7 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 									options={countries}
 									getOptionLabel={option => option.label}
 									value={country}
-									onChange={(_, newValue) => setCountry(newValue)}
+									onChange={(_, newValue) => handleCountryChange(newValue)}
 									renderInput={params => (
 										<TextField
 											{...params}
@@ -201,7 +204,7 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 							type='password'
 							autoComplete={isLoginForm ? 'current-password' : 'new-password'}
 							value={password}
-							onChange={e => setPassword(e.target.value)}
+							onChange={e => handleFieldChange('password', e.target.value)}
 							disabled={loading}
 							{...getTextFieldProps('password')}
 						/>
@@ -215,7 +218,9 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 									type='password'
 									autoComplete='new-password'
 									value={confirmPassword}
-									onChange={e => setConfirmPassword(e.target.value)}
+									onChange={e =>
+										handleFieldChange('confirmPassword', e.target.value)
+									}
 									disabled={loading}
 									{...getTextFieldProps('confirmPassword')}
 								/>
@@ -229,7 +234,7 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 								>
 									<Checkbox
 										checked={isTermsAccepted}
-										onChange={() => setІsTermsAccepted(!isTermsAccepted)}
+										onChange={() => handleTermsChange(!isTermsAccepted)}
 										disabled={loading}
 										sx={{ mt: '-9px', ml: '-11px' }}
 									/>

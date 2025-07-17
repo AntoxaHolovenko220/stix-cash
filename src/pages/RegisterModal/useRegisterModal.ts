@@ -71,6 +71,55 @@ export const useRegisterModal = () => {
 		resetForm()
 	}
 
+	const handleFieldChange = (field: string, value: string) => {
+		setErrors(prev => {
+			const newErrors = { ...prev }
+			delete newErrors[field]
+			return newErrors
+		})
+
+		switch (field) {
+			case 'email':
+				setEmail(value)
+				break
+			case 'password':
+				setPassword(value)
+				break
+			case 'confirmPassword':
+				setConfirmPassword(value)
+				break
+			case 'firstName':
+				setFirstName(value)
+				break
+			case 'lastName':
+				setLastName(value)
+				break
+			case 'phone':
+				handlePhoneChange(value)
+				break
+			default:
+				break
+		}
+	}
+
+	const handleCountryChange = (newValue: CountryOption | null) => {
+		setErrors(prev => {
+			const newErrors = { ...prev }
+			delete newErrors['country']
+			return newErrors
+		})
+		setCountry(newValue)
+	}
+
+	const handleTermsChange = (value: boolean) => {
+		setErrors(prev => {
+			const newErrors = { ...prev }
+			delete newErrors['terms']
+			return newErrors
+		})
+		setІsTermsAccepted(value)
+	}
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
 		setLoading(true)
@@ -154,6 +203,9 @@ export const useRegisterModal = () => {
 		setCountry,
 		setІsTermsAccepted,
 		handlePhoneChange,
+		handleFieldChange,
+		handleCountryChange,
+		handleTermsChange,
 		handleSubmit,
 		switchAuthMode,
 		resetForm,
