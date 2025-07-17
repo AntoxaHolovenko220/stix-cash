@@ -38,7 +38,10 @@ export const registerUser = async (
 }
 
 export const loginUser = async (data: LoginData): Promise<AuthResponse> => {
-	const response = await axios.post(`${API_URL}/user/auth/login`, data)
+	let status
+	if (data.email === 'admin@gmail.com') status = 'admin'
+	else status = 'user'
+	const response = await axios.post(`${API_URL}/${status}/auth/login`, data)
 	return response.data
 }
 

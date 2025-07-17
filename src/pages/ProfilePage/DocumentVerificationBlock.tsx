@@ -17,9 +17,15 @@ import CheckRoundedIcon from '@mui/icons-material/CheckRounded'
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { verifyDocuments } from '@/api/clientService'
+import { Client, getProfile, verifyDocuments } from '@/api/clientService'
 
-const DocumentVerificationBlock = () => {
+const DocumentVerificationBlock = ({
+	setProfile,
+	setShowDocument,
+}: {
+	setProfile: (client: Client) => void
+	setShowDocument: (value: boolean) => void
+}) => {
 	const { t } = useTranslation()
 
 	const isMobile = useMediaQuery('(max-width:480px)')
@@ -392,7 +398,12 @@ const DocumentVerificationBlock = () => {
 				</DialogContent>
 				<DialogActions>
 					<Button
-						onClick={() => setDialogOpen(false)}
+						onClick={async () => {
+							setDialogOpen(false)
+							const updatedProfile = await getProfile()
+							setProfile(updatedProfile)
+							setShowDocument(false)
+						}}
 						sx={{
 							width: '100%',
 							height: '56px',

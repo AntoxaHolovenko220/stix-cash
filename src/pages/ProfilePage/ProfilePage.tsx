@@ -57,9 +57,17 @@ const ProfilePage = () => {
 					/>
 				)}
 				{profile.verificationStatus === 'unverified' && !isMobile && (
-					<DocumentVerificationBlock />
+					<DocumentVerificationBlock
+						setProfile={setProfile}
+						setShowDocument={setShowDocument}
+					/>
 				)}
-				{showDocument && <DocumentVerificationBlock />}
+				{showDocument && (
+					<DocumentVerificationBlock
+						setProfile={setProfile}
+						setShowDocument={setShowDocument}
+					/>
+				)}
 			</Box>
 		</Box>
 	)

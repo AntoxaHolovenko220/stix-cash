@@ -202,7 +202,7 @@ export const enTranslations = {
 	'writing to support': 'Write to customer support - ',
 	'we help': 'we`ll help you figure it out.',
 	'ready-steady':
-		'Done! Your transfer has been successfully sent. Thank you! Please wait for the funds to be credited.',
+		'Done! Your transfer has been successfully sent. Please wait for the funds to be credited.',
 	method: 'Method',
 	search: 'search clients',
 }

@@ -1,15 +1,49 @@
 import Circle from '../Circle'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, useMediaQuery } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import {
-	titleStyles,
-	numberStyles,
-	cardStyles,
-	descriptionStyles,
-} from './style'
 
 const HowWorkBlock = () => {
 	const { t } = useTranslation()
+
+	const isMobile = useMediaQuery('(max-width:480px)')
+
+	const titleStyles = {
+		fontFamily: 'Manrope',
+		fontSize: isMobile ? '28px' : '73px',
+		fontWeight: 700,
+		textAlign: 'center',
+		WebkitBackgroundClip: 'text',
+		WebkitTextFillColor: 'transparent',
+	}
+
+	const numberStyles = {
+		mt: '10px',
+		fontFamily: 'Public Sans',
+		fontSize: isMobile ? '64px' : '96px',
+		fontWeight: 900,
+		lineHeight: 1,
+		textAlign: 'center',
+		WebkitBackgroundClip: 'text',
+		WebkitTextFillColor: 'transparent',
+	}
+
+	const cardStyles = {
+		width: isMobile ? '175px' : '284px',
+		height: isMobile ? '175px' : '231px',
+		backgroundColor: '#FFFFFF',
+		border: '1px solid #9A9A9A',
+		borderRadius: '23px',
+		textAlign: 'center',
+	}
+
+	const descriptionStyles = {
+		mt: '10px',
+		mx: '15px',
+		fontFamily: 'Manrope',
+		fontSize: isMobile ? '15px' : '20px',
+		lineHeight: 1.1,
+		color: '#363636',
+	}
 
 	const steps = [
 		{
@@ -25,32 +59,38 @@ const HowWorkBlock = () => {
 	]
 
 	return (
-		<Box>
-			<Box sx={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+		<Box sx={{ mt: isMobile ? '-50px' : '0px' }}>
+			<Box sx={{ display: 'flex', justifyContent: 'center' }}>
 				<Typography
 					sx={{
 						background: 'linear-gradient(90deg, #323030, #B1B1B1)',
 						...titleStyles,
 					}}
 				>
-					{t('how does')}
-				</Typography>
-				<Typography
-					sx={{
-						background: 'linear-gradient(90deg, #45A5FF, #31A0FF)',
-						...titleStyles,
-					}}
-				>
-					{t('it work')}
+					{t('how does')}{' '}
+					<span
+						style={{
+							background: 'linear-gradient(90deg, #45A5FF, #31A0FF)',
+							fontFamily: 'Manrope',
+							fontSize: isMobile ? '28px' : '73px',
+							fontWeight: 700,
+							textAlign: 'center',
+							WebkitBackgroundClip: 'text',
+							WebkitTextFillColor: 'transparent',
+						}}
+					>
+						{t('it work')}
+					</span>
 				</Typography>
 			</Box>
 			<Box
 				sx={{
-					my: '50px',
+					my: isMobile ? '20px' : '50px',
 					position: 'relative',
 					display: 'flex',
+					flexWrap: 'wrap',
 					justifyContent: 'center',
-					gap: '60px',
+					gap: isMobile ? '10px' : '60px',
 				}}
 			>
 				{steps.map((step, index) => (
@@ -77,32 +117,32 @@ const HowWorkBlock = () => {
 					</Box>
 				))}
 				<Circle
-					size={145}
+					size={isMobile ? 45 : 145}
 					color='linear-gradient(135deg, #0044FF, #77C4F9)'
 					sx={{
 						position: 'absolute',
-						top: '-70px',
-						right: '135px',
+						top: isMobile ? '-15px' : '-70px',
+						right: isMobile ? '27px' : '135px',
 						zIndex: -1,
 					}}
 				/>
 				<Circle
-					size={145}
+					size={isMobile ? 80 : 145}
 					color='linear-gradient(135deg, #0044FF, #77C4F9)'
 					sx={{
 						position: 'absolute',
-						bottom: '-35px',
-						left: '90px',
+						bottom: isMobile ? '150px' : '-35px',
+						left: isMobile ? '30px' : '90px',
 						zIndex: -1,
 					}}
 				/>
 				<Circle
-					size={91}
+					size={isMobile ? 45 : 91}
 					color='linear-gradient(135deg, #0044FF, #77C4F9)'
 					sx={{
 						position: 'absolute',
-						bottom: '-40px',
-						right: '42%',
+						bottom: isMobile ? '80px' : '-40px',
+						right: isMobile ? '105px' : '42%',
 						zIndex: -1,
 					}}
 				/>

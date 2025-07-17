@@ -2,6 +2,7 @@ import { ReactNode, useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { Header, Sidebar } from '@/layouts'
 import { Box, useMediaQuery } from '@mui/material'
+import zIndex from '@mui/material/styles/zIndex'
 
 interface MainLayoutProps {
 	children: ReactNode
@@ -56,6 +57,17 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 					}}
 					key={location.pathname}
 				>
+					<Box
+						component='img'
+						src='/lines.svg'
+						sx={{
+							width: '100%',
+							position: 'absolute',
+							top: '235px',
+							zIndex: -1,
+							mx: '-20px',
+						}}
+					/>
 					{children}
 				</Box>
 			</Box>

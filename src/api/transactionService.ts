@@ -13,12 +13,29 @@ export interface TransactionData {
 	note?: string
 }
 
-export const createTransaction = async (
+export const createAdminTransaction = async (
 	clientId: string,
 	data: TransactionData
 ) => {
 	const response = await axios.post(
 		`${API_URL}/transactions/admin/${clientId}`,
+		{
+			...data,
+			currency: 'USD',
+		},
+		{
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	)
+	return response.data
+}
+
+export const createUserTransaction = async (data: TransactionData) => {
+	const response = await axios.post(
+		`${API_URL}/transactions`,
 		{
 			...data,
 			currency: 'USD',

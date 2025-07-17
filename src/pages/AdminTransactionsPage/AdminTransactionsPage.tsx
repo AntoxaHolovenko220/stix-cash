@@ -62,7 +62,7 @@ const AdminTransactionsPage = () => {
 			</Typography>
 			<Box
 				sx={{
-					mt: '40px',
+					mt: '30px',
 					display: 'flex',
 					flexDirection: 'column',
 					gap: '25px',

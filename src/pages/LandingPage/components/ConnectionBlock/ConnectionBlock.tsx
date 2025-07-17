@@ -1,8 +1,11 @@
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Typography, useMediaQuery } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { ModalProps } from '../../LandingPage'
 
-const ConnectionBlock = () => {
+const ConnectionBlock = ({ setModalOpen }: ModalProps) => {
 	const { t } = useTranslation()
+
+	const isMobile = useMediaQuery('(max-width:480px)')
 
 	return (
 		<Box
@@ -18,9 +21,9 @@ const ConnectionBlock = () => {
 		>
 			<Typography
 				sx={{
-					maxWidth: '900px',
+					maxWidth: isMobile ? '360px' : '900px',
 					fontFamily: 'Manrope',
-					fontSize: '54px',
+					fontSize: isMobile ? '32px' : '54px',
 					fontWeight: 700,
 					lineHeight: 1,
 					background: 'linear-gradient(90deg, #FFFFFF, #E0E0E0)',
@@ -32,10 +35,10 @@ const ConnectionBlock = () => {
 			</Typography>
 			<Typography
 				sx={{
-					maxWidth: '510px',
+					maxWidth: isMobile ? '335px' : '510px',
 					mt: '30px',
 					fontFamily: 'Manrope',
-					fontSize: '22px',
+					fontSize: isMobile ? '20px' : '22px',
 					fontWeight: 300,
 					lineHeight: 1,
 					color: '#EEEEEE',
@@ -44,6 +47,7 @@ const ConnectionBlock = () => {
 				{t('leave contact')}
 			</Typography>
 			<Button
+				onClick={() => setModalOpen(true)}
 				sx={{
 					width: '323px',
 					height: '65px',

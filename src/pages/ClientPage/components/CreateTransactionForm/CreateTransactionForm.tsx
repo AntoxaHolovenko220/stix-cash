@@ -1,4 +1,7 @@
-import { createTransaction, TransactionData } from '@/api/transactionService'
+import {
+	createAdminTransaction,
+	TransactionData,
+} from '@/api/transactionService'
 import {
 	Box,
 	Typography,
@@ -58,7 +61,7 @@ const CreateTransactionForm = ({ clientId, onTransactionCreated }: Props) => {
 
 	const handleCreateTransaction = async () => {
 		try {
-			const result = await createTransaction(clientId, {
+			const result = await createAdminTransaction(clientId, {
 				type,
 				amount: Number(amount).toFixed(2),
 				balance: Number(balance).toFixed(2),

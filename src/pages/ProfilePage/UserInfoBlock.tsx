@@ -96,7 +96,7 @@ const UserInfoBlock = ({ profile, setProfile, setShowDocument }: Props) => {
 	return (
 		<Box
 			sx={{
-				maxWidth: isMobile ? '100%' : '360px',
+				maxWidth: isMobile ? '100%' : '415px',
 				width: '100%',
 				boxSizing: 'border-box',
 			}}

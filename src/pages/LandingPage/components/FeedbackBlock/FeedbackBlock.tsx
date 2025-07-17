@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Typography, alpha } from '@mui/material'
+import { Box, Typography, useMediaQuery } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
@@ -87,6 +87,8 @@ const FeedbackBlock = () => {
 		[]
 	)
 
+	const isMobile = useMediaQuery('(max-width:480px)')
+
 	const slides = [
 		{
 			name: t('Jessica'),
@@ -123,7 +125,7 @@ const FeedbackBlock = () => {
 	}, [])
 
 	const settings = {
-		dots: true,
+		dots: false,
 		infinite: true,
 		speed: 500,
 		slidesToShow: 3,
@@ -160,6 +162,14 @@ const FeedbackBlock = () => {
 					arrows: false,
 				},
 			},
+			{
+				breakpoint: 481,
+				settings: {
+					slidesToShow: 1,
+					slidesToScroll: 1,
+					arrows: false,
+				},
+			},
 		],
 	}
 
@@ -167,21 +177,23 @@ const FeedbackBlock = () => {
 		<Box
 			sx={{
 				pt: '70px',
-				px: '50px',
-				pb: '40px',
+				px: isMobile ? '0px' : '50px',
+				pb: isMobile ? '40px' : '105px',
 				display: 'flex',
 				flexDirection: 'column',
 				justifyContent: 'center',
 				alignItems: 'center',
 				position: 'relative',
 				overflow: 'hidden',
+				background:
+					'radial-gradient(circle, #f0f0f0 0%, #f0f0f0 10%, #ffffff 50%)',
 			}}
 		>
 			<Box sx={{ display: 'flex', justifyContent: 'center', gap: '12px' }}>
 				<Typography
 					sx={{
 						fontFamily: 'Manrope',
-						fontSize: '42px',
+						fontSize: isMobile ? '37px' : '42px',
 						fontWeight: 700,
 						lineHeight: 1,
 						background: 'linear-gradient(90deg, #0044FF, #74AFFF)',
@@ -189,26 +201,26 @@ const FeedbackBlock = () => {
 						WebkitTextFillColor: 'transparent',
 					}}
 				>
-					{t('feedback')}
-				</Typography>
-				<Typography
-					sx={{
-						fontFamily: 'Manrope',
-						fontSize: '42px',
-						fontWeight: 700,
-						lineHeight: 1,
-						background: 'linear-gradient(90deg, #464646, #ACACAC)',
-						WebkitBackgroundClip: 'text',
-						WebkitTextFillColor: 'transparent',
-					}}
-				>
-					{t('customer')}
+					{t('feedback')}{' '}
+					<span
+						style={{
+							fontFamily: 'Manrope',
+							fontSize: isMobile ? '37px' : '42px',
+							fontWeight: 700,
+							lineHeight: 1,
+							background: 'linear-gradient(90deg, #464646, #ACACAC)',
+							WebkitBackgroundClip: 'text',
+							WebkitTextFillColor: 'transparent',
+						}}
+					>
+						{t('customer')}
+					</span>
 				</Typography>
 			</Box>
 			<Box
 				sx={{
 					width: '100%',
-					py: '70px',
+					py: isMobile ? '20px' : '70px',
 					'& .slick-slider': {
 						display: 'flex',
 						alignItems: 'center',

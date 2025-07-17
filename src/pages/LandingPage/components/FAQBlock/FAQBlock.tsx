@@ -1,5 +1,11 @@
 import { useState } from 'react'
-import { Box, Typography, IconButton, Collapse } from '@mui/material'
+import {
+	Box,
+	Typography,
+	IconButton,
+	Collapse,
+	useMediaQuery,
+} from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
@@ -35,18 +41,20 @@ const FAQBlock = () => {
 		setOpenIndex(prev => (prev === index ? null : index))
 	}
 
+	const isMobile = useMediaQuery('(max-width:480px)')
+
 	return (
 		<Box
 			sx={{
 				display: 'flex',
 				flexDirection: 'column',
-				px: '50px',
-				pb: '150px',
+				px: isMobile ? '20px' : '50px',
+				pb: isMobile ? '50px' : '150px',
+				boxSizing: 'border-box',
 			}}
 		>
 			<Typography
 				sx={{
-					mt: '65px',
 					mb: '30px',
 					fontFamily: 'Public Sans',
 					fontStyle: 'italic',
@@ -60,9 +68,9 @@ const FAQBlock = () => {
 			</Typography>
 			<Box
 				sx={{
-					p: '35px 90px',
+					p: isMobile ? '20px' : '35px 90px',
 					backgroundColor: '#242424',
-					borderRadius: '42px',
+					borderRadius: isMobile ? '30px' : '42px',
 				}}
 			>
 				{faqItems.map((item, index) => (
@@ -75,12 +83,13 @@ const FAQBlock = () => {
 							color: '#FFFFFF',
 							overflow: 'hidden',
 							border: `1px solid #979797`,
+							boxSizing: 'border-box',
 						}}
 					>
 						<Box
 							sx={{
-								height: '98px',
-								px: '32px',
+								height: isMobile ? '75px' : '98px',
+								px: isMobile ? '15px' : '32px',
 								display: 'flex',
 								justifyContent: 'space-between',
 								alignItems: 'center',
@@ -91,17 +100,19 @@ const FAQBlock = () => {
 							<Typography
 								sx={{
 									fontFamily: 'Manrope',
-									fontSize: '32px',
+									fontSize: isMobile ? '24px' : '32px',
 									fontStyle: 'italic',
 									flexGrow: 1,
 									color: '#FFFFFF',
 									fontWeight: 300,
+									lineHeight: 1,
 								}}
 							>
 								{item.question}
 							</Typography>
 							<IconButton
 								sx={{
+									mr: isMobile ? '-10px' : '0px',
 									transform:
 										openIndex === index ? 'rotate(180deg)' : 'rotate(0deg)',
 									transition: '0.3s',
@@ -109,8 +120,8 @@ const FAQBlock = () => {
 							>
 								<ExpandMoreIcon
 									sx={{
-										width: '40px',
-										height: '40px',
+										width: isMobile ? '25px' : '40px',
+										height: isMobile ? '25px' : '40px',
 										color: '#FFFFFF',
 									}}
 								/>
@@ -120,14 +131,14 @@ const FAQBlock = () => {
 						<Collapse in={openIndex === index} timeout='auto' unmountOnExit>
 							<Box
 								sx={{
-									p: '32px',
+									p: isMobile ? '15px' : '32px',
 									background: 'linear-gradient(90deg, #2D2D2D, #003277)',
 								}}
 							>
 								<Typography
 									sx={{
 										fontFamily: 'Manrope',
-										fontSize: '27px',
+										fontSize: isMobile ? '20px' : '27px',
 										fontWeight: 200,
 										color: '#FFFFFF',
 										lineHeight: 1,

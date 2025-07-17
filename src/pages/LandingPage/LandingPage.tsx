@@ -10,20 +10,29 @@ import {
 	LandingFooter,
 	LandingHeader,
 } from './components'
+import { useState } from 'react'
+import RegisterModal from '../RegisterModal'
+
+export interface ModalProps {
+	setModalOpen: (value: boolean) => void
+}
 
 const LandingPage = () => {
+	const [modalOpen, setModalOpen] = useState(false)
+
 	return (
 		<Box>
-			<LandingHeader />
-			<Box sx={{ height: '84px' }} />
-			<CardBlock />
+			<LandingHeader setModalOpen={setModalOpen} />
+			<Box sx={{ height: '96px' }} />
+			<CardBlock setModalOpen={setModalOpen} />
 			<HowFixBlock />
 			<HowWorkBlock />
 			<BenefitsBlock />
-			<ConnectionBlock />
+			<ConnectionBlock setModalOpen={setModalOpen} />
 			<FeedbackBlock />
 			<FAQBlock />
 			<LandingFooter />
+			<RegisterModal open={modalOpen} onClose={() => setModalOpen(false)} />
 		</Box>
 	)
 }

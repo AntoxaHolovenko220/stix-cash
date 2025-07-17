@@ -177,10 +177,10 @@ const HomePage = () => {
 					/>
 					<Box
 						sx={{
-							mt: '60px',
+							mt: '40px',
 							display: 'flex',
 							flexDirection: 'column',
-							gap: '25px',
+							gap: '15px',
 						}}
 					>
 						<Button

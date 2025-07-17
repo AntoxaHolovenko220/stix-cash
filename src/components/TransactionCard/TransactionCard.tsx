@@ -176,12 +176,18 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 					},
 					{
 						value: (
-							<>
+							<Box
+								sx={{
+									display: isMobile ? 'flex' : 'block',
+									alignItems: 'center',
+									justifyContent: 'space-between',
+								}}
+							>
 								<Box
 									sx={{
-										height: '16px',
+										// height: '16px',
 										display: 'flex',
-										alignItems: 'flex-start',
+										alignItems: 'center',
 										gap: '5px',
 									}}
 								>
@@ -212,7 +218,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 										? `${wallet.slice(0, 4)}...${wallet.slice(-6)}`
 										: 'Details'}
 								</Typography>
-							</>
+							</Box>
 						),
 					},
 					{ label: t('amount'), value: amount },
@@ -245,23 +251,32 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 						}}
 					>
 						{item.label && (
-							<Typography
+							<Box
 								sx={{
-									...commonStyles,
-									fontWeight: 600,
+									height: '21px',
+									display: 'flex',
+									alignItems: 'center',
 									mb: '15px',
 									'@media (max-width:900px)': {
 										mb: '0px',
 									},
 								}}
 							>
-								{item.label}:
-							</Typography>
+								<Typography
+									sx={{
+										...commonStyles,
+										fontWeight: 600,
+									}}
+								>
+									{item.label}:
+								</Typography>
+							</Box>
 						)}
-						<Typography
+						<Box
 							sx={{
 								...commonStyles,
 								fontWeight: 400,
+								width: !item.label ? '100%' : 'fit-content',
 							}}
 						>
 							{item.label === t('amount')
@@ -269,7 +284,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 								: item.label === t('yourbalance')
 								? Number(item.value).toFixed(2)
 								: item.value}
-						</Typography>
+						</Box>
 					</Box>
 				))}
 			</Box>

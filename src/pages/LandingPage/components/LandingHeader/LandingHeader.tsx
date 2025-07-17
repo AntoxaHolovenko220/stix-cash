@@ -1,26 +1,27 @@
-import { useState } from 'react'
 import { LanguageSwitcher } from '@/components'
-import { Box, IconButton, Typography } from '@mui/material'
-import { RegisterModal } from '@/pages'
+import { Box, IconButton, Typography, useMediaQuery } from '@mui/material'
+import { ModalProps } from '../../LandingPage'
 
-const LandingHeader = () => {
-	const [modalOpen, setModalOpen] = useState(false)
+const LandingHeader = ({ setModalOpen }: ModalProps) => {
+	const isMobile = useMediaQuery('(max-width:480px)')
+
 	return (
 		<Box
 			sx={{
 				width: '100%',
 				py: '20px',
+				px: isMobile ? '20px' : '50px',
 				position: 'fixed',
 				display: 'flex',
 				justifyContent: 'space-between',
 				backgroundColor: '#FFFFFF',
+				boxSizing: 'border-box',
 				zIndex: 100,
 			}}
 		>
 			<Box
 				sx={{
 					width: 'fit-content',
-					ml: '50px',
 					p: '10px',
 					bgcolor: '#EFEFEF',
 					borderRadius: '30px',
@@ -41,15 +42,12 @@ const LandingHeader = () => {
 					Styx Cash
 				</Typography>
 			</Box>
-			<Box
-				sx={{ mr: '50px', display: 'flex', alignItems: 'center', gap: '20px' }}
-			>
+			<Box sx={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
 				<LanguageSwitcher />
 				<IconButton onClick={() => setModalOpen(true)}>
 					<Box component='img' src='person.svg' />
 				</IconButton>
 			</Box>
-			<RegisterModal open={modalOpen} onClose={() => setModalOpen(false)} />
 		</Box>
 	)
 }
