@@ -46,8 +46,6 @@ const ClientPage = () => {
 		fetchClient()
 	}, [id, t])
 
-	console.log(transactions)
-
 	if (loading) return <Loader />
 	if (error || !client) return <Typography color='error'>{error}</Typography>
 
@@ -75,7 +73,14 @@ const ClientPage = () => {
 					}}
 				/>
 			</Box>
-			<Box sx={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: 'column',
+					gap: '25px',
+					mt: '30px',
+				}}
+			>
 				{transactions.map((transaction, index) => (
 					<TransactionCard
 						key={index}

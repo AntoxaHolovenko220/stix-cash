@@ -54,10 +54,13 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 						overflowY: 'auto',
 						position: 'relative',
 						p: '20px',
+						backgroundImage: 'url(/lines.svg)',
+						backgroundRepeat: 'no-repeat',
+						backgroundSize: 'cover',
 					}}
 					key={location.pathname}
 				>
-					<Box
+					{/* <Box
 						component='img'
 						src='/lines.svg'
 						sx={{
@@ -67,7 +70,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 							zIndex: -1,
 							mx: '-20px',
 						}}
-					/>
+					/> */}
 					{children}
 				</Box>
 			</Box>

@@ -181,6 +181,7 @@ const ClientsPage = () => {
 								alignItems: 'center',
 								borderRadius: '8px',
 								border: '0.5px solid #9eb2d7',
+								backgroundColor: '#FFFFFF',
 							}}
 						>
 							<Typography

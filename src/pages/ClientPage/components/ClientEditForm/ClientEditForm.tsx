@@ -698,7 +698,6 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 								console.error('Failed to update showBTCBalance:', err)
 							}
 						}}
-						sx={{ ml: '-11px' }}
 					/>
 					<Typography
 						sx={{
