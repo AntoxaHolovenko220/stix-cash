@@ -204,5 +204,5 @@ export const enTranslations = {
 	'ready-steady':
 		'Done! Your transfer has been successfully sent. Please wait for the funds to be credited.',
 	method: 'Method',
-	search: 'search clients',
+	search: 'Search clients',
 }

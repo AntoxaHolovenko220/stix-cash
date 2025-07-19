@@ -74,7 +74,6 @@ const CreateTransactionForm = ({ clientId, onTransactionCreated }: Props) => {
 			onTransactionCreated?.(result)
 
 			resetForm()
-			console.log('Transaction created:', result)
 		} catch (err) {
 			console.error(err)
 			alert('Failed to create transaction')

@@ -42,7 +42,7 @@ const ProfilePage = () => {
 			</Typography>
 			<Box
 				sx={{
-					mt: '30px',
+					mt: '100px',
 					display: 'flex',
 					gap: '20px',
 					justifyContent: 'space-around',

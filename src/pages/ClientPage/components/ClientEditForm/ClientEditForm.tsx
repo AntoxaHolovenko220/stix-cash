@@ -138,11 +138,9 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 
 		try {
 			if (modalInputKey === 'walletBTCAddress') {
-				console.log('Sending update:', { [modalInputKey]: modalInputValue })
 				await handleSaveField('walletBTCAddress', modalInputValue)
 				setWalletBTCAddress(modalInputValue)
 			} else if (modalInputKey === 'paypal') {
-				console.log('Sending update:', { [modalInputKey]: modalInputValue })
 				await handleSaveField('paypalAddress', modalInputValue)
 				setPaypal(modalInputValue)
 			} else if (modalInputKey === 'zelle') {
@@ -191,7 +189,6 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 		if (!id) return
 
 		try {
-			console.log('Sending update:', { [field]: value })
 			await updateClientField(id, { [field]: value })
 
 			setClient(prev => (prev ? { ...prev, [field]: value } : prev))

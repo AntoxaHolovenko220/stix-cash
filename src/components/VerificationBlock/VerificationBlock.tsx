@@ -21,6 +21,7 @@ const VerificationBlock = ({
 				border: '1px solid',
 				borderRadius: '10px',
 				boxSizing: 'border-box',
+				backgroundColor: '#FFFFFF',
 				borderColor:
 					status === 'verified'
 						? '#52BC37'

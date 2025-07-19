@@ -80,8 +80,6 @@ const HomePage = () => {
 		background: 'linear-gradient(90deg, #58A9FF, #0044FF)',
 	}
 
-	console.log(profile)
-
 	return (
 		<Box>
 			<Typography

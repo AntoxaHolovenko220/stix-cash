@@ -62,7 +62,6 @@ const UserInfoBlock = ({ profile, setProfile, setShowDocument }: Props) => {
 
 	const handleSaveField = async (field: string, value: any) => {
 		try {
-			console.log('Sending update:', { [field]: value })
 			await updateProfileField({ [field]: value })
 
 			setProfile(prev => (prev ? { ...prev, [field]: value } : prev))
