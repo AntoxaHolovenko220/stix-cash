@@ -1,5 +1,9 @@
-import { Box, Typography, useMediaQuery } from '@mui/material'
+import { Box, Typography, useMediaQuery, IconButton } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import EditIcon from '@mui/icons-material/Edit'
+import EditTransactionModal from '../EditTransactionModal'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { TransactionData } from '@/api/transactionService'
 
 export type TransactionType = 'deposit' | 'withdrawal'
 export type TransactionStatus = 'completed' | 'canceled' | 'pending'
@@ -15,6 +19,7 @@ interface PaymentMethodConfig {
 }
 
 export interface TransactionCardProps {
+	_id?: string
 	id: string
 	date: string
 	status: TransactionStatus
@@ -23,9 +28,12 @@ export interface TransactionCardProps {
 	amount: string
 	balance: string
 	wallet?: string
+	setTransactions?: Dispatch<SetStateAction<TransactionData[]>>
+	showEdit?: boolean
 }
 
-const TransactionCard: React.FC<TransactionCardProps> = ({
+const TransactionCard = ({
+	_id,
 	id,
 	date,
 	status,
@@ -34,19 +42,20 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 	amount,
 	balance,
 	wallet,
-}) => {
+	setTransactions,
+	showEdit,
+}: TransactionCardProps) => {
 	const { t } = useTranslation()
 
 	const isMobile = useMediaQuery('(max-width:480px)')
+	const [isModalOpen, setIsModalOpen] = useState(false)
 
-	// Конфигурация статусов
 	const statusConfig = {
 		completed: { color: '#52BC37', icon: '/completed.svg' },
 		canceled: { color: '#D72828', icon: '/canceled.svg' },
 		pending: { color: '#F4D800', icon: '/pending.svg' },
 	}
 
-	// Конфигурация методов оплаты
 	const paymentMethodConfig: Record<PaymentMethod, PaymentMethodConfig> = {
 		paypalAddress: { icon: '/paypal.svg' },
 		zelleTransfer: { icon: '/zelle.svg' },
@@ -57,14 +66,12 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 		},
 	}
 
-	// Общие стили
 	const commonStyles = {
 		fontFamily: 'Manrope',
 		fontSize: '16px',
 		lineHeight: 1,
 	}
 
-	// Получаем конфигурацию для текущего метода оплаты
 	const currentPaymentMethod = paymentMethodConfig[paymentMethod]
 
 	const formattedDate = new Intl.DateTimeFormat('uk-UA', {
@@ -87,8 +94,19 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 				backgroundColor: '#F7F9FF',
 				borderRadius: isMobile ? '6px' : 0,
 				p: '25px 15px',
+				position: 'relative',
 			}}
 		>
+			{showEdit && (
+				<IconButton
+					sx={{ position: 'absolute', top: '10px', right: '10px' }}
+					onClick={() => {
+						setIsModalOpen(true)
+					}}
+				>
+					<EditIcon sx={{ width: '19px', height: '19px', color: '#0246FF' }} />
+				</IconButton>
+			)}
 			<Box
 				sx={{
 					width: 'fit-content',
@@ -185,7 +203,7 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 							>
 								<Box
 									sx={{
-										// height: '16px',
+										height: '21px',
 										display: 'flex',
 										alignItems: 'center',
 										gap: '5px',
@@ -288,6 +306,13 @@ const TransactionCard: React.FC<TransactionCardProps> = ({
 					</Box>
 				))}
 			</Box>
+			<EditTransactionModal
+				open={isModalOpen}
+				onClose={() => setIsModalOpen(false)}
+				setClose={setIsModalOpen}
+				_id={_id!}
+				setTransactions={setTransactions}
+			/>
 		</Box>
 	)
 }

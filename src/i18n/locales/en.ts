@@ -205,4 +205,9 @@ export const enTranslations = {
 		'Done! Your transfer has been successfully sent. Please wait for the funds to be credited.',
 	method: 'Method',
 	search: 'Search clients',
+	allowTransactions: 'Allow withdraw funds',
+	'some troubles': 'This deposit method is currently unavailable.',
+	supportService: 'Please contact customer support.',
+	'no transactions': 'No transactions available',
+	'please select': 'Please select one of the methods to contact support:',
 }

@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { Header, Sidebar } from '@/layouts'
 import { Box, useMediaQuery } from '@mui/material'
 import zIndex from '@mui/material/styles/zIndex'
+import { SupportButtonModal } from '@/components'
 
 interface MainLayoutProps {
 	children: ReactNode
@@ -54,7 +55,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 						overflowY: 'auto',
 						position: 'relative',
 						p: '20px',
-						backgroundImage: 'url(/lines.svg)',
+						backgroundImage: 'url(/public/lines.png)',
 						backgroundRepeat: 'no-repeat',
 						backgroundSize: 'cover',
 					}}
@@ -62,16 +63,16 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 				>
 					{/* <Box
 						component='img'
-						src='/lines.svg'
+						src='/lines.png'
 						sx={{
-							width: '100%',
+							width: 'calc(100%)',
+							ml: '-20px',
 							position: 'absolute',
-							top: '235px',
 							zIndex: -1,
-							mx: '-20px',
 						}}
 					/> */}
 					{children}
+					<SupportButtonModal />
 				</Box>
 			</Box>
 		</Box>

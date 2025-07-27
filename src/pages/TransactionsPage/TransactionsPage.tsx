@@ -1,9 +1,9 @@
 import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { Loader, TransactionCard } from '@/components'
+import { Loader, NoTransactionsBlock, TransactionCard } from '@/components'
 import { useEffect, useState } from 'react'
 import {
-	getProfileTransaction,
+	getProfileTransactions,
 	TransactionData,
 } from '@/api/transactionService'
 import {
@@ -21,7 +21,7 @@ const TransactionsPage = () => {
 	useEffect(() => {
 		const fetchTransactions = async () => {
 			try {
-				const transactionData = await getProfileTransaction()
+				const transactionData = await getProfileTransactions()
 				setTransactions(transactionData)
 			} catch (err) {
 				setError(t('error occurred'))
@@ -47,7 +47,7 @@ const TransactionsPage = () => {
 	}
 
 	return (
-		<Box>
+		<Box sx={{ position: 'relative' }}>
 			<Typography
 				sx={{
 					ml: '2px',
@@ -78,6 +78,7 @@ const TransactionsPage = () => {
 					gap: '25px',
 				}}
 			>
+				{transactions.length === 0 && <NoTransactionsBlock />}
 				{transactions.map((transaction, index) => (
 					<TransactionCard
 						key={index}

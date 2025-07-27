@@ -25,13 +25,6 @@
 		"layout": "MainLayout",
 		"private": true
 	},
-	"CustomerSupportPage": {
-		"path": "/support",
-		"component": "CustomerSupportPage",
-		"title": "Customer Support",
-		"layout": "MainLayout",
-		"private": true
-	},
 	"TopUpPage": {
 		"path": "/top-up",
 		"component": "TopUpPage",

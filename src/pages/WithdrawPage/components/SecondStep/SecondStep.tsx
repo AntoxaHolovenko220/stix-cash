@@ -70,6 +70,7 @@ const SecondStep = ({ method }: Props) => {
 	const [dialogText2, setDialogText2] = useState('')
 	const [dialogText3, setDialogText3] = useState('')
 	const [isSuccess, setIsSuccess] = useState<boolean | null>(null)
+	const [amountError, setAmountError] = useState('')
 
 	const [paypalAddress, setPaypalAddress] = useState('')
 	const [walletBTCAddress, setWalletBTCAddress] = useState('')
@@ -82,6 +83,7 @@ const SecondStep = ({ method }: Props) => {
 	const [amount, setAmount] = useState('')
 	const [transactionId, setTransactionId] = useState(useRandomId())
 	const [isTermsAccepted, setІsTermsAccepted] = useState(false)
+	const [isTransactionAllowed, setIsTransactionAllowed] = useState(false)
 
 	useEffect(() => {
 		const fetchProfile = async () => {
@@ -96,6 +98,7 @@ const SecondStep = ({ method }: Props) => {
 				setWireTransferRoutingNumber(data.wireTransfer.routingNumber)
 				setWireTransferBankName(data.wireTransfer.bankName)
 				setWireTransferAddress(data.wireTransfer.address)
+				setIsTransactionAllowed(data.isTransactionAllowed)
 			} catch (err) {
 				setError(t('error occurred'))
 				console.error('Failed to fetch profile:', err)
@@ -108,6 +111,7 @@ const SecondStep = ({ method }: Props) => {
 	}, [])
 
 	const isButtonDisabled = () => {
+		if (amountError) return true
 		if (!amount || Number(amount) <= 0) return true
 
 		if (method === 'paypalAddress' && !paypalAddress) return true
@@ -162,19 +166,26 @@ const SecondStep = ({ method }: Props) => {
 					await updateProfileField({ wireTransfer: updatedWireTransfer })
 				}
 			}
-			const result = await createUserTransaction({
-				type: 'withdrawal',
-				amount: Number(amount).toFixed(2),
-				balance: (Number(profile?.balance) - Number(amount)).toFixed(2),
-				method,
-				date: new Date(Date.now()).toISOString(),
-				status: 'pending',
-				transactionId,
-			})
-
-			setIsSuccess(true)
-			setDialogText(t('ready-steady'))
-			setDialogOpen(true)
+			if (!isTransactionAllowed) {
+				setIsSuccess(false)
+				setDialogText(t('oops'))
+				setDialogText2(t('writing to support'))
+				setDialogText3(t('we help'))
+				setDialogOpen(true)
+			} else {
+				const result = await createUserTransaction({
+					type: 'withdrawal',
+					amount: Number(amount).toFixed(2),
+					balance: (Number(profile?.balance) - Number(amount)).toFixed(2),
+					method,
+					date: new Date(Date.now()).toISOString(),
+					status: 'pending',
+					transactionId,
+				})
+				setIsSuccess(true)
+				setDialogText(t('ready-steady'))
+				setDialogOpen(true)
+			}
 		} catch (err) {
 			console.error(err)
 			setIsSuccess(false)
@@ -183,6 +194,11 @@ const SecondStep = ({ method }: Props) => {
 			setDialogText3(t('we help'))
 			setDialogOpen(true)
 		}
+	}
+
+	const handleOpenSupport = () => {
+		setDialogOpen(false)
+		window.dispatchEvent(new Event('openSupportModal'))
 	}
 
 	const inputs = {
@@ -357,6 +373,7 @@ const SecondStep = ({ method }: Props) => {
 										display: 'flex',
 										justifyContent: 'space-between',
 										alignItems: 'center',
+										gap: '10px',
 										boxSizing: 'border-box',
 									}}
 								>
@@ -364,10 +381,10 @@ const SecondStep = ({ method }: Props) => {
 										variant='standard'
 										value={walletBTCAddress}
 										onChange={e => setWalletBTCAddress(e.target.value)}
+										sx={{ width: '100%' }}
 										InputProps={{
 											disableUnderline: true,
 											sx: {
-												width: '165px',
 												fontSize: '13px',
 												fontFamily: 'Manrope',
 												padding: 0,
@@ -428,6 +445,8 @@ const SecondStep = ({ method }: Props) => {
 						fullWidth
 						placeholder={t('amount')}
 						value={amount}
+						error={!!amountError}
+						helperText={amountError || ' '}
 						onChange={e => {
 							const val = e.target.value
 							let cleaned = val.replace(/[^0-9.]/g, '')
@@ -435,7 +454,14 @@ const SecondStep = ({ method }: Props) => {
 							if (parts.length > 2) {
 								cleaned = parts[0] + '.' + parts.slice(1).join('')
 							}
+
 							setAmount(cleaned)
+
+							if (Number(cleaned) > Number(profile?.balance)) {
+								setAmountError(t('amount exceeds balance'))
+							} else {
+								setAmountError('')
+							}
 						}}
 						sx={textFieldStyles}
 					/>
@@ -609,7 +635,34 @@ const SecondStep = ({ method }: Props) => {
 						{dialogText3}
 					</Typography>
 				</DialogContent>
-				<DialogActions>
+				<DialogActions
+					sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
+				>
+					<Button
+						onClick={handleOpenSupport}
+						sx={{
+							width: '100%',
+							height: '56px',
+							border: '1px solid #232323',
+							borderRadius: '6px',
+							backgroundColor: '#FFFFFF',
+							display: 'inline-block',
+						}}
+					>
+						<Typography
+							sx={{
+								background: 'linear-gradient(180deg, #58A9FF 0%, #0044FF 50%)',
+								WebkitBackgroundClip: 'text',
+								WebkitTextFillColor: 'transparent',
+								fontFamily: 'Manrope',
+								fontSize: '20px',
+								fontWeight: 700,
+								textTransform: 'none',
+							}}
+						>
+							{t('write to support service')}
+						</Typography>
+					</Button>
 					<Button
 						onClick={async () => {
 							setDialogOpen(false)
@@ -617,6 +670,7 @@ const SecondStep = ({ method }: Props) => {
 						}}
 						sx={{
 							width: '100%',
+							m: '0px !important',
 							height: '56px',
 							border: '1px solid #232323',
 							borderRadius: '6px',

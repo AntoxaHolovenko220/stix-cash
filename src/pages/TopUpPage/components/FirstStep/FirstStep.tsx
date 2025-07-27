@@ -1,7 +1,17 @@
-import { Box, Typography, Radio, Button } from '@mui/material'
+import {
+	Box,
+	Typography,
+	Radio,
+	Button,
+	Dialog,
+	DialogContent,
+	DialogActions,
+} from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
+import { Client } from '@/api/clientService'
 
 type Method =
 	| 'paypalAddress'
@@ -13,6 +23,7 @@ interface Props {
 	selectedOption: Method
 	setSelectedOption: Dispatch<SetStateAction<Method>>
 	setCheckForm: Dispatch<SetStateAction<boolean>>
+	profile: Client
 }
 
 const commonTextStyles = {
@@ -55,8 +66,53 @@ const FirstStep = ({
 	selectedOption,
 	setSelectedOption,
 	setCheckForm,
+	profile,
 }: Props) => {
 	const { t } = useTranslation()
+
+	const [showSupportDialog, setShowSupportDialog] = useState(false)
+
+	const handleNext = () => {
+		let isValid = true
+
+		switch (selectedOption) {
+			case 'paypalAddress':
+				isValid = Boolean(profile.paypalAddress)
+				break
+			case 'zelleTransfer':
+				isValid = Boolean(
+					profile.zelleTransfer?.recipientName ||
+						profile.zelleTransfer?.email ||
+						profile.zelleTransfer?.phone
+				)
+				break
+			case 'wireTransfer':
+				isValid = Boolean(
+					profile.wireTransfer?.firstName ||
+						profile.wireTransfer?.lastName ||
+						profile.wireTransfer?.accountNumber ||
+						profile.wireTransfer?.routingNumber ||
+						profile.wireTransfer?.bankName
+				)
+				break
+			case 'walletBTCAddress':
+				isValid = Boolean(profile.walletBTCAddress)
+				break
+			default:
+				isValid = true
+		}
+
+		if (!isValid) {
+			setShowSupportDialog(true)
+		} else {
+			setCheckForm(true)
+		}
+	}
+
+	const handleOpenSupport = () => {
+		setShowSupportDialog(false)
+		window.dispatchEvent(new Event('openSupportModal'))
+	}
 
 	return (
 		<Box>
@@ -149,7 +205,7 @@ const FirstStep = ({
 						boxShadow: 'none',
 						background: 'linear-gradient(90deg, #58A9FF, #0044FF)',
 					}}
-					onClick={() => setCheckForm(true)}
+					onClick={handleNext}
 				>
 					<Box
 						sx={{
@@ -193,6 +249,87 @@ const FirstStep = ({
 					</Typography>
 				</Box>
 			</Box>
+			<Dialog
+				open={showSupportDialog}
+				onClose={() => setShowSupportDialog(false)}
+				PaperProps={{
+					sx: {
+						boxSizing: 'border-box',
+						width: '390px',
+						minHeight: '263px',
+						borderRadius: '24px',
+						background: 'linear-gradient(180deg, #58A9FF 0%, #0044FF 50%)',
+						color: '#FFFFFF', // чтобы текст был читаемым
+						padding: '20px 16px',
+					},
+				}}
+			>
+				<DialogContent
+					sx={{
+						p: '8px',
+						display: 'flex',
+						flexDirection: 'column',
+						alignItems: 'center',
+					}}
+				>
+					<CloseRoundedIcon
+						sx={{
+							width: '45px',
+							height: '45px',
+							borderRadius: '10px',
+							background: 'linear-gradient(-45deg, #EF3030 0%, #980202 80%)',
+						}}
+					/>
+					<Typography
+						sx={{
+							mt: '15px',
+							fontFamily: 'Manrope',
+							fontSize: '18px',
+							fontWeight: 600,
+							color: '#FFFFFF',
+							textAlign: 'center',
+						}}
+					>
+						{t('some troubles')} {t('supportService')}
+					</Typography>
+					<Typography
+						sx={{
+							fontFamily: 'Manrope',
+							fontSize: '18px',
+							fontWeight: 400,
+							color: '#FFFFFF',
+							textAlign: 'center',
+						}}
+					></Typography>
+				</DialogContent>
+				<DialogActions>
+					<Button
+						onClick={handleOpenSupport}
+						sx={{
+							width: '100%',
+							height: '56px',
+							border: '1px solid #232323',
+							borderRadius: '6px',
+							backgroundColor: '#FFFFFF',
+							display: 'inline-block',
+						}}
+					>
+						<Typography
+							sx={{
+								background: 'linear-gradient(180deg, #58A9FF 0%, #0044FF 50%)',
+								WebkitBackgroundClip: 'text',
+								WebkitTextFillColor: 'transparent',
+								fontFamily: 'Manrope',
+								fontSize: '20px',
+								fontWeight: 700,
+								textTransform: 'none',
+							}}
+						>
+							{t('write to support service')}
+						</Typography>
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</Box>
 	)
 }

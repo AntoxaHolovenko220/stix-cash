@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
-import { Loader, TransactionCard } from '@/components'
+import { Loader, NoTransactionsBlock, TransactionCard } from '@/components'
 import { Client, getClient } from '@/api/clientService'
 import { ClientEditForm, CreateTransactionForm } from './components'
 import {
-	getUserTransactionAdmin,
+	getUserTransactionsAdmin,
 	TransactionData,
 } from '@/api/transactionService'
 import {
@@ -33,7 +33,7 @@ const ClientPage = () => {
 				}
 				const data = await getClient(id)
 				setClient(data)
-				const transactionData = await getUserTransactionAdmin(id)
+				const transactionData = await getUserTransactionsAdmin(id)
 				setTransactions(transactionData)
 			} catch (err) {
 				setError(t('error occurred'))
@@ -81,9 +81,12 @@ const ClientPage = () => {
 					mt: '30px',
 				}}
 			>
+				{transactions.length === 0 && <NoTransactionsBlock />}
 				{transactions.map((transaction, index) => (
 					<TransactionCard
+						showEdit={true}
 						key={index}
+						_id={transaction._id!}
 						id={transaction.transactionId}
 						date={transaction.date}
 						status={transaction.status as TransactionStatus}
@@ -91,6 +94,7 @@ const ClientPage = () => {
 						paymentMethod={transaction.method as PaymentMethod}
 						amount={transaction.amount}
 						balance={transaction.balance}
+						setTransactions={setTransactions}
 					/>
 				))}
 			</Box>

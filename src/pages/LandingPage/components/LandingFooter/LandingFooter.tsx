@@ -92,7 +92,7 @@ const LandingFooter = () => {
 							color: '#3AA2FF',
 						}}
 					>
-						+ 1 123 456 78
+						+ 1 316 742 8113
 					</Typography>
 				</Box>
 			</Box>

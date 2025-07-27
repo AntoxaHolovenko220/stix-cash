@@ -159,6 +159,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 												top: '-62px',
 												bottom: '0',
 												width: '20px',
+												border: 'none',
 												backgroundColor: '#FFFFFF',
 												transform: 'rotate(-90deg)',
 												zIndex: 0,

@@ -1,8 +1,8 @@
 import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { Loader, TransactionCard } from '@/components'
+import { Loader, NoTransactionsBlock, TransactionCard } from '@/components'
 import { useEffect, useState } from 'react'
-import { getTransactionAdmin, TransactionData } from '@/api/transactionService'
+import { getTransactionsAdmin, TransactionData } from '@/api/transactionService'
 import {
 	PaymentMethod,
 	TransactionStatus,
@@ -20,7 +20,7 @@ const AdminTransactionsPage = () => {
 	useEffect(() => {
 		const fetchTransactions = async () => {
 			try {
-				const data = await getTransactionAdmin()
+				const data = await getTransactionsAdmin()
 				setTransactions(data)
 			} catch (err) {
 				setError(t('error occurred'))
@@ -68,6 +68,7 @@ const AdminTransactionsPage = () => {
 					gap: '25px',
 				}}
 			>
+				{transactions.length === 0 && <NoTransactionsBlock />}
 				{transactions.map((transaction, index) => (
 					<TransactionCard
 						key={index}

@@ -187,26 +187,6 @@ const CreateTransactionForm = ({ clientId, onTransactionCreated }: Props) => {
 			onchange: (val: string) => setBalance(val),
 			type: 'string',
 		},
-		{
-			name: t('status transaction'),
-			key: 'status transaction',
-			value: statusTransaction,
-			onchange: (val: string) => setStatusTransaction(val),
-			type: 'string',
-			inputType: 'select',
-			options: [
-				{
-					label: t('ups'),
-					value: 'canceled',
-					color: '#D72828',
-				},
-				{
-					label: t('completed'),
-					value: 'completed',
-					color: '#52BC37',
-				},
-			],
-		},
 	]
 
 	return (

@@ -31,12 +31,12 @@ export interface Client {
 	isTermsAccepted: boolean
 	roles: string[]
 	verificationStatus: string
-	documents: string[]
 	googleDriveFolderId: string
 	balance: string
 	balanceBTC: string
 	showBTCBalance: boolean
 	walletBTCAddress: string
+	isTransactionAllowed: boolean
 	paypalAddress: string
 	wireTransfer: WireTransfer
 	zelleTransfer: ZelleTransfer
@@ -80,7 +80,7 @@ export const verifyDocuments = async (files: File[]) => {
 
 	const formData = new FormData()
 	files.forEach(file => {
-		formData.append('file', file)
+		formData.append('files', file)
 	})
 
 	const response = await axios.post(`${API_URL}/user/documents`, formData, {

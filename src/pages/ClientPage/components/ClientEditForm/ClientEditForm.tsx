@@ -90,6 +90,9 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 		Number(client.balanceBTC).toFixed(8).toString()
 	)
 	const [showBTCBalance, setShowBTCBalance] = useState(client.showBTCBalance)
+	const [isTransactionAllowed, setIsTransactionAllowed] = useState(
+		client.isTransactionAllowed
+	)
 
 	const {
 		isWalletModalOpen,
@@ -705,6 +708,35 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 						}}
 					>
 						{t('showBTCBalance')}
+					</Typography>
+				</Box>
+				<Box
+					sx={{
+						display: 'flex',
+						alignItems: 'center',
+					}}
+				>
+					<Checkbox
+						checked={isTransactionAllowed}
+						onChange={async () => {
+							const newValue = !isTransactionAllowed
+							try {
+								await handleSaveField('isTransactionAllowed', newValue)
+								setIsTransactionAllowed(newValue)
+							} catch (err) {
+								console.error('Failed to update isTransactionAllowed:', err)
+							}
+						}}
+					/>
+					<Typography
+						sx={{
+							fontFamily: 'Manrope',
+							fontSize: '13px',
+							fontWeight: 700,
+							lineHeight: 1,
+						}}
+					>
+						{t('allowTransactions')}
 					</Typography>
 				</Box>
 			</Box>

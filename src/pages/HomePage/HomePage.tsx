@@ -4,10 +4,15 @@ import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import routes from '@/router/routes.json'
 import CardBalance from './CardBalance'
-import { TransactionCard, VerificationBlock, Loader } from '@/components'
+import {
+	TransactionCard,
+	VerificationBlock,
+	Loader,
+	NoTransactionsBlock,
+} from '@/components'
 import { getProfile, Client } from '@/api/clientService'
 import {
-	getProfileTransaction,
+	getProfileTransactions,
 	TransactionData,
 } from '@/api/transactionService'
 import {
@@ -31,7 +36,7 @@ const HomePage = () => {
 			try {
 				const data = await getProfile()
 				setProfile(data)
-				const transactionData = await getProfileTransaction()
+				const transactionData = await getProfileTransactions()
 				setTransactions(transactionData)
 			} catch (err) {
 				setError(t('error occurred'))
@@ -81,7 +86,7 @@ const HomePage = () => {
 	}
 
 	return (
-		<Box>
+		<Box sx={{ position: 'relative' }}>
 			<Typography
 				sx={{
 					ml: '2px',
@@ -275,6 +280,7 @@ const HomePage = () => {
 					gap: '25px',
 				}}
 			>
+				{transactions.length === 0 && <NoTransactionsBlock />}
 				{sortedTransactions.map((transaction, index) => (
 					<TransactionCard
 						key={index}
@@ -289,7 +295,7 @@ const HomePage = () => {
 				))}
 			</Box>
 
-			{isMobile && (
+			{isMobile && transactions.length !== 0 && (
 				<Button
 					sx={{
 						width: '100%',

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { getProfile, Client } from '@/api/clientService'
 import UserInfoBlock from './UserInfoBlock'
 import DocumentVerificationBlock from './DocumentVerificationBlock'
+import zIndex from '@mui/material/styles/zIndex'
 
 const ProfilePage = () => {
 	const { t } = useTranslation()
@@ -36,13 +37,13 @@ const ProfilePage = () => {
 	if (!profile) return <Typography>{t('error occurred')}</Typography>
 
 	return (
-		<Box>
+		<Box sx={{ position: 'relative' }}>
 			<Typography sx={{ ml: '2px', fontFamily: 'Manrope', fontSize: '14px' }}>
 				<span style={{ opacity: 0.5 }}>{t('home')}</span> | {t('profile')}
 			</Typography>
 			<Box
 				sx={{
-					mt: '100px',
+					mt: '30px',
 					display: 'flex',
 					gap: '20px',
 					justifyContent: 'space-around',

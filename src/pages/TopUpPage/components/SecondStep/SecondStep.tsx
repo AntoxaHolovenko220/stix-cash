@@ -59,62 +59,53 @@ type Method =
 	| 'walletBTCAddress'
 
 interface Props {
+	profile: Client
 	method: Method
 }
 
-const SecondStep = ({ method }: Props) => {
+const SecondStep = ({ profile, method }: Props) => {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
 
-	const [profile, setProfile] = useState<Client>()
-	const [loading, setLoading] = useState(true)
-	const [error, setError] = useState('')
 	const [dialogOpen, setDialogOpen] = useState(false)
 	const [dialogText, setDialogText] = useState('')
 	const [dialogText2, setDialogText2] = useState('')
 	const [isSuccess, setIsSuccess] = useState<boolean | null>(null)
 
-	const [paypalAddress, setPaypalAddress] = useState('')
-	const [walletBTCAddress, setWalletBTCAddress] = useState('')
-	const [wireTransferFirstName, setWireTransferFirstName] = useState('')
-	const [wireTransferLastName, setWireTransferLastName] = useState('')
-	const [wireTransferAccountNumber, setWireTransferAccountNumber] = useState('')
-	const [wireTransferRoutingNumber, setWireTransferRoutingNumber] = useState('')
-	const [wireTransferBankName, setWireTransferBankName] = useState('')
-	const [wireTransferAddress, setWireTransferAddress] = useState('')
-	const [zelleTransferName, setZelleTransferName] = useState('')
-	const [zelleTransferEmail, setZelleTransferEmail] = useState('')
-	const [zelleTransferPhone, setZelleTransferPhone] = useState('')
+	const [paypalAddress, setPaypalAddress] = useState(profile.paypalAddress)
+	const [walletBTCAddress, setWalletBTCAddress] = useState(
+		profile.walletBTCAddress
+	)
+	const [wireTransferFirstName, setWireTransferFirstName] = useState(
+		profile.wireTransfer.firstName
+	)
+	const [wireTransferLastName, setWireTransferLastName] = useState(
+		profile.wireTransfer.lastName
+	)
+	const [wireTransferAccountNumber, setWireTransferAccountNumber] = useState(
+		profile.wireTransfer.accountNumber
+	)
+	const [wireTransferRoutingNumber, setWireTransferRoutingNumber] = useState(
+		profile.wireTransfer.routingNumber
+	)
+	const [wireTransferBankName, setWireTransferBankName] = useState(
+		profile.wireTransfer.bankName
+	)
+	const [wireTransferAddress, setWireTransferAddress] = useState(
+		profile.wireTransfer.address
+	)
+	const [zelleTransferName, setZelleTransferName] = useState(
+		profile.zelleTransfer.recipientName
+	)
+	const [zelleTransferEmail, setZelleTransferEmail] = useState(
+		profile.zelleTransfer.email
+	)
+	const [zelleTransferPhone, setZelleTransferPhone] = useState(
+		profile.zelleTransfer.phone
+	)
 	const [amount, setAmount] = useState('')
 	const [transactionId, setTransactionId] = useState(useRandomId())
 	const [isTermsAccepted, setІsTermsAccepted] = useState(false)
-
-	useEffect(() => {
-		const fetchProfile = async () => {
-			try {
-				const data = await getProfile()
-				setProfile(data)
-				setPaypalAddress(data.paypalAddress)
-				setWalletBTCAddress(data.walletBTCAddress)
-				setWireTransferFirstName(data.wireTransfer.firstName)
-				setWireTransferLastName(data.wireTransfer.lastName)
-				setWireTransferAccountNumber(data.wireTransfer.accountNumber)
-				setWireTransferRoutingNumber(data.wireTransfer.routingNumber)
-				setWireTransferBankName(data.wireTransfer.bankName)
-				setWireTransferAddress(data.wireTransfer.address)
-				setZelleTransferName(data.zelleTransfer.recipientName)
-				setZelleTransferEmail(data.zelleTransfer.email)
-				setZelleTransferPhone(data.zelleTransfer.phone)
-			} catch (err) {
-				setError(t('error occurred'))
-				console.error('Failed to fetch profile:', err)
-			} finally {
-				setLoading(false)
-			}
-		}
-
-		fetchProfile()
-	}, [])
 
 	const handlePhoneChange = (value: string) => {
 		const digits = value.replace(/\D/g, '')
@@ -293,14 +284,6 @@ const SecondStep = ({ method }: Props) => {
 		],
 	}
 
-	if (loading) {
-		return <Loader />
-	}
-
-	if (error) {
-		return <Typography color='error'>{error}</Typography>
-	}
-
 	return (
 		<Box>
 			<Typography sx={{ ml: '2px', ...commonTextStyles, fontSize: '14px' }}>
@@ -414,6 +397,7 @@ const SecondStep = ({ method }: Props) => {
 										display: 'flex',
 										justifyContent: 'space-between',
 										alignItems: 'center',
+										gap: '10px',
 										boxSizing: 'border-box',
 									}}
 								>
@@ -421,10 +405,10 @@ const SecondStep = ({ method }: Props) => {
 										variant='standard'
 										value={walletBTCAddress}
 										onChange={e => setWalletBTCAddress(e.target.value)}
+										sx={{ width: '100%' }}
 										InputProps={{
 											disableUnderline: true,
 											sx: {
-												width: '165px',
 												fontSize: '13px',
 												fontFamily: 'Manrope',
 												padding: 0,

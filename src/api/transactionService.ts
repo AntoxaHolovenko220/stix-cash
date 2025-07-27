@@ -3,6 +3,7 @@ import axios from 'axios'
 const API_URL = import.meta.env.VITE_API_URL
 
 export interface TransactionData {
+	_id?: string
 	type: string
 	amount: string
 	balance: string
@@ -33,6 +34,22 @@ export const createAdminTransaction = async (
 	return response.data
 }
 
+export const editTransaction = async (id: string, data: TransactionData) => {
+	const response = await axios.patch(
+		`${API_URL}/transactions/${id}`,
+		{
+			...data,
+		},
+		{
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	)
+	return response.data
+}
+
 export const createUserTransaction = async (data: TransactionData) => {
 	const response = await axios.post(
 		`${API_URL}/transactions`,
@@ -50,7 +67,7 @@ export const createUserTransaction = async (data: TransactionData) => {
 	return response.data
 }
 
-export const getUserTransactionAdmin = async (clientId: string) => {
+export const getUserTransactionsAdmin = async (clientId: string) => {
 	const response = await axios.get(
 		`${API_URL}/transactions?userId=${clientId}`,
 		{
@@ -63,7 +80,17 @@ export const getUserTransactionAdmin = async (clientId: string) => {
 	return response.data
 }
 
-export const getTransactionAdmin = async () => {
+export const getTransactionAdmin = async (id: string) => {
+	const response = await axios.get(`${API_URL}/transactions/${id}`, {
+		headers: {
+			Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+			'Content-Type': 'application/json',
+		},
+	})
+	return response.data
+}
+
+export const getTransactionsAdmin = async () => {
 	const response = await axios.get(`${API_URL}/transactions`, {
 		headers: {
 			Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
@@ -73,7 +100,7 @@ export const getTransactionAdmin = async () => {
 	return response.data
 }
 
-export const getProfileTransaction = async () => {
+export const getProfileTransactions = async () => {
 	const response = await axios.get(`${API_URL}/transactions/my`, {
 		headers: {
 			Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
