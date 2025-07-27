@@ -55,7 +55,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 						overflowY: 'auto',
 						position: 'relative',
 						p: '20px',
-						backgroundImage: 'url(/public/lines.png)',
+						backgroundImage: 'url(/lines.png)',
 						backgroundRepeat: 'no-repeat',
 						backgroundSize: 'cover',
 					}}

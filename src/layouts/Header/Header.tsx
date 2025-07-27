@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { LanguageSwitcher } from '@/components'
 import { Box, IconButton, Typography, useMediaQuery } from '@mui/material'
@@ -30,19 +29,24 @@ const Header = ({ onLogoClick }: HeaderProps) => {
 				<Box
 					onClick={onLogoClick}
 					sx={{
-						width: 'fit-content',
-						p: '10px',
+						width: '126px',
+						height: '39px',
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
 						bgcolor: '#EFEFEF',
 						borderRadius: '30px',
 						cursor: 'pointer',
+						boxSizing: 'border-box',
 					}}
 				>
 					<Typography
 						sx={{
+							mt: '-2px',
 							fontFamily: 'Benzin',
 							fontSize: '16px',
 							fontWeight: 700,
-							lineHeight: '31px',
+							lineHeight: 1.3,
 							background: 'linear-gradient(90deg, #0044FF, #002999)',
 							WebkitBackgroundClip: 'text',
 							WebkitTextFillColor: 'transparent',

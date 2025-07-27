@@ -60,7 +60,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 				top: 0,
 				transition: !isWideScreen ? 'left 0.3s ease' : 'none',
 				zIndex: 1000,
-				pt: '22px',
+				pt: '15px',
 				pl: '50px',
 			}}
 		>
