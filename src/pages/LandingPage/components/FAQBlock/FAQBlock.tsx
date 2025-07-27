@@ -15,23 +15,55 @@ const FAQBlock = () => {
 	const faqItems = [
 		{
 			question: t('get money'),
-			answer:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id faucibus nulla. Donec non ante sem. Donec lorem est, molestie eget finibus vitae, pulvinar nec leo.',
+			answers: [
+				t('styx'),
+				'br',
+				'br',
+				t('clients can'),
+				'br',
+				t('exchange'),
+				'br',
+				t('haveBTC'),
+				'br',
+				t('use'),
+			],
 		},
 		{
 			question: t('time'),
-			answer:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id faucibus nulla. Donec non ante sem. Donec lorem est, molestie eget finibus vitae, pulvinar nec leo.',
+			answers: [
+				t('personal'),
+				'br',
+				'br',
+				t('opportunity'),
+				'br',
+				t('obnal'),
+				'br',
+				t('get fiat'),
+				'br',
+				t('have actives'),
+				'br',
+				t('p2p'),
+				'br',
+				t('instruments'),
+			],
 		},
 		{
 			question: t('risks'),
-			answer:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id faucibus nulla. Donec non ante sem. Donec lorem est, molestie eget finibus vitae, pulvinar nec leo.',
+			answers: [t('styx helps'), 'br', 'br', t('not simple')],
 		},
 		{
 			question: t('commissions'),
-			answer:
-				'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus id faucibus nulla. Donec non ante sem. Donec lorem est, molestie eget finibus vitae, pulvinar nec leo.',
+			answers: [
+				t('helps'),
+				'br',
+				t('helps'),
+				'br',
+				t('low'),
+				'br',
+				t('anonimnost'),
+				'br',
+				t('podderzhka'),
+			],
 		},
 	]
 
@@ -135,17 +167,24 @@ const FAQBlock = () => {
 									background: 'linear-gradient(90deg, #2D2D2D, #003277)',
 								}}
 							>
-								<Typography
-									sx={{
-										fontFamily: 'Manrope',
-										fontSize: isMobile ? '20px' : '27px',
-										fontWeight: 200,
-										color: '#FFFFFF',
-										lineHeight: 1,
-									}}
-								>
-									{item.answer}
-								</Typography>
+								{item.answers?.map((answer, index) =>
+									answer === 'br' ? (
+										<br />
+									) : (
+										<Typography
+											key={index}
+											sx={{
+												fontFamily: 'Manrope',
+												fontSize: isMobile ? '20px' : '27px',
+												fontWeight: 200,
+												color: '#FFFFFF',
+												lineHeight: 1,
+											}}
+										>
+											{answer}
+										</Typography>
+									)
+								)}
 							</Box>
 						</Collapse>
 					</Box>

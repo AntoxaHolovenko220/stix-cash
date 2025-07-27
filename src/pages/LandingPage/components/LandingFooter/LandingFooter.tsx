@@ -97,6 +97,7 @@ const LandingFooter = () => {
 				</Box>
 			</Box>
 			<Button sx={buttonStyles}>{t('support')}</Button>
+			<Button sx={buttonStyles}>{t('policy')}</Button>
 		</Box>
 	)
 }

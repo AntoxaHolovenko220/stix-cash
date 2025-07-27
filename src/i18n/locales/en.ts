@@ -41,9 +41,9 @@ export const enTranslations = {
 	'credit line3':
 		" «I had a credit limit that I couldn't use. With the help of Styx Cash, I turned it into real money in just a few hours. Fast, transparent and no hassle. Highly recommended!»",
 	cards: 'Which cards are supported?',
-	time: 'How long is the process taking?',
+	time: 'What opportunities are available with us?',
 	risks: 'Are there any risks to credit history?',
-	commissions: 'What kind of commissions?',
+	commissions: 'How does the company benefit the customer?',
 	phone: 'Tel:',
 	support: 'Support',
 	'in touch': "We'll get back to you",
@@ -210,4 +210,29 @@ export const enTranslations = {
 	supportService: 'Please contact customer support.',
 	'no transactions': 'No transactions available',
 	'please select': 'Please select one of the methods to contact support:',
+	policy: 'Privacy Policy',
+	styx: 'Styx Cash is a fintech company specializing in legal methods of withdrawing funds from credit cards and converting cryptocurrency into fiat (cash).',
+	'clients can': 'Clients can:',
+	exchange: '— Transfer money from credit cards into cash;',
+	haveBTC:
+		'— Deposit cryptocurrency into a personal account and receive the equivalent in dollars, hryvnia, or another preferred currency;',
+	use: '— Use the created personal account in the Styx Cash system for storing, managing, or cashing out funds.',
+	personal: 'Personal account in the Styx Cash system;',
+	opportunity: 'Opportunity at any time to:',
+	obnal: '— Cash out credit funds;',
+	'get fiat': '— Receive fiat for cryptocurrency;',
+	'have actives': '— Store assets in a convenient form;',
+	p2p: '— Make P2P transfers between other platform users;',
+	instruments:
+		'— Tools for financial planning, optimizing credit load, and even generating income.',
+	'styx helps':
+		'Styx Cash helps use credit funds correctly, rather than creating debt.',
+	'not simple':
+		'We don’t just withdraw money—we teach how to manage this tool. The client receives money in hand without harming their credit history; on the contrary, if desired, they can improve it by regularly using the card and fully repaying the funds on time.',
+	helps: '— Assistance in accessing your money bypassing banking restrictions;',
+	low: '— Low fees compared to ATMs and other services;',
+	anonimnost:
+		'— Anonymity (in the case of cryptocurrency) and confidentiality;',
+	podderzhka:
+		'— Support and assistance—clients are not left alone with technical difficulties;',
 }
