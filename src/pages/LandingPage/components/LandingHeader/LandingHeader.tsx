@@ -34,6 +34,7 @@ const LandingHeader = ({ setModalOpen }: ModalProps) => {
 			>
 				<Typography
 					sx={{
+						mt: '-2px',
 						fontFamily: 'Benzin',
 						fontSize: '16px',
 						lineHeight: 1.2,
