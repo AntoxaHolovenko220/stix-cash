@@ -23,7 +23,7 @@ const LandingPage = () => {
 	return (
 		<Box>
 			<LandingHeader setModalOpen={setModalOpen} />
-			<Box sx={{ height: '96px' }} />
+			<Box sx={{ height: '80px' }} />
 			<CardBlock setModalOpen={setModalOpen} />
 			<HowFixBlock />
 			<HowWorkBlock />

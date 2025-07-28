@@ -12,13 +12,14 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded'
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import { useTranslation } from 'react-i18next'
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Client, getProfile, updateProfileField } from '@/api/clientService'
 import { Loader } from '@/components'
 import { useRandomId } from '@/hooks/useRandomId'
 import { createUserTransaction } from '@/api/transactionService'
 import { useNavigate } from 'react-router-dom'
 import routes from '@/router/routes.json'
+import { Balance } from '@mui/icons-material'
 
 const commonTextStyles = {
 	fontFamily: 'Manrope',
@@ -56,9 +57,10 @@ type Method = 'paypalAddress' | 'wireTransfer' | 'walletBTCAddress'
 
 interface Props {
 	method: Method
+	setCheckForm: Dispatch<SetStateAction<boolean>>
 }
 
-const SecondStep = ({ method }: Props) => {
+const SecondStep = ({ method, setCheckForm }: Props) => {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
 
@@ -90,14 +92,6 @@ const SecondStep = ({ method }: Props) => {
 			try {
 				const data = await getProfile()
 				setProfile(data)
-				setPaypalAddress(data.paypalAddress)
-				setWalletBTCAddress(data.walletBTCAddress)
-				setWireTransferFirstName(data.wireTransfer.firstName)
-				setWireTransferLastName(data.wireTransfer.lastName)
-				setWireTransferAccountNumber(data.wireTransfer.accountNumber)
-				setWireTransferRoutingNumber(data.wireTransfer.routingNumber)
-				setWireTransferBankName(data.wireTransfer.bankName)
-				setWireTransferAddress(data.wireTransfer.address)
 				setIsTransactionAllowed(data.isTransactionAllowed)
 			} catch (err) {
 				setError(t('error occurred'))
@@ -139,33 +133,6 @@ const SecondStep = ({ method }: Props) => {
 
 	const handleCreateTransaction = async () => {
 		try {
-			if (
-				paypalAddress !== profile.paypalAddress ||
-				walletBTCAddress !== profile.walletBTCAddress ||
-				wireTransferFirstName !== profile.wireTransfer.firstName ||
-				wireTransferLastName !== profile.wireTransfer.lastName ||
-				wireTransferAccountNumber !== profile.wireTransfer.accountNumber ||
-				wireTransferRoutingNumber !== profile.wireTransfer.routingNumber ||
-				wireTransferBankName !== profile.wireTransfer.bankName ||
-				wireTransferAddress !== profile.wireTransfer.address
-			) {
-				if (method === 'paypalAddress') {
-					await updateProfileField({ paypalAddress: paypalAddress })
-				} else if (method === 'walletBTCAddress') {
-					await updateProfileField({ walletBTCAddress: walletBTCAddress })
-				} else if (method === 'wireTransfer') {
-					const updatedWireTransfer = {
-						firstName: wireTransferFirstName,
-						lastName: wireTransferLastName,
-						accountNumber: wireTransferAccountNumber,
-						routingNumber: wireTransferRoutingNumber,
-						bankName: wireTransferBankName,
-						address: wireTransferAddress,
-					}
-
-					await updateProfileField({ wireTransfer: updatedWireTransfer })
-				}
-			}
 			if (!isTransactionAllowed) {
 				setIsSuccess(false)
 				setDialogText(t('oops'))
@@ -181,6 +148,9 @@ const SecondStep = ({ method }: Props) => {
 					date: new Date(Date.now()).toISOString(),
 					status: 'pending',
 					transactionId,
+				})
+				await updateProfileField({
+					balance: (Number(profile?.balance) - Number(amount)).toFixed(2),
 				})
 				setIsSuccess(true)
 				setDialogText(t('ready-steady'))
@@ -250,7 +220,7 @@ const SecondStep = ({ method }: Props) => {
 				onchange: (val: string) => setWireTransferFirstName(val),
 			},
 			{
-				name: t('surname'),
+				name: t('last name'),
 				key: 'wireTransferLastName',
 				value: wireTransferLastName,
 				onchange: (val: string) => setWireTransferLastName(val),
@@ -270,7 +240,13 @@ const SecondStep = ({ method }: Props) => {
 		<Box>
 			<Typography sx={{ ml: '2px', ...commonTextStyles, fontSize: '14px' }}>
 				<span style={{ opacity: 0.5 }}>
-					{t('home')} | {t('withdraw')}
+					{t('home')} |{' '}
+					<span
+						onClick={() => setCheckForm(false)}
+						style={{ cursor: 'pointer' }}
+					>
+						{t('withdraw')}
+					</span>
 				</span>{' '}
 				|{' '}
 				{method === 'paypalAddress'
@@ -380,6 +356,7 @@ const SecondStep = ({ method }: Props) => {
 									<TextField
 										variant='standard'
 										value={walletBTCAddress}
+										placeholder={t('type address')}
 										onChange={e => setWalletBTCAddress(e.target.value)}
 										sx={{ width: '100%' }}
 										InputProps={{

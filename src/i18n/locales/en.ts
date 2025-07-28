@@ -100,7 +100,7 @@ export const enTranslations = {
 	bridge: 'Styx Cash — your bridge between you and financial freedom',
 	'your balance': 'Total balance',
 	'top up': 'Deposit balance',
-	withdraw: 'Withdraw funds',
+	withdraw: 'Withdrawal',
 	'fill all fields': 'Please fill all required fields',
 	'agree to terms': 'You must accept terms and conditions to register',
 	'error occurred': 'An error occurred',
@@ -235,4 +235,7 @@ export const enTranslations = {
 		'— Anonymity (in the case of cryptocurrency) and confidentiality;',
 	podderzhka:
 		'— Support and assistance—clients are not left alone with technical difficulties;',
+	'want to logout': 'Do you really want to logout?',
+	cancel: 'Cancel',
+	'type address': 'Please enter your BTC wallet',
 }

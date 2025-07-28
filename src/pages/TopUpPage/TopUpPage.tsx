@@ -1,9 +1,10 @@
-import { Box, Typography } from '@mui/material'
+import { Box, IconButton } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import FirstStep from './components/FirstStep/FirstStep'
 import { useEffect, useState } from 'react'
 import SecondStep from './components/SecondStep/SecondStep'
 import { Client, getProfile } from '@/api/clientService'
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 
 const TopUpPage = () => {
 	const { t } = useTranslation()
@@ -43,7 +44,23 @@ const TopUpPage = () => {
 					profile={profile!}
 				/>
 			) : (
-				<SecondStep method={method} profile={profile!} />
+				<>
+					<IconButton
+						sx={{ position: 'absolute', top: '46px', left: '12px' }}
+						onClick={() => setCheckFrom(false)}
+					>
+						<KeyboardBackspaceIcon
+							sx={{
+								color: '#000000',
+							}}
+						/>
+					</IconButton>
+					<SecondStep
+						method={method}
+						profile={profile!}
+						setCheckForm={setCheckFrom}
+					/>
+				</>
 			)}
 		</Box>
 	)

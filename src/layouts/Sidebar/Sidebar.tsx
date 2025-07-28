@@ -6,6 +6,10 @@ import {
 	ListItem,
 	Typography,
 	useMediaQuery,
+	Dialog,
+	DialogActions,
+	DialogTitle,
+	Button,
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded'
@@ -27,6 +31,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 	const [activePath, setActivePath] = useState(location.pathname)
 	const isWideScreen = useMediaQuery('(min-width:1280px)')
 	const userData = getUserData()
+	const [openLogoutModal, setOpenLogoutModal] = useState(false)
 
 	useEffect(() => {
 		setActivePath(location.pathname)
@@ -327,7 +332,7 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 					cursor: 'pointer',
 					gap: 1,
 				}}
-				onClick={handleLogout}
+				onClick={() => setOpenLogoutModal(true)}
 			>
 				<LogoutRoundedIcon sx={{ color: '#FFFFFF' }} />
 				<Typography
@@ -339,6 +344,90 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 					{t('logout')}
 				</Typography>
 			</Box>
+			<Dialog
+				open={openLogoutModal}
+				onClose={() => setOpenLogoutModal(false)}
+				PaperProps={{
+					sx: {
+						boxSizing: 'border-box',
+						display: 'flex',
+						flexDirection: 'column',
+						justifyContent: 'space-between',
+						width: '390px',
+						minHeight: '220px',
+						borderRadius: '24px',
+						background: 'linear-gradient(180deg, #58A9FF 0%, #0044FF 50%)',
+						color: '#FFFFFF',
+						padding: '20px 16px',
+					},
+				}}
+			>
+				<DialogTitle sx={{ p: 0 }}>
+					<Typography
+						sx={{
+							fontFamily: 'Manrope',
+							fontSize: '20px',
+							fontWeight: 700,
+							textAlign: 'center',
+						}}
+					>
+						{t('want to logout')}
+					</Typography>
+				</DialogTitle>
+
+				<DialogActions
+					sx={{ display: 'flex', justifyContent: 'center', gap: '20px' }}
+				>
+					<Button
+						onClick={handleLogout}
+						sx={{
+							width: '100%',
+							height: '56px',
+							border: '1px solid #232323',
+							borderRadius: '6px',
+							display: 'inline-block',
+							backgroundColor: '#D72828',
+						}}
+					>
+						<Typography
+							sx={{
+								color: '#FFFFFF',
+								fontFamily: 'Manrope',
+								fontSize: '20px',
+								fontWeight: 700,
+								textTransform: 'none',
+							}}
+						>
+							{t('logout')}
+						</Typography>
+					</Button>
+					<Button
+						onClick={() => setOpenLogoutModal(false)}
+						sx={{
+							width: '100%',
+							height: '56px',
+							border: '1px solid #232323',
+							borderRadius: '6px',
+							backgroundColor: '#FFFFFF',
+							display: 'inline-block',
+						}}
+					>
+						<Typography
+							sx={{
+								background: 'linear-gradient(180deg, #58A9FF 0%, #0044FF 50%)',
+								WebkitBackgroundClip: 'text',
+								WebkitTextFillColor: 'transparent',
+								fontFamily: 'Manrope',
+								fontSize: '20px',
+								fontWeight: 700,
+								textTransform: 'none',
+							}}
+						>
+							{t('cancel')}
+						</Typography>
+					</Button>
+				</DialogActions>
+			</Dialog>
 		</Box>
 	)
 }

@@ -99,18 +99,18 @@ const SupportButtonModal = () => {
 							/>
 						</IconButton>
 					</Link>
-					<Link
+					{/* <Link
 						href='https://wa.me/380'
 						target='_blank'
 						rel='noopener noreferrer'
 						style={{ textDecoration: 'none' }}
-					>
-						<IconButton>
-							<WhatsAppIcon
-								sx={{ width: '50px', height: '50px', color: '#1ed760' }}
-							/>
-						</IconButton>
-					</Link>
+					> */}
+					<IconButton>
+						<WhatsAppIcon
+							sx={{ width: '50px', height: '50px', color: '#1ed760' }}
+						/>
+					</IconButton>
+					{/* </Link> */}
 				</DialogActions>
 			</Dialog>
 		</>

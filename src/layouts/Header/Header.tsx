@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { LanguageSwitcher } from '@/components'
 import { Box, IconButton, Typography, useMediaQuery } from '@mui/material'
 import routes from '@/router/routes.json'
+import { getUserData } from '@/api/authService'
 
 interface HeaderProps {
 	onLogoClick: () => void
@@ -10,6 +11,7 @@ interface HeaderProps {
 
 const Header = ({ onLogoClick }: HeaderProps) => {
 	const navigate = useNavigate()
+	const userData = getUserData()
 	const isWideScreen = useMediaQuery('(min-width:1280px)')
 	const isMobile = useMediaQuery('(max-width:480px)')
 
@@ -17,21 +19,26 @@ const Header = ({ onLogoClick }: HeaderProps) => {
 		<Box
 			sx={{
 				width: '100%',
-				py: '20px',
+				height: '80px',
 				px: isMobile ? '20px' : '50px',
 				boxSizing: 'border-box',
 				display: 'flex',
 				justifyContent: !isWideScreen ? 'space-between' : 'flex-end',
+				alignItems: 'center',
 				backgroundColor: '#0246FF',
-				position: 'relative', // Добавляем позиционирование
+				position: 'relative',
+				zIndex: 1,
 			}}
 		>
 			{!isWideScreen && (
 				<Box
 					onClick={onLogoClick}
 					sx={{
-						width: 'fit-content',
-						p: '10px',
+						width: '126px',
+						height: '39px',
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
 						bgcolor: '#EFEFEF',
 						borderRadius: '30px',
 						cursor: 'pointer',
@@ -39,10 +46,11 @@ const Header = ({ onLogoClick }: HeaderProps) => {
 				>
 					<Typography
 						sx={{
+							mt: '-2px',
 							fontFamily: 'Benzin',
 							fontSize: '16px',
 							fontWeight: 700,
-							lineHeight: '31px',
+							lineHeight: 1.3,
 							background: 'linear-gradient(90deg, #0044FF, #002999)',
 							WebkitBackgroundClip: 'text',
 							WebkitTextFillColor: 'transparent',
@@ -56,7 +64,11 @@ const Header = ({ onLogoClick }: HeaderProps) => {
 			<Box sx={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
 				<LanguageSwitcher color='#FFFFFF' />
 				<IconButton
-					// onClick={() => navigate(`${routes.HomePage.path}`)}
+					onClick={
+						userData?.roles?.includes('user')
+							? () => navigate(routes.ProfilePage.path)
+							: undefined
+					}
 					sx={{ p: 0 }}
 				>
 					<Box component='img' src='/person-white.svg' />

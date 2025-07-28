@@ -12,7 +12,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded'
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import { useTranslation } from 'react-i18next'
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Client, getProfile, updateProfileField } from '@/api/clientService'
 import { Loader } from '@/components'
 import { useRandomId } from '@/hooks/useRandomId'
@@ -61,9 +61,10 @@ type Method =
 interface Props {
 	profile: Client
 	method: Method
+	setCheckForm: Dispatch<SetStateAction<boolean>>
 }
 
-const SecondStep = ({ profile, method }: Props) => {
+const SecondStep = ({ profile, method, setCheckForm }: Props) => {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
 
@@ -145,46 +146,46 @@ const SecondStep = ({ profile, method }: Props) => {
 
 	const handleCreateTransaction = async () => {
 		try {
-			if (
-				paypalAddress !== profile.paypalAddress ||
-				walletBTCAddress !== profile.walletBTCAddress ||
-				wireTransferFirstName !== profile.wireTransfer.firstName ||
-				wireTransferLastName !== profile.wireTransfer.lastName ||
-				wireTransferAccountNumber !== profile.wireTransfer.accountNumber ||
-				wireTransferRoutingNumber !== profile.wireTransfer.routingNumber ||
-				wireTransferBankName !== profile.wireTransfer.bankName ||
-				wireTransferAddress !== profile.wireTransfer.address ||
-				zelleTransferName !== profile.zelleTransfer.recipientName ||
-				zelleTransferEmail !== profile.zelleTransfer.email ||
-				zelleTransferPhone !== profile.zelleTransfer.phone
-			) {
-				if (method === 'paypalAddress') {
-					await updateProfileField({ paypalAddress: paypalAddress })
-				} else if (method === 'walletBTCAddress') {
-					await updateProfileField({ walletBTCAddress: walletBTCAddress })
-				} else if (method === 'wireTransfer') {
-					const updatedWireTransfer = {
-						firstName: wireTransferFirstName,
-						lastName: wireTransferLastName,
-						accountNumber: wireTransferAccountNumber,
-						routingNumber: wireTransferRoutingNumber,
-						bankName: wireTransferBankName,
-						address: wireTransferAddress,
-					}
+			// if (
+			// 	paypalAddress !== profile.paypalAddress ||
+			// 	walletBTCAddress !== profile.walletBTCAddress ||
+			// 	wireTransferFirstName !== profile.wireTransfer.firstName ||
+			// 	wireTransferLastName !== profile.wireTransfer.lastName ||
+			// 	wireTransferAccountNumber !== profile.wireTransfer.accountNumber ||
+			// 	wireTransferRoutingNumber !== profile.wireTransfer.routingNumber ||
+			// 	wireTransferBankName !== profile.wireTransfer.bankName ||
+			// 	wireTransferAddress !== profile.wireTransfer.address ||
+			// 	zelleTransferName !== profile.zelleTransfer.recipientName ||
+			// 	zelleTransferEmail !== profile.zelleTransfer.email ||
+			// 	zelleTransferPhone !== profile.zelleTransfer.phone
+			// ) {
+			// 	if (method === 'paypalAddress') {
+			// 		await updateProfileField({ paypalAddress: paypalAddress })
+			// 	} else if (method === 'walletBTCAddress') {
+			// 		await updateProfileField({ walletBTCAddress: walletBTCAddress })
+			// 	} else if (method === 'wireTransfer') {
+			// 		const updatedWireTransfer = {
+			// 			firstName: wireTransferFirstName,
+			// 			lastName: wireTransferLastName,
+			// 			accountNumber: wireTransferAccountNumber,
+			// 			routingNumber: wireTransferRoutingNumber,
+			// 			bankName: wireTransferBankName,
+			// 			address: wireTransferAddress,
+			// 		}
 
-					await updateProfileField({ wireTransfer: updatedWireTransfer })
-				} else if (method === 'zelleTransfer') {
-					const updatedZelleTransfer = {
-						recipientName: zelleTransferName,
-						email: zelleTransferEmail,
-						phone: zelleTransferPhone,
-					}
+			// 		await updateProfileField({ wireTransfer: updatedWireTransfer })
+			// 	} else if (method === 'zelleTransfer') {
+			// 		const updatedZelleTransfer = {
+			// 			recipientName: zelleTransferName,
+			// 			email: zelleTransferEmail,
+			// 			phone: zelleTransferPhone,
+			// 		}
 
-					await updateProfileField({
-						zelleTransfer: updatedZelleTransfer,
-					})
-				}
-			}
+			// 		await updateProfileField({
+			// 			zelleTransfer: updatedZelleTransfer,
+			// 		})
+			// 	}
+			// }
 			const result = await createUserTransaction({
 				type: 'deposit',
 				amount: Number(amount).toFixed(2),
@@ -256,7 +257,7 @@ const SecondStep = ({ profile, method }: Props) => {
 				onchange: (val: string) => setWireTransferFirstName(val),
 			},
 			{
-				name: t('surname'),
+				name: t('last name'),
 				key: 'wireTransferLastName',
 				value: wireTransferLastName,
 				onchange: (val: string) => setWireTransferLastName(val),
@@ -288,7 +289,13 @@ const SecondStep = ({ profile, method }: Props) => {
 		<Box>
 			<Typography sx={{ ml: '2px', ...commonTextStyles, fontSize: '14px' }}>
 				<span style={{ opacity: 0.5 }}>
-					{t('home')} | {t('top up')}
+					{t('home')} |{' '}
+					<span
+						onClick={() => setCheckForm(false)}
+						style={{ cursor: 'pointer' }}
+					>
+						{t('top up')}
+					</span>
 				</span>{' '}
 				|{' '}
 				{method === 'paypalAddress'
@@ -404,9 +411,11 @@ const SecondStep = ({ profile, method }: Props) => {
 									<TextField
 										variant='standard'
 										value={walletBTCAddress}
+										placeholder={t('type address')}
 										onChange={e => setWalletBTCAddress(e.target.value)}
 										sx={{ width: '100%' }}
 										InputProps={{
+											readOnly: true,
 											disableUnderline: true,
 											sx: {
 												fontSize: '13px',
@@ -458,6 +467,9 @@ const SecondStep = ({ profile, method }: Props) => {
 									} else {
 										input.onchange(val)
 									}
+								}}
+								InputProps={{
+									readOnly: true,
 								}}
 								sx={textFieldStyles}
 								type={input.key === 'zelleTransferEmail' ? 'email' : 'text'}

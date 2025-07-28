@@ -4,6 +4,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import EditTransactionModal from '../EditTransactionModal'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { TransactionData } from '@/api/transactionService'
+import AnimatedLoaderIcon from '../AnimatedLoaderIcon'
 
 export type TransactionType = 'deposit' | 'withdrawal'
 export type TransactionStatus = 'completed' | 'canceled' | 'pending'
@@ -53,7 +54,7 @@ const TransactionCard = ({
 	const statusConfig = {
 		completed: { color: '#52BC37', icon: '/completed.svg' },
 		canceled: { color: '#D72828', icon: '/canceled.svg' },
-		pending: { color: '#F4D800', icon: '/pending.svg' },
+		pending: { color: '#F4D800' },
 	}
 
 	const paymentMethodConfig: Record<PaymentMethod, PaymentMethodConfig> = {
@@ -174,7 +175,11 @@ const TransactionCard = ({
 										? 'Canceled'
 										: 'Pending'}
 								</Typography>
-								<Box component='img' src={statusConfig[status].icon} />
+								{status === 'pending' ? (
+									<AnimatedLoaderIcon />
+								) : (
+									<Box component='img' src={statusConfig[status].icon} />
+								)}
 							</Box>
 						),
 					},
