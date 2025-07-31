@@ -346,13 +346,15 @@ const TransactionCard = ({
 					</Box>
 				))}
 			</Box>
-			<EditTransactionModal
-				open={isModalOpen}
-				onClose={() => setIsModalOpen(false)}
-				setClose={setIsModalOpen}
-				id={id!}
-				setTransactions={setTransactions}
-			/>
+			{showEdit && (
+				<EditTransactionModal
+					open={isModalOpen}
+					onClose={() => setIsModalOpen(false)}
+					setClose={setIsModalOpen}
+					id={id!}
+					setTransactions={setTransactions}
+				/>
+			)}
 			{paymentDetails && (
 				<>
 					<WalletModal

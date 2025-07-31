@@ -1,9 +1,9 @@
 import { ReactNode, useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Header, Sidebar } from '@/layouts'
+import { Footer, Header, Sidebar } from '@/layouts'
 import { Box, useMediaQuery } from '@mui/material'
-import zIndex from '@mui/material/styles/zIndex'
 import { SupportButtonModal } from '@/components'
+import routes from '@/router/routes.json'
 
 interface MainLayoutProps {
 	children: ReactNode
@@ -61,20 +61,16 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 					}}
 					key={location.pathname}
 				>
-					{/* <Box
-						component='img'
-						src='/lines.png'
-						sx={{
-							width: 'calc(100%)',
-							ml: '-20px',
-							position: 'absolute',
-							zIndex: -1,
-						}}
-					/> */}
 					{children}
 					<SupportButtonModal />
 				</Box>
+				{/* {isWideScreen && location.pathname === routes.ProfilePage.path && (
+					<Footer />
+				)} */}
 			</Box>
+			{/* {!isWideScreen && location.pathname === routes.ProfilePage.path && (
+				<Footer />
+			)} */}
 		</Box>
 	)
 }

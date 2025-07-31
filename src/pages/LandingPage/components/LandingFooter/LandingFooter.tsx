@@ -71,7 +71,7 @@ const LandingFooter = () => {
 					display: 'flex',
 					flexDirection: 'row',
 					rowGap: '20px',
-					columnGap: '30px',
+					columnGap: '20px',
 					flexWrap: 'wrap',
 					justifyContent: 'center',
 				}}
