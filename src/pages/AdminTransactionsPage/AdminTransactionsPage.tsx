@@ -72,7 +72,8 @@ const AdminTransactionsPage = () => {
 				{transactions.map((transaction, index) => (
 					<TransactionCard
 						key={index}
-						id={transaction.transactionId}
+						id={transaction.id!}
+						transactionId={transaction.transactionId}
 						date={transaction.date}
 						status={transaction.status as TransactionStatus}
 						type={transaction.type as TransactionType}

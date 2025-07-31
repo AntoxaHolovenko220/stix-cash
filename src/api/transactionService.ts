@@ -3,7 +3,7 @@ import axios from 'axios'
 const API_URL = import.meta.env.VITE_API_URL
 
 export interface TransactionData {
-	_id?: string
+	id?: string
 	type: string
 	amount: string
 	balance?: string

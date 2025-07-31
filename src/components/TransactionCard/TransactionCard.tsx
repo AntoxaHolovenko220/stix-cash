@@ -22,8 +22,8 @@ interface PaymentMethodConfig {
 }
 
 export interface TransactionCardProps {
-	_id?: string
 	id: string
+	transactionId: string
 	date: string
 	status: TransactionStatus
 	type: TransactionType
@@ -37,8 +37,8 @@ export interface TransactionCardProps {
 }
 
 const TransactionCard = ({
-	_id,
 	id,
+	transactionId,
 	date,
 	status,
 	type,
@@ -161,7 +161,7 @@ const TransactionCard = ({
 				}}
 			>
 				{[
-					{ label: t('id transaction'), value: id },
+					{ label: t('id transaction'), value: transactionId },
 					{ label: t('date'), value: formattedDate },
 					{
 						label: t('status'),
@@ -350,25 +350,29 @@ const TransactionCard = ({
 				open={isModalOpen}
 				onClose={() => setIsModalOpen(false)}
 				setClose={setIsModalOpen}
-				_id={_id!}
+				id={id!}
 				setTransactions={setTransactions}
 			/>
-			<WalletModal
-				open={walletModalOpen}
-				onClose={() => setWalletModalOpen(false)}
-				value={paymentDetails}
-				name={paymentMethod}
-			/>
-			<WireTransferModal
-				open={wireTransferModalOpen}
-				onClose={() => setWireTransferModalOpen(false)}
-				values={paymentDetails}
-			/>
-			<ZelleModal
-				open={zelleModalOpen}
-				onClose={() => setZelleModalOpen(false)}
-				values={paymentDetails}
-			/>
+			{paymentDetails && (
+				<>
+					<WalletModal
+						open={walletModalOpen}
+						onClose={() => setWalletModalOpen(false)}
+						value={paymentDetails}
+						name={paymentMethod}
+					/>
+					<WireTransferModal
+						open={wireTransferModalOpen}
+						onClose={() => setWireTransferModalOpen(false)}
+						values={paymentDetails}
+					/>
+					<ZelleModal
+						open={zelleModalOpen}
+						onClose={() => setZelleModalOpen(false)}
+						values={paymentDetails}
+					/>
+				</>
+			)}
 		</Box>
 	)
 }
