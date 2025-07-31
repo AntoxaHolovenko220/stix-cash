@@ -86,6 +86,7 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 	const [transactionId, setTransactionId] = useState(useRandomId())
 	const [isTermsAccepted, setІsTermsAccepted] = useState(false)
 	const [isTransactionAllowed, setIsTransactionAllowed] = useState(false)
+	const [paymentDetails, setPaymentDetails] = useState({})
 
 	useEffect(() => {
 		const fetchProfile = async () => {
@@ -133,6 +134,20 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 
 	const handleCreateTransaction = async () => {
 		try {
+			if (method === 'paypalAddress') {
+				setPaymentDetails({ paypalAddress: paypalAddress })
+			} else if (method === 'walletBTCAddress') {
+				setPaymentDetails({ walletBTCAddress: walletBTCAddress })
+			} else if (method === 'wireTransfer') {
+				setPaymentDetails({
+					firstName: wireTransferFirstName,
+					lastName: wireTransferLastName,
+					accountNumber: wireTransferAccountNumber,
+					routingNumber: wireTransferRoutingNumber,
+					bankName: wireTransferBankName,
+					address: wireTransferAddress,
+				})
+			}
 			if (!isTransactionAllowed) {
 				setIsSuccess(false)
 				setDialogText(t('oops'))
@@ -143,11 +158,12 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 				const result = await createUserTransaction({
 					type: 'withdrawal',
 					amount: Number(amount).toFixed(2),
-					balance: (Number(profile?.balance) - Number(amount)).toFixed(2),
+					// balance: (Number(profile?.balance) - Number(amount)).toFixed(2),
 					method,
 					date: new Date(Date.now()).toISOString(),
 					status: 'pending',
 					transactionId,
+					paymentDetails,
 				})
 				await updateProfileField({
 					balance: (Number(profile?.balance) - Number(amount)).toFixed(2),
@@ -601,45 +617,50 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 					>
 						{dialogText2}
 					</Typography>
-					<Typography
-						sx={{
-							fontFamily: 'Manrope',
-							fontSize: '18px',
-							color: '#FFFFFF',
-							textAlign: 'center',
-						}}
-					>
-						{dialogText3}
-					</Typography>
+					{isSuccess === false && (
+						<Typography
+							sx={{
+								fontFamily: 'Manrope',
+								fontSize: '18px',
+								color: '#FFFFFF',
+								textAlign: 'center',
+							}}
+						>
+							{dialogText3}
+						</Typography>
+					)}
 				</DialogContent>
 				<DialogActions
 					sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}
 				>
-					<Button
-						onClick={handleOpenSupport}
-						sx={{
-							width: '100%',
-							height: '56px',
-							border: '1px solid #232323',
-							borderRadius: '6px',
-							backgroundColor: '#FFFFFF',
-							display: 'inline-block',
-						}}
-					>
-						<Typography
+					{isSuccess === false && (
+						<Button
+							onClick={handleOpenSupport}
 							sx={{
-								background: 'linear-gradient(180deg, #58A9FF 0%, #0044FF 50%)',
-								WebkitBackgroundClip: 'text',
-								WebkitTextFillColor: 'transparent',
-								fontFamily: 'Manrope',
-								fontSize: '20px',
-								fontWeight: 700,
-								textTransform: 'none',
+								width: '100%',
+								height: '56px',
+								border: '1px solid #232323',
+								borderRadius: '6px',
+								backgroundColor: '#FFFFFF',
+								display: 'inline-block',
 							}}
 						>
-							{t('write to support service')}
-						</Typography>
-					</Button>
+							<Typography
+								sx={{
+									background:
+										'linear-gradient(180deg, #58A9FF 0%, #0044FF 50%)',
+									WebkitBackgroundClip: 'text',
+									WebkitTextFillColor: 'transparent',
+									fontFamily: 'Manrope',
+									fontSize: '20px',
+									fontWeight: 700,
+									textTransform: 'none',
+								}}
+							>
+								{t('write to support service')}
+							</Typography>
+						</Button>
+					)}
 					<Button
 						onClick={async () => {
 							setDialogOpen(false)

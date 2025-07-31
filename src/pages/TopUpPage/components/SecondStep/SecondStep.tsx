@@ -12,9 +12,8 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded'
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import { useTranslation } from 'react-i18next'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { Client, getProfile, updateProfileField } from '@/api/clientService'
-import { Loader } from '@/components'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { Client } from '@/api/clientService'
 import { useRandomId } from '@/hooks/useRandomId'
 import { createUserTransaction } from '@/api/transactionService'
 import { useNavigate } from 'react-router-dom'
@@ -146,54 +145,37 @@ const SecondStep = ({ profile, method, setCheckForm }: Props) => {
 
 	const handleCreateTransaction = async () => {
 		try {
-			// if (
-			// 	paypalAddress !== profile.paypalAddress ||
-			// 	walletBTCAddress !== profile.walletBTCAddress ||
-			// 	wireTransferFirstName !== profile.wireTransfer.firstName ||
-			// 	wireTransferLastName !== profile.wireTransfer.lastName ||
-			// 	wireTransferAccountNumber !== profile.wireTransfer.accountNumber ||
-			// 	wireTransferRoutingNumber !== profile.wireTransfer.routingNumber ||
-			// 	wireTransferBankName !== profile.wireTransfer.bankName ||
-			// 	wireTransferAddress !== profile.wireTransfer.address ||
-			// 	zelleTransferName !== profile.zelleTransfer.recipientName ||
-			// 	zelleTransferEmail !== profile.zelleTransfer.email ||
-			// 	zelleTransferPhone !== profile.zelleTransfer.phone
-			// ) {
-			// 	if (method === 'paypalAddress') {
-			// 		await updateProfileField({ paypalAddress: paypalAddress })
-			// 	} else if (method === 'walletBTCAddress') {
-			// 		await updateProfileField({ walletBTCAddress: walletBTCAddress })
-			// 	} else if (method === 'wireTransfer') {
-			// 		const updatedWireTransfer = {
-			// 			firstName: wireTransferFirstName,
-			// 			lastName: wireTransferLastName,
-			// 			accountNumber: wireTransferAccountNumber,
-			// 			routingNumber: wireTransferRoutingNumber,
-			// 			bankName: wireTransferBankName,
-			// 			address: wireTransferAddress,
-			// 		}
+			let paymentDetails = {}
 
-			// 		await updateProfileField({ wireTransfer: updatedWireTransfer })
-			// 	} else if (method === 'zelleTransfer') {
-			// 		const updatedZelleTransfer = {
-			// 			recipientName: zelleTransferName,
-			// 			email: zelleTransferEmail,
-			// 			phone: zelleTransferPhone,
-			// 		}
-
-			// 		await updateProfileField({
-			// 			zelleTransfer: updatedZelleTransfer,
-			// 		})
-			// 	}
-			// }
+			if (method === 'paypalAddress') {
+				paymentDetails = { paypalAddress: paypalAddress }
+			} else if (method === 'walletBTCAddress') {
+				paymentDetails = { walletBTCAddress: walletBTCAddress }
+			} else if (method === 'zelleTransfer') {
+				paymentDetails = {
+					recipientName: zelleTransferName,
+					email: zelleTransferEmail,
+					phone: zelleTransferPhone,
+				}
+			} else if (method === 'wireTransfer') {
+				paymentDetails = {
+					firstName: wireTransferFirstName,
+					lastName: wireTransferLastName,
+					accountNumber: wireTransferAccountNumber,
+					routingNumber: wireTransferRoutingNumber,
+					bankName: wireTransferBankName,
+					address: wireTransferAddress,
+				}
+			}
 			const result = await createUserTransaction({
 				type: 'deposit',
 				amount: Number(amount).toFixed(2),
-				balance: (Number(profile?.balance) + Number(amount)).toFixed(2),
+				// balance: (Number(profile?.balance) + Number(amount)).toFixed(2),
 				method,
 				date: new Date(Date.now()).toISOString(),
 				status: 'pending',
 				transactionId,
+				paymentDetails,
 			})
 			setIsSuccess(true)
 			setDialogText(t('successful replenishment'))

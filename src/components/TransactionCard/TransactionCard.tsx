@@ -1,10 +1,12 @@
 import { Box, Typography, useMediaQuery, IconButton } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import EditIcon from '@mui/icons-material/Edit'
+import SearchIcon from '@mui/icons-material/Search'
 import EditTransactionModal from '../EditTransactionModal'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { TransactionData } from '@/api/transactionService'
 import AnimatedLoaderIcon from '../AnimatedLoaderIcon'
+import { WalletModal, WireTransferModal, ZelleModal } from './components'
 
 export type TransactionType = 'deposit' | 'withdrawal'
 export type TransactionStatus = 'completed' | 'canceled' | 'pending'
@@ -28,6 +30,7 @@ export interface TransactionCardProps {
 	paymentMethod: PaymentMethod
 	amount: string
 	balance: string
+	paymentDetails: object
 	wallet?: string
 	setTransactions?: Dispatch<SetStateAction<TransactionData[]>>
 	showEdit?: boolean
@@ -40,6 +43,7 @@ const TransactionCard = ({
 	status,
 	type,
 	paymentMethod,
+	paymentDetails,
 	amount,
 	balance,
 	wallet,
@@ -50,6 +54,9 @@ const TransactionCard = ({
 
 	const isMobile = useMediaQuery('(max-width:480px)')
 	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [walletModalOpen, setWalletModalOpen] = useState(false)
+	const [zelleModalOpen, setZelleModalOpen] = useState(false)
+	const [wireTransferModalOpen, setWireTransferModalOpen] = useState(false)
 
 	const statusConfig = {
 		completed: { color: '#52BC37', icon: '/completed.svg' },
@@ -227,20 +234,48 @@ const TransactionCard = ({
 										</Typography>
 									)}
 								</Box>
-								<Typography
+
+								<Box
+									onClick={() => {
+										if (
+											paymentMethod === 'walletBTCAddress' ||
+											paymentMethod === 'paypalAddress'
+										)
+											setWalletModalOpen(true)
+										else if (paymentMethod === 'wireTransfer')
+											setWireTransferModalOpen(true)
+										else if (paymentMethod === 'zelleTransfer')
+											setZelleModalOpen(true)
+									}}
 									sx={{
-										...commonStyles,
-										fontWeight: 400,
 										mt: '15px',
-										'@media (max-width:900px)': {
-											mt: '0px',
-										},
+										display: 'flex',
+										gap: '5px',
+										cursor: 'pointer',
 									}}
 								>
-									{wallet
-										? `${wallet.slice(0, 4)}...${wallet.slice(-6)}`
-										: 'Details'}
-								</Typography>
+									<Typography
+										sx={{
+											...commonStyles,
+											fontWeight: 400,
+											'@media (max-width:900px)': {
+												mt: '0px',
+											},
+										}}
+									>
+										{wallet
+											? `${wallet.slice(0, 4)}...${wallet.slice(-6)}`
+											: 'Details'}
+									</Typography>
+									<SearchIcon
+										sx={{
+											width: '21px',
+											height: '21px',
+											mt: '-2px',
+											color: '#0246FF',
+										}}
+									/>
+								</Box>
 							</Box>
 						),
 					},
@@ -317,6 +352,22 @@ const TransactionCard = ({
 				setClose={setIsModalOpen}
 				_id={_id!}
 				setTransactions={setTransactions}
+			/>
+			<WalletModal
+				open={walletModalOpen}
+				onClose={() => setWalletModalOpen(false)}
+				value={paymentDetails}
+				name={paymentMethod}
+			/>
+			<WireTransferModal
+				open={wireTransferModalOpen}
+				onClose={() => setWireTransferModalOpen(false)}
+				values={paymentDetails}
+			/>
+			<ZelleModal
+				open={zelleModalOpen}
+				onClose={() => setZelleModalOpen(false)}
+				values={paymentDetails}
 			/>
 		</Box>
 	)

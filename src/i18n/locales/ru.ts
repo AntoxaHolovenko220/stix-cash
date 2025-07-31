@@ -240,4 +240,9 @@ export const ruTranslations = {
 	'want to logout': 'Вы действительно хотите выйти из системы?',
 	cancel: 'Отменить',
 	'type address': 'Укажите ваш BTC кошелька',
+	terms: 'Условия и положения',
+	offer: 'Публичное предложение',
+	kyc: 'Политика KYC',
+	disclaimer: 'Дисклеймер',
+	aml: 'Политика AML',
 }

@@ -6,12 +6,13 @@ export interface TransactionData {
 	_id?: string
 	type: string
 	amount: string
-	balance: string
+	balance?: string
 	method: string
 	date: string
 	status: string
 	transactionId: string
 	note?: string
+	paymentDetails?: object
 }
 
 export const createAdminTransaction = async (
