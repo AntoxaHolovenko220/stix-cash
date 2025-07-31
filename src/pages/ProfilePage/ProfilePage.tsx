@@ -49,7 +49,6 @@ const ProfilePage = () => {
 		maxWidth: isMobile ? '157px' : '220px',
 		width: '100%',
 		minHeight: isMobile ? '36px' : '48px',
-		height: 'fit-content',
 		borderRadius: '8px',
 		fontFamily: 'Manrope',
 		fontSize: isMobile ? '12px' : '16px',
@@ -112,17 +111,20 @@ const ProfilePage = () => {
 			</Box>
 			<Box
 				sx={{
-					minHeight: '90px',
-					maxWidth: '940px',
 					width: '100%',
+					display: 'flex',
+					flexDirection: 'row',
+					rowGap: '20px',
+					columnGap: '20px',
+					flexWrap: 'wrap',
+					justifyContent: 'center',
+					alignItems: 'stretch',
+					maxWidth: '940px',
 					mt: '30px',
 					mx: 'auto',
 					pb: '5px',
-					display: 'flex',
-					flexWrap: 'wrap',
 					gap: '20px',
-					justifyContent: 'center',
-					alignItems: 'center',
+					boxSizing: 'border-box',
 				}}
 			>
 				<Button
