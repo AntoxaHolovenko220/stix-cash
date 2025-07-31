@@ -1,13 +1,29 @@
-import { Box, Button, Typography, useMediaQuery } from '@mui/material'
+import { useState } from 'react'
+import { Box, Button, useMediaQuery, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { CustomerSupportModal, DocumentsModal } from '@/components'
+import { DocumentInterface } from '@/components/DocumentsModal/DocumentsModal'
+import termsData from '../../../../documents/terms_and_conditions.json'
+import publicOffer from '../../../../documents/public_offer.json'
+import privatePolicy from '../../../../documents/private_policy.json'
+import kycPolicy from '../../../../documents/kyc_policy.json'
+import disclaimer from '../../../../documents/disclaimer.json'
+import amlPolicy from '../../../../documents/aml_privacy.json'
+import FAQ from '../../../../documents/FAQ.json'
 
 const LandingFooter = () => {
 	const { t } = useTranslation()
 
+	const [openCustomerSupportModal, setOpenCustomerSupportModal] =
+		useState(false)
+
+	const [documentsModal, setDocumentsModal] = useState(false)
+	const [data, setData] = useState<DocumentInterface>()
+
 	const isMobile = useMediaQuery('(max-width:480px)')
 
 	const footerStyles = {
-		py: '50px',
+		py: isMobile ? '30px' : '50px',
 		px: isMobile ? '20px' : '50px',
 		display: 'flex',
 		flexDirection: 'column',
@@ -34,14 +50,13 @@ const LandingFooter = () => {
 		fontWeight: 300,
 	}
 
-	const buttonStyles = {
-		maxWidth: isMobile ? '272px' : '335px',
+	const miniButtonStyles = {
+		maxWidth: isMobile ? '157px' : '220px',
 		width: '100%',
-		height: isMobile ? '60px' : '74px',
-		mt: '20px',
-		borderRadius: '12px',
+		minHeight: isMobile ? '36px' : '48px',
+		borderRadius: '8px',
 		fontFamily: 'Manrope',
-		fontSize: isMobile ? '16px' : '20px',
+		fontSize: isMobile ? '12px' : '16px',
 		fontWeight: 300,
 		color: '#3AA2FF',
 		textTransform: 'none',
@@ -52,7 +67,9 @@ const LandingFooter = () => {
 		<Box sx={footerStyles}>
 			<Box
 				sx={{
+					width: '100%',
 					display: 'flex',
+					flexDirection: 'row',
 					rowGap: '20px',
 					columnGap: '30px',
 					flexWrap: 'wrap',
@@ -96,8 +113,99 @@ const LandingFooter = () => {
 					</Typography>
 				</Box>
 			</Box>
-			<Button sx={buttonStyles}>{t('support')}</Button>
-			<Button sx={buttonStyles}>{t('policy')}</Button>
+			<Box
+				sx={{
+					width: '100%',
+					mt: '20px',
+					display: 'flex',
+					flexDirection: 'row',
+					rowGap: '20px',
+					columnGap: '20px',
+					flexWrap: 'wrap',
+					justifyContent: 'center',
+				}}
+			>
+				<Button
+					onClick={() => setOpenCustomerSupportModal(true)}
+					sx={miniButtonStyles}
+				>
+					{t('support')}
+				</Button>
+				<Button
+					onClick={() => {
+						setDocumentsModal(true)
+						setData(privatePolicy)
+					}}
+					sx={miniButtonStyles}
+				>
+					{t('policy')}
+				</Button>
+				<Button
+					onClick={() => {
+						setDocumentsModal(true)
+						setData(termsData)
+					}}
+					sx={miniButtonStyles}
+				>
+					{t('terms')}
+				</Button>
+				<Button
+					onClick={() => {
+						setDocumentsModal(true)
+						setData(publicOffer)
+					}}
+					sx={miniButtonStyles}
+				>
+					{t('offer')}
+				</Button>
+				<Button
+					onClick={() => {
+						setDocumentsModal(true)
+						setData(kycPolicy)
+					}}
+					sx={miniButtonStyles}
+				>
+					{t('kyc')}
+				</Button>
+				<Button
+					onClick={() => {
+						setDocumentsModal(true)
+						setData(disclaimer)
+					}}
+					sx={miniButtonStyles}
+				>
+					{t('disclaimer')}
+				</Button>
+				<Button
+					onClick={() => {
+						setDocumentsModal(true)
+						setData(amlPolicy)
+					}}
+					sx={miniButtonStyles}
+				>
+					{t('aml')}
+				</Button>
+				<Button
+					onClick={() => {
+						setDocumentsModal(true)
+						setData(FAQ)
+					}}
+					sx={miniButtonStyles}
+				>
+					FAQ
+				</Button>
+			</Box>
+			<CustomerSupportModal
+				open={openCustomerSupportModal}
+				onClose={() => setOpenCustomerSupportModal(false)}
+			/>
+			{data && (
+				<DocumentsModal
+					open={documentsModal}
+					onClose={() => setDocumentsModal(false)}
+					data={data}
+				/>
+			)}
 		</Box>
 	)
 }

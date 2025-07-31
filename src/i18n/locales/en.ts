@@ -100,7 +100,7 @@ export const enTranslations = {
 	bridge: 'Styx Cash — your bridge between you and financial freedom',
 	'your balance': 'Total balance',
 	'top up': 'Deposit balance',
-	withdraw: 'Withdraw funds',
+	withdraw: 'Withdrawal',
 	'fill all fields': 'Please fill all required fields',
 	'agree to terms': 'You must accept terms and conditions to register',
 	'error occurred': 'An error occurred',
@@ -186,11 +186,11 @@ export const enTranslations = {
 	'please transfer the exact amount':
 		'Please transfer the exact amount to the specified BTC address to complete the deposit.',
 	'BTC adress': 'BTC address:',
-	'failed to complete': 'Failed to complete the replenishment.',
+	'failed to complete': 'Failed to complete the deposit.',
 	'checked the entered data': 'Check the entered data or contact support.',
 	'write to support service': 'Write to customer support',
 	'return to the main page': 'Back to Home',
-	'successful replenishment': 'Successful replenishment!',
+	'successful replenishment': 'Successful deposit!',
 	'your balance update':
 		'Your balance has been updated. Thank you for using Styx Cash.',
 	'step 1 for 2': 'STEP 1 of 2: Choose a convenient withdrawal method',
@@ -235,4 +235,12 @@ export const enTranslations = {
 		'— Anonymity (in the case of cryptocurrency) and confidentiality;',
 	podderzhka:
 		'— Support and assistance—clients are not left alone with technical difficulties;',
+	'want to logout': 'Do you really want to logout?',
+	cancel: 'Cancel',
+	'type address': 'Please enter your BTC wallet',
+	terms: 'Terms and Conditions',
+	offer: 'Public Offer',
+	kyc: 'KYC Policy',
+	disclaimer: 'Disclaimer',
+	aml: 'AML Policy',
 }

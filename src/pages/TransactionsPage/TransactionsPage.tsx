@@ -88,7 +88,8 @@ const TransactionsPage = () => {
 						type={transaction.type as TransactionType}
 						paymentMethod={transaction.method as PaymentMethod}
 						amount={transaction.amount}
-						balance={transaction.balance}
+						balance={transaction.balance!}
+						paymentDetails={transaction.paymentDetails!}
 					/>
 				))}
 			</Box>

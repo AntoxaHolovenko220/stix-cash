@@ -22,7 +22,7 @@ interface ModalProps {
 	onClose: () => void
 	setClose: Dispatch<SetStateAction<boolean>>
 	setTransactions?: Dispatch<SetStateAction<TransactionData[]>>
-	_id: string
+	id: string
 }
 
 type Option = {
@@ -47,7 +47,7 @@ const EditTransactionModal = ({
 	onClose,
 	setClose,
 	setTransactions,
-	_id,
+	id,
 }: ModalProps) => {
 	const { t } = useTranslation()
 
@@ -55,6 +55,7 @@ const EditTransactionModal = ({
 	const [error, setError] = useState('')
 	const [transactionData, setTransactionData] = useState({
 		transactionId: '',
+		currency: 'USD',
 		date: '',
 		status: '',
 		type: '',
@@ -73,14 +74,15 @@ const EditTransactionModal = ({
 	useEffect(() => {
 		const fetchTransaction = async () => {
 			try {
-				if (!_id) {
+				if (!id) {
 					setError(t('Client ID not provided'))
 					return
 				}
-				const data = await getTransactionAdmin(_id)
+				const data = await getTransactionAdmin(id)
 				setTransactionData({
 					transactionId: data.transactionId,
 					date: formatDateForInput(data.date),
+					currency: 'USD',
 					status: data.status,
 					type: data.type,
 					method: data.method,
@@ -94,15 +96,15 @@ const EditTransactionModal = ({
 		}
 
 		fetchTransaction()
-	}, [_id, t])
+	}, [id, t])
 
 	const handleEditTransaction = async () => {
 		try {
-			const result = await editTransaction(_id, transactionData)
+			const result = await editTransaction(id, transactionData)
 
-			const updated = await getTransactionAdmin(_id)
+			const updated = await getTransactionAdmin(id)
 			if (setTransactions) {
-				setTransactions(prev => prev.map(t => (t._id === _id ? updated : t)))
+				setTransactions(prev => prev.map(t => (t.id === id ? updated : t)))
 			}
 
 			console.log(result)

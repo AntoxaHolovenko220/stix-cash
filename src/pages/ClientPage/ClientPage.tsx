@@ -46,6 +46,8 @@ const ClientPage = () => {
 		fetchClient()
 	}, [id, t])
 
+	console.log(transactions)
+
 	if (loading) return <Loader />
 	if (error || !client) return <Typography color='error'>{error}</Typography>
 
@@ -86,14 +88,15 @@ const ClientPage = () => {
 					<TransactionCard
 						showEdit={true}
 						key={index}
-						_id={transaction._id!}
-						id={transaction.transactionId}
+						id={transaction.id!}
+						transactionId={transaction.transactionId}
 						date={transaction.date}
 						status={transaction.status as TransactionStatus}
 						type={transaction.type as TransactionType}
 						paymentMethod={transaction.method as PaymentMethod}
 						amount={transaction.amount}
-						balance={transaction.balance}
+						balance={transaction.balance!}
+						paymentDetails={transaction.paymentDetails!}
 						setTransactions={setTransactions}
 					/>
 				))}
