@@ -190,9 +190,9 @@ export const enTranslations = {
 	'checked the entered data': 'Check the entered data or contact support.',
 	'write to support service': 'Write to customer support',
 	'return to the main page': 'Back to Home',
-	'successful replenishment': 'Successful deposit!',
+	'successful replenishment': 'Success!',
 	'your balance update':
-		'Your balance has been updated. Thank you for using Styx Cash.',
+		'Your deposit request has been created. Thank you for using Styx Cash.',
 	'step 1 for 2': 'STEP 1 of 2: Choose a convenient withdrawal method',
 	'confirm withdrawal': 'Select the method and confirm the withdrawal',
 	'please provide data':

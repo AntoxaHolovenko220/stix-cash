@@ -193,9 +193,9 @@ export const ruTranslations = {
 		'Проверьте введённые данные или свяжитесь с поддержкой.',
 	'write to support service': 'Написать в службу поддержки',
 	'return to the main page': 'Вернуться на главную',
-	'successful replenishment': 'Успешное пополнение!',
+	'successful replenishment': 'Успех!',
 	'your balance update':
-		'Ваш баланс обновлён. Спасибо за использование Styx Cash.',
+		'Заявка на пополнение средств создана. Спасибо за использование Styx Cash.',
 	'step 1 for 2': 'ШАГ 1 из 2:  Выберите удобный способ вывода',
 	'confirm withdrawal': 'Выберите метод и подтвердите вывод средств',
 	'please provide data':
