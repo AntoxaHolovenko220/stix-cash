@@ -170,7 +170,7 @@ const SecondStep = ({ profile, method, setCheckForm }: Props) => {
 			const result = await createUserTransaction({
 				type: 'deposit',
 				amount: Number(amount).toFixed(2),
-				balance: (Number(profile?.balance) + Number(amount)).toFixed(2),
+				// balance: (Number(profile?.balance) + Number(amount)).toFixed(2),
 				method,
 				date: new Date(Date.now()).toISOString(),
 				status: 'pending',

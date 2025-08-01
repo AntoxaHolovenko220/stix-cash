@@ -64,13 +64,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 					{children}
 					<SupportButtonModal />
 				</Box>
-				{/* {isWideScreen && location.pathname === routes.ProfilePage.path && (
-					<Footer />
-				)} */}
 			</Box>
-			{/* {!isWideScreen && location.pathname === routes.ProfilePage.path && (
-				<Footer />
-			)} */}
 		</Box>
 	)
 }

@@ -134,19 +134,21 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 
 	const handleCreateTransaction = async () => {
 		try {
+			let paymentDetails = {}
+
 			if (method === 'paypalAddress') {
-				setPaymentDetails({ paypalAddress: paypalAddress })
+				paymentDetails = { paypalAddress: paypalAddress }
 			} else if (method === 'walletBTCAddress') {
-				setPaymentDetails({ walletBTCAddress: walletBTCAddress })
+				paymentDetails = { walletBTCAddress: walletBTCAddress }
 			} else if (method === 'wireTransfer') {
-				setPaymentDetails({
+				paymentDetails = {
 					firstName: wireTransferFirstName,
 					lastName: wireTransferLastName,
 					accountNumber: wireTransferAccountNumber,
 					routingNumber: wireTransferRoutingNumber,
 					bankName: wireTransferBankName,
 					address: wireTransferAddress,
-				})
+				}
 			}
 			if (!isTransactionAllowed) {
 				setIsSuccess(false)
@@ -158,7 +160,7 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 				const result = await createUserTransaction({
 					type: 'withdrawal',
 					amount: Number(amount).toFixed(2),
-					balance: (Number(profile?.balance) - Number(amount)).toFixed(2),
+					// balance: (Number(profile?.balance) - Number(amount)).toFixed(2),
 					method,
 					date: new Date(Date.now()).toISOString(),
 					status: 'pending',
