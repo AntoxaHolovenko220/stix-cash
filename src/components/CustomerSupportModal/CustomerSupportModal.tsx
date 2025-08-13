@@ -70,7 +70,7 @@ const CustomerSupportModal = ({ open, onClose }: ModalProps) => {
 				sx={{ display: 'flex', justifyContent: 'center', gap: '50px' }}
 			>
 				<Link
-					href='https://t.me/stix_cash_support'
+					href='https://t.me/stix_cash_wallet_support'
 					target='_blank'
 					rel='noopener noreferrer'
 					style={{ textDecoration: 'none' }}
