@@ -91,7 +91,7 @@ const LandingFooter = () => {
 							color: '#FFFFFF',
 						}}
 					>
-						styxcash@gmail.com
+						stixcash@gmail.com
 					</Typography>
 				</Box>
 				<Box sx={contactsBoxStyles}>
