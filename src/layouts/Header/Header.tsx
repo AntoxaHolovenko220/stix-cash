@@ -57,7 +57,7 @@ const Header = ({ onLogoClick }: HeaderProps) => {
 							display: 'inline-block',
 						}}
 					>
-						Styx Cash
+						Stix Cash
 					</Typography>
 				</Box>
 			)}

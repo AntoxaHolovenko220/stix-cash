@@ -45,7 +45,7 @@ const LandingHeader = ({ setModalOpen }: ModalProps) => {
 						display: 'inline-block',
 					}}
 				>
-					Styx Cash
+					Stix Cash
 				</Typography>
 			</Box>
 			<Box sx={{ display: 'flex', alignItems: 'center', gap: '20px' }}>

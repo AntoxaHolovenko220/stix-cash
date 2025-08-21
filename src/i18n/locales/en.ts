@@ -35,11 +35,11 @@ export const enTranslations = {
 	customer: 'feedback',
 	Jessica: 'Jessica',
 	'credit line':
-		"« I have a line of credit that can't really be used. Using Styx Cash, I turned it into real money in a matter of hours. Fast, transparent, carefree. highly recommended!»",
+		"« I have a line of credit that can't really be used. Using Stix Cash, I turned it into real money in a matter of hours. Fast, transparent, carefree. highly recommended!»",
 	'credit line2':
-		'«My credit line had been unused for a long time. Thanks to Styx Cash, I was able to turn it into real money in just a few hours - fast, transparent and hassle-free. Definitely recommend it!»',
+		'«My credit line had been unused for a long time. Thanks to Stix Cash, I was able to turn it into real money in just a few hours - fast, transparent and hassle-free. Definitely recommend it!»',
 	'credit line3':
-		" «I had a credit limit that I couldn't use. With the help of Styx Cash, I turned it into real money in just a few hours. Fast, transparent and no hassle. Highly recommended!»",
+		" «I had a credit limit that I couldn't use. With the help of Stix Cash, I turned it into real money in just a few hours. Fast, transparent and no hassle. Highly recommended!»",
 	cards: 'Which cards are supported?',
 	time: 'What opportunities are available with us?',
 	risks: 'Are there any risks to credit history?',
@@ -85,7 +85,7 @@ export const enTranslations = {
 	and: 'and',
 	statement: 'Privacy Statement',
 	'legal age':
-		'of the Styx Cash and that I am of legal age. I understand that I have the right to change the communication methods settings on my Styx Cash account at any time',
+		'of the Stix Cash and that I am of legal age. I understand that I have the right to change the communication methods settings on my Stix Cash account at any time',
 	registration_success: 'Registration successful!',
 	please_login: 'Please log in to continue.',
 	home: 'Home',
@@ -97,7 +97,7 @@ export const enTranslations = {
 	client: 'Client',
 	logout: 'Logout',
 	'nice to see': 'Nice to see you!',
-	bridge: 'Styx Cash — your bridge between you and financial freedom',
+	bridge: 'Stix Cash — your bridge between you and financial freedom',
 	'your balance': 'Total balance',
 	'top up': 'Deposit balance',
 	withdraw: 'Withdrawal',
@@ -192,7 +192,7 @@ export const enTranslations = {
 	'return to the main page': 'Back to Home',
 	'successful replenishment': 'Success!',
 	'your balance update':
-		'Your deposit request has been created. Thank you for using Styx Cash.',
+		'Your deposit request has been created. Thank you for using Stix Cash.',
 	'step 1 for 2': 'STEP 1 of 2: Choose a convenient withdrawal method',
 	'confirm withdrawal': 'Select the method and confirm the withdrawal',
 	'please provide data':
@@ -211,13 +211,13 @@ export const enTranslations = {
 	'no transactions': 'No transactions available',
 	'please select': 'Please select one of the methods to contact support:',
 	policy: 'Privacy Policy',
-	styx: 'Styx Cash is a fintech company specializing in legal methods of withdrawing funds from credit cards and converting cryptocurrency into fiat (cash).',
+	styx: 'Stix Cash is a fintech company specializing in legal methods of withdrawing funds from credit cards and converting cryptocurrency into fiat (cash).',
 	'clients can': 'Clients can:',
 	exchange: '— Transfer money from credit cards into cash;',
 	haveBTC:
 		'— Deposit cryptocurrency into a personal account and receive the equivalent in dollars, hryvnia, or another preferred currency;',
-	use: '— Use the created personal account in the Styx Cash system for storing, managing, or cashing out funds.',
-	personal: 'Personal account in the Styx Cash system;',
+	use: '— Use the created personal account in the Stix Cash system for storing, managing, or cashing out funds.',
+	personal: 'Personal account in the Stix Cash system;',
 	opportunity: 'Opportunity at any time to:',
 	obnal: '— Cash out credit funds;',
 	'get fiat': '— Receive fiat for cryptocurrency;',
@@ -226,7 +226,7 @@ export const enTranslations = {
 	instruments:
 		'— Tools for financial planning, optimizing credit load, and even generating income.',
 	'styx helps':
-		'Styx Cash helps use credit funds correctly, rather than creating debt.',
+		'Stix Cash helps use credit funds correctly, rather than creating debt.',
 	'not simple':
 		'We don’t just withdraw money—we teach how to manage this tool. The client receives money in hand without harming their credit history; on the contrary, if desired, they can improve it by regularly using the card and fully repaying the funds on time.',
 	helps: '— Assistance in accessing your money bypassing banking restrictions;',
