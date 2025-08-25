@@ -243,4 +243,5 @@ export const enTranslations = {
 	kyc: 'KYC Policy',
 	disclaimer: 'Disclaimer',
 	aml: 'AML Policy',
+	amountError: 'the withdrawal amount exceeds your balance',
 }

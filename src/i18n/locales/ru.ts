@@ -245,4 +245,5 @@ export const ruTranslations = {
 	kyc: 'Политика KYC',
 	disclaimer: 'Дисклеймер',
 	aml: 'Политика AML',
+	amountError: 'сумма вывода превышает ваш баланс',
 }

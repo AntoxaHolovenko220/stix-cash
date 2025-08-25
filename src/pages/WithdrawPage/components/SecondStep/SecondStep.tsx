@@ -441,7 +441,7 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 						placeholder={t('amount')}
 						value={amount}
 						error={!!amountError}
-						helperText={amountError || ' '}
+						helperText={(amountError && t('amountError')) || ' '}
 						onChange={e => {
 							const val = e.target.value
 							let cleaned = val.replace(/[^0-9.]/g, '')
