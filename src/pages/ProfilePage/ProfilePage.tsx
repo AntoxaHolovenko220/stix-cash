@@ -5,7 +5,6 @@ import { useTranslation } from 'react-i18next'
 import { getProfile, Client } from '@/api/clientService'
 import UserInfoBlock from './UserInfoBlock'
 import DocumentVerificationBlock from './DocumentVerificationBlock'
-import zIndex from '@mui/material/styles/zIndex'
 import DocumentsModal, {
 	DocumentInterface,
 } from '@/components/DocumentsModal/DocumentsModal'

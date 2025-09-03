@@ -64,7 +64,6 @@ const CreateTransactionForm = ({ clientId, onTransactionCreated }: Props) => {
 			const result = await createAdminTransaction(clientId, {
 				type,
 				amount: Number(amount).toFixed(2),
-				// balance: Number(balance).toFixed(2),
 				method,
 				date,
 				status,
@@ -180,13 +179,6 @@ const CreateTransactionForm = ({ clientId, onTransactionCreated }: Props) => {
 			onchange: (val: string) => setAmount(val),
 			type: 'string',
 		},
-		// {
-		// 	name: t('balance'),
-		// 	key: 'balance',
-		// 	value: balance,
-		// 	onchange: (val: string) => setBalance(val),
-		// 	type: 'string',
-		// },
 	]
 
 	return (

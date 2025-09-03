@@ -16,7 +16,7 @@ const Card = ({ sx }: CardProps) => {
 				backgroundColor: 'rgba(200, 200, 200, 0.3)',
 				backdropFilter: 'blur(9px)',
 				WebkitBackdropFilter: 'blur(9px)',
-				...sx, // добавление пользовательских стилей
+				...sx,
 			}}
 		>
 			<Box sx={{ display: 'flex', alignItems: 'center' }}>

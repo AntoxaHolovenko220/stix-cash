@@ -12,5 +12,3 @@ export const useRandomId = (length: number = 8) => {
 
 	return generateRandomId
 }
-
-// ABCDEFGHIJKLMNOPQRSTUVWXYZ

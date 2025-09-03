@@ -1,5 +1,4 @@
 import { Box, Button, Typography, useMediaQuery } from '@mui/material'
-import { Link } from 'react-router-dom'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { useTranslation } from 'react-i18next'
 import Card from './Card'

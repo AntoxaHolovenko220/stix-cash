@@ -6,7 +6,6 @@ import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import Circle from '../Circle'
 
-// Кастомные стрелки
 const NextArrow = (props: any) => {
 	const { className, onClick } = props
 	return (

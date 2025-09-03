@@ -51,7 +51,6 @@ const EditTransactionModal = ({
 }: ModalProps) => {
 	const { t } = useTranslation()
 
-	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState('')
 	const [transactionData, setTransactionData] = useState({
 		transactionId: '',

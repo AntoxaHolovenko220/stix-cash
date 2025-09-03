@@ -50,15 +50,6 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 		isTermsAccepted,
 		loading,
 		errors,
-		setEmail,
-		setPassword,
-		setConfirmPassword,
-		setFirstName,
-		setLastName,
-		setPhone,
-		setCountry,
-		setІsTermsAccepted,
-		handlePhoneChange,
 		handleFieldChange,
 		handleCountryChange,
 		handleTermsChange,
@@ -98,7 +89,7 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 			FormHelperTextProps: { sx: { color: 'red', mt: 0.5 } },
 			sx: {
 				...textFieldStyles,
-				mb: hasError ? '0px' : '23.901px', // Используем hasError вместо error
+				mb: hasError ? '0px' : '23.901px',
 				'& .MuiInput-underline:after': {
 					borderBottomColor: hasError ? 'red' : undefined,
 				},

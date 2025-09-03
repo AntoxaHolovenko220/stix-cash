@@ -41,7 +41,6 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 		{ label: t('home'), path: routes.HomePage.path },
 		{ label: t('transactions'), path: routes.TransactionsPage.path },
 		{ label: t('profile'), path: routes.ProfilePage.path },
-		// { label: t('customer support'), path: routes.CustomerSupportPage.path },
 	]
 
 	const adminNavItems = [

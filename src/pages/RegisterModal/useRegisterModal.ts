@@ -157,9 +157,9 @@ export const useRegisterModal = () => {
 
 				const tokens = await registerUser(registerData)
 				await new Promise(resolve => setTimeout(resolve, 500))
-				setIsLoginForm(true) // Переключаем на форму входа
+				setIsLoginForm(true)
 				resetForm()
-				return { success: true } // Возвращаем успешный статус
+				return { success: true }
 			}
 		} catch (err: any) {
 			const errorMessage = err.response?.data?.message || err.message

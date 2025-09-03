@@ -170,10 +170,8 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 					address: modalWireValues.address,
 				}
 
-				// Отправляем обновление целиком
 				await updateClientField(id, { wireTransfer: updatedWireTransfer })
 
-				// Обновляем локальный стейт
 				setWireTransferFirstName(updatedWireTransfer.firstName)
 				setWireTransferLastName(updatedWireTransfer.lastName)
 				setWireTransferAccountNumber(updatedWireTransfer.accountNumber)
@@ -418,7 +416,6 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 												ml: '-12px',
 											},
 										},
-										// Запрещаем открытие меню при isEditing false
 										onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => {
 											if (!isEditing[input.key]) {
 												e.preventDefault()
@@ -439,7 +436,6 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 													alignItems: 'cente',
 													justifyContent: 'space-between',
 													gap: '8px',
-													// Запрещаем события мыши при неактивном состоянии
 													pointerEvents: isEditing[input.key] ? 'auto' : 'none',
 												}}
 											>
@@ -489,7 +485,6 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 											opacity: 1,
 											color: 'inherit',
 										},
-										// Запрещаем события мыши при неактивном состоянии
 										pointerEvents: isEditing[input.key] ? 'auto' : 'none',
 										cursor: isEditing[input.key] ? 'pointer' : 'default',
 									}}

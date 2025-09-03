@@ -349,7 +349,7 @@ const DocumentVerificationBlock = ({
 						height: '263px',
 						borderRadius: '24px',
 						background: 'linear-gradient(180deg, #58A9FF 0%, #0044FF 50%)',
-						color: '#FFFFFF', // чтобы текст был читаемым
+						color: '#FFFFFF',
 						padding: '20px 16px',
 					},
 				}}
