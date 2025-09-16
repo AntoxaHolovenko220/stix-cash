@@ -54,6 +54,7 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 	const [isEditing, setIsEditing] = useState<{ [key: string]: boolean }>({})
 	const [firstName, setFirstName] = useState(client.firstName)
 	const [lastName, setLastName] = useState(client.lastName)
+	const [email, setEmail] = useState(client.email)
 	const [phone, setPhone] = useState(client.phone)
 	const [verificationStatus, setVerificationStatus] = useState(
 		client.verificationStatus
@@ -211,6 +212,13 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 			key: 'lastName',
 			value: lastName,
 			onchange: (val: string) => setLastName(val),
+			type: 'string',
+		},
+		{
+			name: t('email'),
+			key: 'email',
+			value: email,
+			onchange: (val: string) => setEmail(val),
 			type: 'string',
 		},
 		{
@@ -623,6 +631,7 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 												if (input.key === 'firstName') valueToSave = firstName
 												else if (input.key === 'lastName')
 													valueToSave = lastName
+												else if (input.key === 'email') valueToSave = email
 												else if (input.key === 'phone') valueToSave = phone
 												else if (input.key === 'country') valueToSave = country
 												else if (input.key === 'password')
