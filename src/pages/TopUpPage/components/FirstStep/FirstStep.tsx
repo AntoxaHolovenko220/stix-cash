@@ -18,6 +18,7 @@ type Method =
 	| 'zelleTransfer'
 	| 'wireTransfer'
 	| 'walletBTCAddress'
+	| 'card'
 
 interface Props {
 	selectedOption: Method
@@ -57,6 +58,13 @@ const paymentMethods = [
 		id: 'walletBTCAddress',
 		icon: '/bigwallet.svg',
 		name: 'Crypto',
+		time: 'instantly',
+		showName: true,
+	},
+	{
+		id: 'card',
+		icon: '/visa.png',
+		name: 'Debit or Credit',
 		time: 'instantly',
 		showName: true,
 	},
@@ -165,7 +173,32 @@ const FirstStep = ({
 						/>
 						<Box>
 							<Box sx={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-								<Box component='img' src={method.icon} />
+								<Box
+									component='img'
+									src={method.icon}
+									sx={{
+										width:
+											method.id === 'paypalAddress'
+												? '75px'
+												: method.id === 'zelleTransfer'
+												? '60x'
+												: method.id === 'wireTransfer'
+												? '43px'
+												: method.id === 'walletBTCAddress'
+												? '34px'
+												: '60px',
+									}}
+								/>
+								{method.id === 'card' && (
+									<Box
+										component='img'
+										src='/mastercard.svg'
+										sx={{
+											width: '45px',
+											ml: '-5px',
+										}}
+									/>
+								)}
 								{method.showName && (
 									<Typography
 										sx={{

@@ -246,4 +246,5 @@ export const ruTranslations = {
 	disclaimer: 'Дисклеймер',
 	aml: 'Политика AML',
 	amountError: 'сумма вывода превышает ваш баланс',
+	'debit or credit': 'Дебетовая или Кредитная',
 }

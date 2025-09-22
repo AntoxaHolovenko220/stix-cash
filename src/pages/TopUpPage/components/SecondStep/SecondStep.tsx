@@ -56,6 +56,7 @@ type Method =
 	| 'zelleTransfer'
 	| 'wireTransfer'
 	| 'walletBTCAddress'
+	| 'card'
 
 interface Props {
 	profile: Client
@@ -264,6 +265,7 @@ const SecondStep = ({ profile, method, setCheckForm }: Props) => {
 				onchange: (val: string) => handlePhoneChange(val),
 			},
 		],
+		card: [],
 	}
 
 	return (
@@ -285,7 +287,9 @@ const SecondStep = ({ profile, method, setCheckForm }: Props) => {
 					? 'Crypto'
 					: method === 'wireTransfer'
 					? 'Wire transfer'
-					: 'Zelle'}
+					: method === 'zelleTransfer'
+					? 'Zelle'
+					: 'Visa / Mastercard'}
 			</Typography>
 
 			<Typography
@@ -316,7 +320,9 @@ const SecondStep = ({ profile, method, setCheckForm }: Props) => {
 						? 'Crypto'
 						: method === 'wireTransfer'
 						? 'Wire transfer'
-						: 'Zelle'}
+						: method === 'zelleTransfer'
+						? 'Zelle'
+						: 'Visa / Mastercard'}
 				</span>
 			</Typography>
 			<Box
@@ -332,8 +338,8 @@ const SecondStep = ({ profile, method, setCheckForm }: Props) => {
 			>
 				<Box
 					sx={{
-						mt: '15px',
-						mb: '25px',
+						mt: method === 'card' ? '10px' : '15px',
+						mb: method === 'card' ? '20px' : '25px',
 						display: 'flex',
 						alignItems: 'center',
 						gap: '8px',
@@ -348,9 +354,32 @@ const SecondStep = ({ profile, method, setCheckForm }: Props) => {
 								? '/bigwallet.svg'
 								: method === 'wireTransfer'
 								? '/bigwire-transfer.svg'
-								: '/bigzelle.svg'
+								: method === 'zelleTransfer'
+								? '/bigzelle.svg'
+								: '/visa.png'
 						}
+						sx={{
+							width:
+								method === 'paypalAddress'
+									? '75px'
+									: method === 'zelleTransfer'
+									? '60x'
+									: method === 'wireTransfer'
+									? '43px'
+									: method === 'walletBTCAddress'
+									? '34px'
+									: '65px',
+						}}
 					/>
+					{method === 'card' && (
+						<Box
+							component='img'
+							src='/mastercard.svg'
+							sx={{
+								width: '55px',
+							}}
+						/>
+					)}
 					<Typography
 						sx={{ ...commonTextStyles, fontSize: '22px', fontWeight: 700 }}
 					>

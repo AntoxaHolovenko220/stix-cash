@@ -244,4 +244,5 @@ export const enTranslations = {
 	disclaimer: 'Disclaimer',
 	aml: 'AML Policy',
 	amountError: 'the withdrawal amount exceeds your balance',
+	'debit or credit': 'Debit or Credit',
 }
