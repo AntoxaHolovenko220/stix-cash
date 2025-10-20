@@ -34,7 +34,11 @@ import {
 	footerTextStyles,
 } from './styles'
 
-const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
+const RegisterModal: React.FC<AuthModalProps> = ({
+	open,
+	onClose,
+	onReset,
+}) => {
 	const { t } = useTranslation()
 	const [showSuccessAlert, setShowSuccessAlert] = React.useState(false)
 
@@ -245,7 +249,17 @@ const RegisterModal: React.FC<AuthModalProps> = ({ open, onClose }) => {
 						)}
 
 						{isLoginForm && (
-							<Typography sx={{ ...footerTextStyles, cursor: 'pointer' }}>
+							<Typography
+								onClick={() => {
+									onReset()
+									handleClose()
+								}}
+								sx={{
+									...footerTextStyles,
+									cursor: 'pointer',
+									width: 'fit-content',
+								}}
+							>
 								{t('forgot password')}
 							</Typography>
 						)}

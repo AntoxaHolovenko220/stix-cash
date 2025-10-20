@@ -84,6 +84,7 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 	const [zelleName, setZelleName] = useState(client.zelleTransfer.recipientName)
 	const [zelleEmail, setZelleEmail] = useState(client.zelleTransfer.email)
 	const [zellePhone, setZellePhone] = useState(client.zelleTransfer.phone)
+	const [merchantAddress, setMerchantAddress] = useState(client.merchantAddress)
 	const [country, setCountry] = useState(client.country)
 	const [password, setPassword] = useState('')
 	const [balance, setBalance] = useState(client.balance)
@@ -268,6 +269,12 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 			inputType: 'modal',
 		},
 		{
+			img: '/mastercard.svg',
+			key: 'merchantAddress',
+			value: merchantAddress,
+			onchange: (val: string) => setMerchantAddress(val),
+		},
+		{
 			name: t('mycountry'),
 			key: 'country',
 			value: country,
@@ -361,15 +368,26 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 							boxSizing: 'border-box',
 						}}
 					>
-						<Box sx={{ display: 'flex', gap: '5px' }}>
+						<Box sx={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
 							{input.key === 'walletBTCAddress' && (
 								<Box component='img' src='/wallet.svg' />
 							)}
 							{input.key === 'wire transfer' && (
 								<Box component='img' src='/wire-transfer.svg' />
 							)}
+							{input.key === 'merchantAddress' && (
+								<Box
+									component='img'
+									src='/visa.png'
+									sx={{ maxHeight: '13px' }}
+								/>
+							)}
 							{input.img ? (
-								<Box component='img' src={input.img} />
+								<Box
+									component='img'
+									src={input.img}
+									sx={{ maxHeight: '25px' }}
+								/>
 							) : (
 								<Typography
 									sx={{
@@ -642,6 +660,8 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 													valueToSave = Number(balanceBTC).toFixed(8)
 												else if (input.key === 'verificationStatus')
 													valueToSave = verificationStatus
+												else if (input.key === 'merchantAddress')
+													valueToSave = merchantAddress
 
 												await handleSaveField(input.key, valueToSave)
 

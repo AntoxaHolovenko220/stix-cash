@@ -169,7 +169,7 @@ const FAQBlock = () => {
 							>
 								{item.answers?.map((answer, index) =>
 									answer === 'br' ? (
-										<br />
+										<br key={index} />
 									) : (
 										<Typography
 											key={index}

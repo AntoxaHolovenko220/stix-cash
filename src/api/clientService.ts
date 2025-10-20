@@ -36,6 +36,7 @@ export interface Client {
 	balanceBTC: string
 	showBTCBalance: boolean
 	walletBTCAddress: string
+	merchantAddress: string
 	isTransactionAllowed: boolean
 	paypalAddress: string
 	wireTransfer: WireTransfer

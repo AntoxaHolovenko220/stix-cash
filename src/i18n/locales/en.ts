@@ -87,7 +87,8 @@ export const enTranslations = {
 	'legal age':
 		'of the Stix Cash and that I am of legal age. I understand that I have the right to change the communication methods settings on my Stix Cash account at any time',
 	registration_success: 'Registration successful!',
-	please_login: 'Please log in to continue.',
+	please_login:
+		'Email has been sent to your email address to confirm your address.',
 	home: 'Home',
 	transactions: 'Transactions',
 	profile: 'Profile',
@@ -245,4 +246,13 @@ export const enTranslations = {
 	aml: 'AML Policy',
 	amountError: 'the withdrawal amount exceeds your balance',
 	'debit or credit': 'Debit or Credit',
+	confirmed: 'Email confirmed',
+	thank:
+		'Thank you — your email address has been successfully confirmed. You can now log in to your account and enjoy all the features of Stix Cash.',
+	'password-reset': 'Password reset',
+	'reset-password': 'Reset password',
+	'reset-success': 'Password changed successfully!',
+	'reset-error': 'Your password reset request has expired',
+	'try-another': 'Try sending a new request',
+	'reset-request': 'A password reset request has been sent to your email!',
 }

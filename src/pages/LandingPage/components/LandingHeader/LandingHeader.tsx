@@ -1,8 +1,10 @@
 import { LanguageSwitcher } from '@/components'
 import { Box, IconButton, Typography, useMediaQuery } from '@mui/material'
 import { ModalProps } from '../../LandingPage'
+import { useNavigate } from 'react-router-dom'
 
 const LandingHeader = ({ setModalOpen }: ModalProps) => {
+	const navigate = useNavigate()
 	const isMobile = useMediaQuery('(max-width:480px)')
 
 	return (
@@ -21,6 +23,7 @@ const LandingHeader = ({ setModalOpen }: ModalProps) => {
 			}}
 		>
 			<Box
+				onClick={() => navigate('/')}
 				sx={{
 					width: '126px',
 					height: '39px',
@@ -30,6 +33,7 @@ const LandingHeader = ({ setModalOpen }: ModalProps) => {
 					bgcolor: '#EFEFEF',
 					borderRadius: '30px',
 					boxSizing: 'border-box',
+					cursor: 'pointer',
 				}}
 			>
 				<Typography

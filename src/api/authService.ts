@@ -45,6 +45,21 @@ export const loginUser = async (data: LoginData): Promise<AuthResponse> => {
 	return response.data
 }
 
+export const ForgotPassword = async (email: string) => {
+	const response = await axios.post(`${API_URL}/auth/forgot-password`, {
+		email: email,
+	})
+	return response.data
+}
+
+export const ResetPassword = async (token: string, password: string) => {
+	const response = await axios.post(`${API_URL}/auth/reset-password`, {
+		token: token,
+		newPassword: password,
+	})
+	return response.data
+}
+
 const decodeToken = (token: string): TokenPayload | null => {
 	try {
 		const base64Url = token.split('.')[1]

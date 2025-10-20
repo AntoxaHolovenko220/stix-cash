@@ -4,6 +4,16 @@
 		"component": "LandingPage",
 		"title": "Stix Cash"
 	},
+	"VerifyEmailPage": {
+		"path": "/verify-email",
+		"component": "VerifyEmailPage",
+		"title": "Stix Cash"
+	},
+	"ResetPasswordPage": {
+		"path": "/reset-password",
+		"component": "ResetPasswordPage",
+		"title": "Stix Cash"
+	},
 	"HomePage": {
 		"path": "/home",
 		"component": "HomePage",
@@ -60,6 +70,7 @@
 		"layout": "MainLayout",
 		"private": true
 	},
+
 	"NotFoundPage": {
 		"path": "*",
 		"component": "NotFoundPage",

@@ -6,4 +6,5 @@ export interface CountryOption {
 export interface AuthModalProps {
 	open: boolean
 	onClose: () => void
+	onReset: () => void
 }

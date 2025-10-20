@@ -157,7 +157,7 @@ export const useRegisterModal = () => {
 
 				const tokens = await registerUser(registerData)
 				await new Promise(resolve => setTimeout(resolve, 500))
-				setIsLoginForm(true)
+				// setIsLoginForm(true)
 				resetForm()
 				return { success: true }
 			}
