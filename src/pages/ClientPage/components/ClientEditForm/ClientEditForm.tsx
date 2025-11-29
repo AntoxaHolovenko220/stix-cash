@@ -56,9 +56,7 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 	const [lastName, setLastName] = useState(client.lastName)
 	const [email, setEmail] = useState(client.email)
 	const [phone, setPhone] = useState(client.phone)
-	const [verificationStatus, setVerificationStatus] = useState(
-		client.verificationStatus
-	)
+	const [kycStatus, setKycStatus] = useState(client.kycStatus)
 	const [walletBTCAddress, setWalletBTCAddress] = useState(
 		client.walletBTCAddress
 	)
@@ -231,9 +229,9 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 		},
 		{
 			name: t('verification status'),
-			key: 'verificationStatus',
-			value: verificationStatus,
-			onchange: (val: string) => setVerificationStatus(val),
+			key: 'kycStatus',
+			value: kycStatus,
+			onchange: (val: string) => setKycStatus(val),
 			type: 'string',
 			inputType: 'select',
 			options: [
@@ -419,10 +417,10 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 										? input.value
 										: 'details...'}
 								</Typography>
-							) : input.key === 'verificationStatus' ? (
+							) : input.key === 'kycStatus' ? (
 								<Select
 									variant='standard'
-									value={verificationStatus}
+									value={kycStatus}
 									onChange={e => input.onchange?.(e.target.value)}
 									displayEmpty
 									inputRef={el => (inputRefs.current[input.key] = el)}
@@ -658,8 +656,8 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 													valueToSave = Number(balance).toFixed(2)
 												else if (input.key === 'balanceBTC')
 													valueToSave = Number(balanceBTC).toFixed(8)
-												else if (input.key === 'verificationStatus')
-													valueToSave = verificationStatus
+												else if (input.key === 'kycStatus')
+													valueToSave = kycStatus
 												else if (input.key === 'merchantAddress')
 													valueToSave = merchantAddress
 

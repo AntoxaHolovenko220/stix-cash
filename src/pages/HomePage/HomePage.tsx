@@ -153,7 +153,7 @@ const HomePage = () => {
 						</Box>
 					</Box>
 					<VerificationBlock
-						status={profile.verificationStatus}
+						status={profile.kycStatus}
 						sx={{ mt: isMobile ? '10px' : '50px' }}
 					/>
 					{isMobile && (

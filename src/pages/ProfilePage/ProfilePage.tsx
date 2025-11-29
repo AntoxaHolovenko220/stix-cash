@@ -94,7 +94,7 @@ const ProfilePage = () => {
 							setShowDocument={setShowDocument}
 						/>
 					)}
-					{profile.verificationStatus === 'unverified' && !isMobile && (
+					{profile.kycStatus === 'unverified' && !isMobile && (
 						<DocumentVerificationBlock
 							setProfile={setProfile}
 							setShowDocument={setShowDocument}

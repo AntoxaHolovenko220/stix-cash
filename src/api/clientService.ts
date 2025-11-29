@@ -30,7 +30,7 @@ export interface Client {
 	password: string
 	isTermsAccepted: boolean
 	roles: string[]
-	verificationStatus: string
+	kycStatus: string
 	googleDriveFolderId: string
 	balance: string
 	balanceBTC: string

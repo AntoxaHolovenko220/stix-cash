@@ -158,7 +158,7 @@ const UserInfoBlock = ({ profile, setProfile, setShowDocument }: Props) => {
 						sx={{ width: '55px', height: 'auto' }}
 					/>
 				</Box>
-				<VerificationBlock status={profile.verificationStatus} />
+				<VerificationBlock status={profile.kycStatus} />
 				<Typography
 					sx={{
 						mt: '15px',
@@ -355,7 +355,7 @@ const UserInfoBlock = ({ profile, setProfile, setShowDocument }: Props) => {
 						</IconButton>
 					</Box>
 				</Box>
-				{isMobile && profile.verificationStatus === 'unverified' && (
+				{isMobile && profile.kycStatus === 'unverified' && (
 					<Button
 						sx={{
 							width: '100%',
