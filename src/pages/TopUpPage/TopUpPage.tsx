@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import FirstStep from './components/FirstStep/FirstStep'
 import { useEffect, useState } from 'react'
 import SecondStep from './components/SecondStep/SecondStep'
+import PayPalProvider from '@/components/PayPalProvider/PayPalProvider'
 import { Client, getProfile } from '@/api/clientService'
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace'
 
@@ -30,11 +31,12 @@ const TopUpPage = () => {
 	}, [])
 
 	const [method, setMethod] = useState<
-		'paypalAddress' | 'zelleTransfer' | 'wireTransfer' | 'walletBTCAddress'
+		'paypalAddress' | 'zelleTransfer' | 'walletBTCAddress' | 'card'
 	>('paypalAddress')
 	const [checkForm, setCheckFrom] = useState(false)
 
 	return (
+		<PayPalProvider>
 		<Box>
 			{!checkForm ? (
 				<FirstStep
@@ -63,6 +65,7 @@ const TopUpPage = () => {
 				</>
 			)}
 		</Box>
+		</PayPalProvider>
 	)
 }
 

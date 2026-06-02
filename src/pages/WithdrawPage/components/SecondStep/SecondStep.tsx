@@ -3,7 +3,6 @@ import {
 	TextField,
 	Typography,
 	Button,
-	Checkbox,
 	Dialog,
 	DialogActions,
 	DialogContent,
@@ -12,14 +11,13 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded'
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import { useTranslation } from 'react-i18next'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { Client, getProfile, updateProfileField } from '@/api/clientService'
-import { Loader } from '@/components'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { Client, updateProfileField } from '@/api/clientService'
 import { useRandomId } from '@/hooks/useRandomId'
 import { createUserTransaction } from '@/api/transactionService'
 import { useNavigate } from 'react-router-dom'
 import routes from '@/router/routes.json'
-import { Balance } from '@mui/icons-material'
+import { isKycVerified } from '@/utils/isKycVerified'
 
 const commonTextStyles = {
 	fontFamily: 'Manrope',
@@ -28,45 +26,50 @@ const commonTextStyles = {
 
 const textFieldStyles = {
 	'& .MuiInput-root': {
-		'&:before': {
-			borderBottomColor: '#E0E0E0',
-		},
-		'&:hover:not(.Mui-disabled):before': {
-			borderBottomColor: '#BDBDBD',
-		},
+		'&:before': { borderBottomColor: '#E0E0E0' },
+		'&:hover:not(.Mui-disabled):before': { borderBottomColor: '#BDBDBD' },
 	},
-	'& .MuiInput-input': {
-		fontFamily: 'Manrope',
-	},
+	'& .MuiInput-input': { fontFamily: 'Manrope' },
 	'& .Mui-error': {
 		'& .MuiInput-root': {
-			'&:before': {
-				borderBottomColor: '#DE0000',
-			},
-			'&:after': {
-				borderBottomColor: '#DE0000',
-			},
-			'&:hover:not(.Mui-disabled):before': {
-				borderBottomColor: '#DE0000',
-			},
+			'&:before': { borderBottomColor: '#DE0000' },
+			'&:after': { borderBottomColor: '#DE0000' },
+			'&:hover:not(.Mui-disabled):before': { borderBottomColor: '#DE0000' },
 		},
 	},
 }
 
-type Method = 'paypalAddress' | 'wireTransfer' | 'walletBTCAddress'
+type Method = 'paypalAddress' | 'zelleTransfer' | 'walletBTCAddress' | 'card'
 
 interface Props {
 	method: Method
+	profile: Client
 	setCheckForm: Dispatch<SetStateAction<boolean>>
+	onVerificationRequired: () => void
 }
 
-const SecondStep = ({ method, setCheckForm }: Props) => {
+const getMethodLabel = (method: Method) => {
+	switch (method) {
+		case 'paypalAddress':
+			return 'PayPal'
+		case 'walletBTCAddress':
+			return 'Crypto'
+		case 'zelleTransfer':
+			return 'Zelle'
+		case 'card':
+			return 'Visa / Mastercard'
+	}
+}
+
+const SecondStep = ({
+	method,
+	profile,
+	setCheckForm,
+	onVerificationRequired,
+}: Props) => {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
 
-	const [profile, setProfile] = useState<Client>()
-	const [loading, setLoading] = useState(true)
-	const [error, setError] = useState('')
 	const [dialogOpen, setDialogOpen] = useState(false)
 	const [dialogText, setDialogText] = useState('')
 	const [dialogText2, setDialogText2] = useState('')
@@ -75,104 +78,85 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 	const [amountError, setAmountError] = useState('')
 
 	const [paypalAddress, setPaypalAddress] = useState('')
-	const [walletBTCAddress, setWalletBTCAddress] = useState('')
-	const [wireTransferFirstName, setWireTransferFirstName] = useState('')
-	const [wireTransferLastName, setWireTransferLastName] = useState('')
-	const [wireTransferAccountNumber, setWireTransferAccountNumber] = useState('')
-	const [wireTransferRoutingNumber, setWireTransferRoutingNumber] = useState('')
-	const [wireTransferBankName, setWireTransferBankName] = useState('')
-	const [wireTransferAddress, setWireTransferAddress] = useState('')
+	const [walletBTCAddress, setWalletBTCAddress] = useState(
+		profile.walletBTCAddress ?? '',
+	)
+	const [zelleTransferName, setZelleTransferName] = useState(
+		profile.zelleTransfer.recipientName ?? '',
+	)
+	const [zelleTransferEmail, setZelleTransferEmail] = useState(
+		profile.zelleTransfer.email ?? '',
+	)
+	const [zelleTransferPhone, setZelleTransferPhone] = useState(
+		profile.zelleTransfer.phone ?? '',
+	)
 	const [amount, setAmount] = useState('')
-	const [transactionId, setTransactionId] = useState(useRandomId())
-	const [isTermsAccepted, setІsTermsAccepted] = useState(false)
-	const [isTransactionAllowed, setIsTransactionAllowed] = useState(false)
-	const [paymentDetails, setPaymentDetails] = useState({})
+	const generateRandomId = useRandomId()
+	const [transactionId] = useState(() => generateRandomId())
 
-	useEffect(() => {
-		const fetchProfile = async () => {
-			try {
-				const data = await getProfile()
-				setProfile(data)
-				setIsTransactionAllowed(data.isTransactionAllowed)
-			} catch (err) {
-				setError(t('error occurred'))
-				console.error('Failed to fetch profile:', err)
-			} finally {
-				setLoading(false)
-			}
-		}
-
-		fetchProfile()
-	}, [])
+	const handlePhoneChange = (value: string) => {
+		const digits = value.replace(/\D/g, '')
+		setZelleTransferPhone(digits.length === 0 ? '' : `+${digits}`)
+	}
 
 	const isButtonDisabled = () => {
 		if (amountError) return true
 		if (!amount || Number(amount) <= 0) return true
-
 		if (method === 'paypalAddress' && !paypalAddress) return true
 		if (method === 'walletBTCAddress' && !walletBTCAddress) return true
-		if (method === 'wireTransfer') {
-			if (
-				!wireTransferFirstName ||
-				!wireTransferLastName ||
-				!wireTransferAccountNumber ||
-				!wireTransferRoutingNumber ||
-				!wireTransferBankName ||
-				!wireTransferAddress ||
-				!isTermsAccepted
-			) {
+		if (method === 'zelleTransfer') {
+			if (!zelleTransferName || !zelleTransferEmail || !zelleTransferPhone) {
 				return true
 			}
 		}
-
 		return false
 	}
 
-	if (!profile) {
-		return <Typography>{t('error occurred')}</Typography>
-	}
-
 	const handleCreateTransaction = async () => {
+		if (!isKycVerified(profile.kycStatus)) {
+			onVerificationRequired()
+			return
+		}
+
 		try {
-			let paymentDetails = {}
+			let paymentDetails: Record<string, string> = {}
 
 			if (method === 'paypalAddress') {
-				paymentDetails = { paypalAddress: paypalAddress }
+				paymentDetails = { paypalAddress }
 			} else if (method === 'walletBTCAddress') {
-				paymentDetails = { walletBTCAddress: walletBTCAddress }
-			} else if (method === 'wireTransfer') {
+				paymentDetails = { walletBTCAddress }
+			} else if (method === 'zelleTransfer') {
 				paymentDetails = {
-					firstName: wireTransferFirstName,
-					lastName: wireTransferLastName,
-					accountNumber: wireTransferAccountNumber,
-					routingNumber: wireTransferRoutingNumber,
-					bankName: wireTransferBankName,
-					address: wireTransferAddress,
+					recipientName: zelleTransferName,
+					email: zelleTransferEmail,
+					phone: zelleTransferPhone,
 				}
 			}
-			if (!isTransactionAllowed) {
+
+			if (!profile.isTransactionAllowed) {
 				setIsSuccess(false)
 				setDialogText(t('oops'))
 				setDialogText2(t('writing to support'))
 				setDialogText3(t('we help'))
 				setDialogOpen(true)
-			} else {
-				const result = await createUserTransaction({
-					type: 'withdrawal',
-					amount: Number(amount).toFixed(2),
-					method,
-					date: new Date(Date.now()).toISOString(),
-					status: 'pending',
-					transactionId,
-					paymentDetails,
-				})
-				await updateProfileField({
-					balance: (Number(profile?.balance) - Number(amount)).toFixed(2),
-				})
-				setIsSuccess(true)
-				setDialogText(t('ready-steady'))
-				setDialogOpen(true)
+				return
 			}
+
+			await createUserTransaction({
+				type: 'withdrawal',
+				amount: Number(amount).toFixed(2),
+				method,
+				date: new Date(Date.now()).toISOString(),
+				status: 'pending',
+				transactionId,
+				paymentDetails,
+			})
+			await updateProfileField({
+				balance: (Number(profile.balance) - Number(amount)).toFixed(2),
+			})
+			setIsSuccess(true)
+			setDialogText(t('ready-steady'))
+			setDialogOpen(true)
 		} catch (err) {
 			console.error(err)
 			setIsSuccess(false)
@@ -183,18 +167,21 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 		}
 	}
 
-	const handleOpenSupport = () => {
-		setDialogOpen(false)
-		window.dispatchEvent(new Event('openSupportModal'))
-	}
-
-	const inputs = {
+	const inputs: Record<
+		Exclude<Method, 'card'>,
+		Array<{
+			name: string
+			key: string
+			value: string
+			onchange: (val: string) => void
+		}>
+	> = {
 		paypalAddress: [
 			{
-				name: t('link'),
+				name: t('paypal payout address'),
 				key: 'paypalAddress',
 				value: paypalAddress,
-				onchange: (val: string) => setPaypalAddress(val),
+				onchange: setPaypalAddress,
 			},
 		],
 		walletBTCAddress: [
@@ -202,56 +189,32 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 				name: t('BTC adress'),
 				key: 'walletBTCAddress',
 				value: walletBTCAddress,
-				onchange: (val: string) => setWalletBTCAddress(val),
+				onchange: setWalletBTCAddress,
 			},
 		],
-		wireTransfer: [
-			{
-				name: t('count number'),
-				key: 'wireTransferAccountNumber',
-				value: wireTransferAccountNumber,
-				onchange: (val: string) => setWireTransferAccountNumber(val),
-			},
-			{
-				name: t('route number'),
-				key: 'wireTransferRoutingNumber',
-				value: wireTransferRoutingNumber,
-				onchange: (val: string) => setWireTransferRoutingNumber(val),
-			},
-			{
-				name: t('bank'),
-				key: 'wireTransferBankName',
-				value: wireTransferBankName,
-				onchange: (val: string) => setWireTransferBankName(val),
-			},
-			{
-				name: t('address'),
-				key: 'wireTransferAddress',
-				value: wireTransferAddress,
-				onchange: (val: string) => setWireTransferAddress(val),
-			},
+		zelleTransfer: [
 			{
 				name: t('first name'),
-				key: 'wireTransferFirstName',
-				value: wireTransferFirstName,
-				onchange: (val: string) => setWireTransferFirstName(val),
+				key: 'zelleTransferName',
+				value: zelleTransferName,
+				onchange: setZelleTransferName,
 			},
 			{
-				name: t('last name'),
-				key: 'wireTransferLastName',
-				value: wireTransferLastName,
-				onchange: (val: string) => setWireTransferLastName(val),
+				name: t('email'),
+				key: 'zelleTransferEmail',
+				value: zelleTransferEmail,
+				onchange: setZelleTransferEmail,
+			},
+			{
+				name: t('number'),
+				key: 'zelleTransferPhone',
+				value: zelleTransferPhone,
+				onchange: handlePhoneChange,
 			},
 		],
 	}
 
-	if (loading) {
-		return <Loader />
-	}
-
-	if (error) {
-		return <Typography color='error'>{error}</Typography>
-	}
+	const methodLabel = getMethodLabel(method)
 
 	return (
 		<Box>
@@ -265,12 +228,7 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 						{t('withdraw')}
 					</span>
 				</span>{' '}
-				|{' '}
-				{method === 'paypalAddress'
-					? 'PayPal'
-					: method === 'walletBTCAddress'
-					? 'Crypto'
-					: 'Wire transfer'}
+				| {methodLabel}
 			</Typography>
 
 			<Typography
@@ -293,15 +251,9 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 					fontWeight: 400,
 				}}
 			>
-				{t('please provide data')}{' '}
-				<span>
-					{method === 'paypalAddress'
-						? 'PayPal'
-						: method === 'walletBTCAddress'
-						? 'Crypto'
-						: 'Wire transfer'}
-				</span>
+				{t('please provide data')} <span>{methodLabel}</span>
 			</Typography>
+
 			<Box
 				sx={{
 					maxWidth: '500px',
@@ -315,8 +267,8 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 			>
 				<Box
 					sx={{
-						mt: '15px',
-						mb: '25px',
+						mt: method === 'card' ? '10px' : '15px',
+						mb: method === 'card' ? '20px' : '25px',
 						display: 'flex',
 						alignItems: 'center',
 						gap: '8px',
@@ -328,112 +280,111 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 							method === 'paypalAddress'
 								? '/bigpaypal.svg'
 								: method === 'walletBTCAddress'
-								? '/bigwallet.svg'
-								: '/bigwire-transfer.svg'
+									? '/bigwallet.svg'
+									: method === 'zelleTransfer'
+										? '/bigzelle.svg'
+										: '/visa.png'
 						}
+						sx={{
+							width:
+								method === 'paypalAddress'
+									? '75px'
+									: method === 'zelleTransfer'
+										? '60x'
+										: method === 'walletBTCAddress'
+											? '34px'
+											: '65px',
+						}}
 					/>
+					{method === 'card' && (
+						<Box component='img' src='/mastercard.svg' sx={{ width: '55px' }} />
+					)}
 					<Typography
 						sx={{ ...commonTextStyles, fontSize: '22px', fontWeight: 700 }}
 					>
-						{method === 'walletBTCAddress'
-							? 'Crypto'
-							: method === 'wireTransfer'
-							? 'Wire transfer'
-							: ''}
+						{method === 'walletBTCAddress' ? 'Crypto' : ''}
 					</Typography>
 				</Box>
+
 				<Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-					{inputs[method]?.map(input =>
-						input.key === 'walletBTCAddress' ? (
-							<>
-								<Typography
-									sx={{
-										...commonTextStyles,
-										fontSize: '14px',
-										color: '#6A6A6A',
-									}}
-								>
-									{t('BTC adress')}
-								</Typography>
-								<Box
-									sx={{
-										width: '100%',
-										mt: '10px',
-										mb: '30px',
-										p: '5px 10px',
-										borderRadius: '8px',
-										backgroundColor: '#FFFFFF',
-										display: 'flex',
-										justifyContent: 'space-between',
-										alignItems: 'center',
-										gap: '10px',
-										boxSizing: 'border-box',
-									}}
-								>
-									<TextField
-										variant='standard'
-										value={walletBTCAddress}
-										placeholder={t('type address')}
-										onChange={e => setWalletBTCAddress(e.target.value)}
-										sx={{ width: '100%' }}
-										InputProps={{
-											disableUnderline: true,
-											sx: {
-												fontSize: '13px',
-												fontFamily: 'Manrope',
-												padding: 0,
-												backgroundColor: 'transparent',
-											},
-										}}
-									/>
-									<Button
-										onClick={() => {
-											if (walletBTCAddress) {
-												navigator.clipboard
-													.writeText(walletBTCAddress)
-													.catch(err => {
-														console.error('Failed to copy: ', err)
-													})
-											}
-										}}
+					{method !== 'card' &&
+						inputs[method]?.map(input =>
+							input.key === 'walletBTCAddress' ? (
+								<Box key={input.key}>
+									<Typography
 										sx={{
-											width: '54px',
-											height: '24px',
-											borderRadius: '6px',
-											backgroundColor: '#0549FF',
-											color: '#FFFFFF',
 											...commonTextStyles,
 											fontSize: '14px',
-											textTransform: 'none',
+											color: '#6A6A6A',
 										}}
 									>
-										Copy
-									</Button>
+										{t('BTC adress')}
+									</Typography>
+									<Box
+										sx={{
+											width: '100%',
+											mt: '10px',
+											mb: '30px',
+											p: '5px 10px',
+											borderRadius: '8px',
+											backgroundColor: '#FFFFFF',
+											display: 'flex',
+											justifyContent: 'space-between',
+											alignItems: 'center',
+											gap: '10px',
+											boxSizing: 'border-box',
+										}}
+									>
+										<TextField
+											variant='standard'
+											value={walletBTCAddress}
+											placeholder={t('type address')}
+											onChange={e => setWalletBTCAddress(e.target.value)}
+											sx={{ width: '100%' }}
+											InputProps={{
+												disableUnderline: true,
+												sx: {
+													fontSize: '13px',
+													fontFamily: 'Manrope',
+													padding: 0,
+													backgroundColor: 'transparent',
+												},
+											}}
+										/>
+										<Button
+											onClick={() => {
+												if (walletBTCAddress) {
+													navigator.clipboard.writeText(walletBTCAddress)
+												}
+											}}
+											sx={{
+												width: '54px',
+												height: '24px',
+												borderRadius: '6px',
+												backgroundColor: '#0549FF',
+												color: '#FFFFFF',
+												...commonTextStyles,
+												fontSize: '14px',
+												textTransform: 'none',
+											}}
+										>
+											Copy
+										</Button>
+									</Box>
 								</Box>
-							</>
-						) : (
-							<TextField
-								key={input.key}
-								variant='standard'
-								fullWidth
-								placeholder={input.name}
-								value={input.value}
-								onChange={e => {
-									const val = e.target.value
-									if (
-										input.key === 'wireTransferAccountNumber' ||
-										input.key === 'wireTransferRoutingNumber'
-									) {
-										input.onchange(val.replace(/\D/g, ''))
-									} else {
-										input.onchange(val)
-									}
-								}}
-								sx={textFieldStyles}
-								type={input.key === 'zelleTransferEmail' ? 'email' : 'text'}
-							/>
-						)
-					)}
+							) : (
+								<TextField
+									key={input.key}
+									variant='standard'
+									fullWidth
+									placeholder={input.name}
+									value={input.value}
+									onChange={e => input.onchange(e.target.value)}
+									sx={textFieldStyles}
+									type={input.key === 'zelleTransferEmail' ? 'email' : 'text'}
+								/>
+							),
+						)}
 					<TextField
 						variant='standard'
 						fullWidth
@@ -448,10 +399,8 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 							if (parts.length > 2) {
 								cleaned = parts[0] + '.' + parts.slice(1).join('')
 							}
-
 							setAmount(cleaned)
-
-							if (Number(cleaned) > Number(profile?.balance)) {
+							if (Number(cleaned) > Number(profile.balance)) {
 								setAmountError(t('amount exceeds balance'))
 							} else {
 								setAmountError('')
@@ -459,41 +408,8 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 						}}
 						sx={textFieldStyles}
 					/>
-					{method === 'wireTransfer' && (
-						<Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
-							<Checkbox
-								checked={isTermsAccepted}
-								onChange={() => setІsTermsAccepted(!isTermsAccepted)}
-								sx={{ mt: '-9px', ml: '-11px' }}
-							/>
-							<Typography
-								sx={{
-									mb: '5px',
-									fontSize: '12px',
-									fontFamily: 'Manrope',
-									color: '#0C0C0C90',
-								}}
-							>
-								{t('aknowledge')}{' '}
-								<span
-									style={{
-										borderBottom: '1px solid #0C0C0C90',
-									}}
-								>
-									{t('agreement')}
-								</span>{' '}
-								{t('and')}{' '}
-								<span
-									style={{
-										borderBottom: '1px solid #0C0C0C90',
-									}}
-								>
-									{t('statement')}
-								</span>
-							</Typography>
-						</Box>
-					)}
 				</Box>
+
 				<Button
 					variant='contained'
 					disabled={isButtonDisabled()}
@@ -507,7 +423,7 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 						boxShadow: 'none',
 						background: 'linear-gradient(90deg, #58A9FF, #0044FF)',
 					}}
-					onClick={() => handleCreateTransaction()}
+					onClick={handleCreateTransaction}
 				>
 					<Box
 						sx={{
@@ -551,6 +467,7 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 					</Typography>
 				</Box>
 			</Box>
+
 			<Dialog
 				open={dialogOpen}
 				onClose={() => setDialogOpen(false)}
@@ -561,7 +478,7 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 						minHeight: '263px',
 						borderRadius: '24px',
 						background: 'linear-gradient(180deg, #58A9FF 0%, #0044FF 50%)',
-						color: '#FFFFFF', // чтобы текст был читаемым
+						color: '#FFFFFF',
 						padding: '20px 16px',
 					},
 				}}
@@ -584,7 +501,6 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 							}}
 						/>
 					)}
-
 					{isSuccess === false && (
 						<CloseRoundedIcon
 							sx={{
@@ -595,7 +511,6 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 							}}
 						/>
 					)}
-
 					<Typography
 						sx={{
 							mt: '15px',
@@ -636,14 +551,16 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 				>
 					{isSuccess === false && (
 						<Button
-							onClick={handleOpenSupport}
+							onClick={() => {
+								setDialogOpen(false)
+								window.dispatchEvent(new Event('openSupportModal'))
+							}}
 							sx={{
 								width: '100%',
 								height: '56px',
 								border: '1px solid #232323',
 								borderRadius: '6px',
 								backgroundColor: '#FFFFFF',
-								display: 'inline-block',
 							}}
 						>
 							<Typography
@@ -663,7 +580,7 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 						</Button>
 					)}
 					<Button
-						onClick={async () => {
+						onClick={() => {
 							setDialogOpen(false)
 							navigate(routes.HomePage.path)
 						}}
@@ -674,7 +591,6 @@ const SecondStep = ({ method, setCheckForm }: Props) => {
 							border: '1px solid #232323',
 							borderRadius: '6px',
 							backgroundColor: '#FFFFFF',
-							display: 'inline-block',
 						}}
 					>
 						<Typography

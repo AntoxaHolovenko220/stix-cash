@@ -13,12 +13,7 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded'
 import { Client } from '@/api/clientService'
 
-type Method =
-	| 'paypalAddress'
-	| 'zelleTransfer'
-	| 'wireTransfer'
-	| 'walletBTCAddress'
-	| 'card'
+type Method = 'paypalAddress' | 'zelleTransfer' | 'walletBTCAddress' | 'card'
 
 interface Props {
 	selectedOption: Method
@@ -37,7 +32,7 @@ const paymentMethods = [
 		id: 'paypalAddress',
 		icon: '/bigpaypal.svg',
 		name: 'PayPal',
-		time: 'from 1 to 3 hours',
+		time: 'instantly',
 		showName: false,
 	},
 	{
@@ -46,13 +41,6 @@ const paymentMethods = [
 		name: 'Zelle',
 		time: 'instantly',
 		showName: false,
-	},
-	{
-		id: 'wireTransfer',
-		icon: '/bigwire-transfer.svg',
-		name: 'Wire transfer',
-		time: 'from 1 to 3 business ideas',
-		showName: true,
 	},
 	{
 		id: 'walletBTCAddress',
@@ -66,7 +54,7 @@ const paymentMethods = [
 		icon: '/visa.png',
 		name: 'Debit or Credit',
 		time: 'instantly',
-		showName: true,
+		showName: false,
 	},
 ]
 
@@ -85,22 +73,13 @@ const FirstStep = ({
 
 		switch (selectedOption) {
 			case 'paypalAddress':
-				isValid = Boolean(profile.paypalAddress)
+				isValid = true
 				break
 			case 'zelleTransfer':
 				isValid = Boolean(
 					profile.zelleTransfer?.recipientName ||
-						profile.zelleTransfer?.email ||
-						profile.zelleTransfer?.phone
-				)
-				break
-			case 'wireTransfer':
-				isValid = Boolean(
-					profile.wireTransfer?.firstName ||
-						profile.wireTransfer?.lastName ||
-						profile.wireTransfer?.accountNumber ||
-						profile.wireTransfer?.routingNumber ||
-						profile.wireTransfer?.bankName
+					profile.zelleTransfer?.email ||
+					profile.zelleTransfer?.phone,
 				)
 				break
 			case 'walletBTCAddress':
@@ -181,12 +160,10 @@ const FirstStep = ({
 											method.id === 'paypalAddress'
 												? '75px'
 												: method.id === 'zelleTransfer'
-												? '60x'
-												: method.id === 'wireTransfer'
-												? '43px'
-												: method.id === 'walletBTCAddress'
-												? '34px'
-												: '60px',
+													? '60x'
+													: method.id === 'walletBTCAddress'
+														? '34px'
+														: '60px',
 									}}
 								/>
 								{method.id === 'card' && (

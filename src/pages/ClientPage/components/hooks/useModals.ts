@@ -5,14 +5,6 @@ export const useModals = () => {
 	const [modalInputKey, setModalInputKey] = useState<string | null>(null)
 	const [modalInputValue, setModalInputValue] = useState('')
 	const [modalName, setModalName] = useState('')
-	const [modalWireValues, setModalWireValues] = useState({
-		firstName: '',
-		lastName: '',
-		accountNumber: '',
-		routingNumber: '',
-		bankName: '',
-		address: '',
-	})
 	const [modalZelleValues, setModalZelleValues] = useState({
 		name: '',
 		email: '',
@@ -28,8 +20,6 @@ export const useModals = () => {
 		setModalInputValue,
 		modalName,
 		setModalName,
-		modalWireValues,
-		setModalWireValues,
 		modalZelleValues,
 		setModalZelleValues,
 	}

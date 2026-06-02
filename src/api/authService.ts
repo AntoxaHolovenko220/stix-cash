@@ -7,6 +7,11 @@ export interface AuthResponse {
 	refreshToken: string
 }
 
+export interface RegisterResponse {
+	message: string
+	email: string
+}
+
 export interface RegisterData {
 	firstName: string
 	lastName: string
@@ -32,7 +37,7 @@ export interface TokenPayload {
 
 export const registerUser = async (
 	data: RegisterData
-): Promise<AuthResponse> => {
+): Promise<RegisterResponse> => {
 	const response = await axios.post(`${API_URL}/user/auth/register`, data)
 	return response.data
 }

@@ -39,6 +39,13 @@ const ZelleModal = ({
 		}))
 	}
 
+	const handleEnterSave = (e: React.KeyboardEvent) => {
+		if (e.key === 'Enter') {
+			e.preventDefault()
+			onSave()
+		}
+	}
+
 	return (
 		<Dialog
 			open={open}
@@ -85,6 +92,7 @@ const ZelleModal = ({
 							name: e.target.value,
 						}))
 					}
+					onKeyDown={handleEnterSave}
 					sx={{ mb: 2 }}
 				/>
 				<Typography
@@ -119,6 +127,7 @@ const ZelleModal = ({
 							email: e.target.value,
 						}))
 					}
+					onKeyDown={handleEnterSave}
 					sx={{ mb: 2 }}
 				/>
 				<Typography
@@ -148,6 +157,7 @@ const ZelleModal = ({
 					}}
 					value={values.phone}
 					onChange={e => handleModalPhoneChange(e.target.value)}
+					onKeyDown={handleEnterSave}
 				/>
 			</DialogContent>
 			<DialogActions>

@@ -100,7 +100,7 @@ export const enTranslations = {
 	'nice to see': 'Nice to see you!',
 	bridge: 'Stix Cash — your bridge between you and financial freedom',
 	'your balance': 'Total balance',
-	'top up': 'Deposit balance',
+	'top up': 'Deposit',
 	withdraw: 'Withdrawal',
 	'fill all fields': 'Please fill all required fields',
 	'agree to terms': 'You must accept terms and conditions to register',
@@ -149,6 +149,10 @@ export const enTranslations = {
 	list3: 'not edited',
 	list4: 'uploaded in JPG, PNG or PDF format',
 	verify: 'Verify profile',
+	verification_required_title: 'Verification required',
+	verification_required_message:
+		'You must complete profile verification before withdrawing funds. Upload your documents in your profile and wait for approval.',
+	close: 'Close',
 	dataprotected:
 		'All uploaded data is protected and is used for identity verification only.',
 	onlyOneFile: 'You can upload only one file',
@@ -168,7 +172,7 @@ export const enTranslations = {
 	'your account': 'Your account',
 	'choose the method of': 'Choose a method of deposit',
 	'indicate a convenient option':
-		'Specify a convenient option to deposit the balance',
+		'Select a convenient option to deposit the balance',
 	'from 1 to 3 hours': 'from 1 tо 3 hours',
 	instantly: 'instantly',
 	'from 1 to 3 business ideas': 'from 1 tо 3 business ideas',
@@ -178,6 +182,7 @@ export const enTranslations = {
 	'please provide your name and phone':
 		'Please provide your name and phone number to complete your recharge via',
 	link: 'Link',
+	'paypal payout address': 'PayPal email or phone',
 	'if you need help':
 		'If you need assistance, You can contact the support team',
 	'count number': 'Account number',
@@ -194,8 +199,14 @@ export const enTranslations = {
 	'successful replenishment': 'Success!',
 	'your balance update':
 		'Your deposit request has been created. Thank you for using Stix Cash.',
-	'step 1 for 2': 'STEP 1 of 2: Choose a convenient withdrawal method',
-	'confirm withdrawal': 'Select the method and confirm the withdrawal',
+	'your balance updated paypal':
+		'Your balance has been topped up via PayPal. Thank you for using Stix Cash.',
+	'paypal payment hint': 'Enter the amount and pay with your PayPal account.',
+	'paypal not configured':
+		'PayPal payments are temporarily unavailable. Please contact support.',
+	'paypal payment cancelled': 'PayPal payment was cancelled.',
+	'step 1 for 2': 'STEP 1 of 2: Choose a method of withdrawal',
+	'confirm withdrawal': 'Select a convenient option to complete the withdrawal',
 	'please provide data':
 		'Please provide the correct details to complete withdraw via',
 	'step 2 of 2': 'Step 2 of 2: Fill out the withdrawal form',
@@ -246,6 +257,15 @@ export const enTranslations = {
 	aml: 'AML Policy',
 	amountError: 'the withdrawal amount exceeds your balance',
 	'debit or credit': 'Debit or Credit',
+	email_not_verified: 'Confirm your email before signing in',
+	verify_email_loading: 'Confirming email…',
+	verify_email_loading_hint: 'Please wait while we verify your email link.',
+	verify_email_invalid: 'Invalid link',
+	verify_email_invalid_hint:
+		'This link has expired or was already used. Request a new verification email when signing in.',
+	verify_email_not_found: 'User not found',
+	verify_email_not_found_hint:
+		'We could not find an account for this link. Please register again.',
 	confirmed: 'Email confirmed',
 	thank:
 		'Thank you — your email address has been successfully confirmed. You can now log in to your account and enjoy all the features of Stix Cash.',

@@ -2,23 +2,18 @@ import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import routes from '@/router/routes.json'
-import { useState } from 'react'
+import { usdToBtc } from '@/utils/usdToBtc'
+import { useBtcUsdRate } from '@/hooks/useBtcUsdRate'
 
 interface CardBalanceProps {
 	balance: number | string
-	BTCbalance: number | string
 	showBtcBalance?: boolean
 }
 
-const CardBalance = ({
-	balance,
-	BTCbalance,
-	showBtcBalance,
-}: CardBalanceProps) => {
+const CardBalance = ({ balance, showBtcBalance }: CardBalanceProps) => {
 	const { t } = useTranslation()
 	const navigate = useNavigate()
-
-	const [error, setError] = useState('')
+	const { btcUsdRate, loading } = useBtcUsdRate(!!showBtcBalance)
 
 	const commonTextStyles = {
 		fontFamily: 'Manrope',
@@ -28,9 +23,8 @@ const CardBalance = ({
 		textTransform: 'uppercase',
 	}
 
-	if (error) {
-		return <Typography color='error'>Error: {error}</Typography>
-	}
+	const btcEquivalent =
+		btcUsdRate != null ? usdToBtc(balance, btcUsdRate) : null
 
 	return (
 		<Box
@@ -73,9 +67,12 @@ const CardBalance = ({
 								fontSize: '32px',
 								mt: '10px',
 								letterSpacing: '-1px',
+								opacity: loading ? 0.6 : 1,
 							}}
 						>
-							{BTCbalance} BTC
+							{loading || btcEquivalent == null
+								? '…'
+								: `${btcEquivalent} BTC`}
 						</Typography>
 					)}
 				</Box>

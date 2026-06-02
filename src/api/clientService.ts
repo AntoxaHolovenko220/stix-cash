@@ -3,16 +3,6 @@ import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_API_URL
 
-export interface WireTransfer {
-	firstName: string
-	lastName: string
-	accountNumber: string
-	routingNumber: string
-	bankName: string
-	address: string
-	_id: string
-}
-
 export interface ZelleTransfer {
 	recipientName: string
 	email: string
@@ -33,13 +23,9 @@ export interface Client {
 	kycStatus: string
 	googleDriveFolderId: string
 	balance: string
-	balanceBTC: string
 	showBTCBalance: boolean
 	walletBTCAddress: string
-	merchantAddress: string
 	isTransactionAllowed: boolean
-	paypalAddress: string
-	wireTransfer: WireTransfer
 	zelleTransfer: ZelleTransfer
 	transactions: TransactionCardProps[]
 	createdAt: string

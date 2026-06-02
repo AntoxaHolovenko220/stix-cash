@@ -15,6 +15,7 @@ export type PaymentMethod =
 	| 'paypalAddress'
 	| 'wireTransfer'
 	| 'walletBTCAddress'
+	| 'card'
 
 interface PaymentMethodConfig {
 	icon: string
@@ -68,6 +69,7 @@ const TransactionCard = ({
 		paypalAddress: { icon: '/paypal.svg' },
 		zelleTransfer: { icon: '/zelle.svg' },
 		wireTransfer: { icon: '/wire-transfer.svg', label: 'Wire transfer' },
+		card: { icon: '/visa.png', label: 'Visa / Mastercard' },
 		walletBTCAddress: {
 			icon: '/wallet.svg',
 			label: type === 'deposit' ? 'From wallet' : 'To wallet',
@@ -81,6 +83,17 @@ const TransactionCard = ({
 	}
 
 	const currentPaymentMethod = paymentMethodConfig[paymentMethod]
+
+	const truncateTransactionId = (id: string) =>
+		id.length > 8 ? `${id.slice(0, 8)}...` : id
+
+	const copyTransactionId = async () => {
+		try {
+			await navigator.clipboard.writeText(transactionId)
+		} catch (err) {
+			console.error('Failed to copy transaction id:', err)
+		}
+	}
 
 	const formattedDate = new Intl.DateTimeFormat('uk-UA', {
 		year: 'numeric',
@@ -161,7 +174,28 @@ const TransactionCard = ({
 				}}
 			>
 				{[
-					{ label: t('id transaction'), value: transactionId },
+					{
+						label: t('id transaction'),
+						value: (
+							<Typography
+								component='span'
+								onClick={copyTransactionId}
+								title={transactionId}
+								sx={{
+									...commonStyles,
+									fontWeight: 400,
+									cursor: 'pointer',
+									whiteSpace: 'nowrap',
+									'&:hover': {
+										color: '#0246FF',
+										textDecoration: 'underline',
+									},
+								}}
+							>
+								{truncateTransactionId(transactionId)}
+							</Typography>
+						),
+					},
 					{ label: t('date'), value: formattedDate },
 					{
 						label: t('status'),
@@ -235,47 +269,49 @@ const TransactionCard = ({
 									)}
 								</Box>
 
-								<Box
-									onClick={() => {
-										if (
-											paymentMethod === 'walletBTCAddress' ||
-											paymentMethod === 'paypalAddress'
-										)
-											setWalletModalOpen(true)
-										else if (paymentMethod === 'wireTransfer')
-											setWireTransferModalOpen(true)
-										else if (paymentMethod === 'zelleTransfer')
-											setZelleModalOpen(true)
-									}}
-									sx={{
-										mt: '15px',
-										display: 'flex',
-										gap: '5px',
-										cursor: 'pointer',
-									}}
-								>
-									<Typography
+								{paymentMethod !== 'card' && (
+									<Box
+										onClick={() => {
+											if (
+												paymentMethod === 'walletBTCAddress' ||
+												paymentMethod === 'paypalAddress'
+											)
+												setWalletModalOpen(true)
+											else if (paymentMethod === 'wireTransfer')
+												setWireTransferModalOpen(true)
+											else if (paymentMethod === 'zelleTransfer')
+												setZelleModalOpen(true)
+										}}
 										sx={{
-											...commonStyles,
-											fontWeight: 400,
-											'@media (max-width:900px)': {
-												mt: '0px',
-											},
+											mt: '15px',
+											display: 'flex',
+											gap: '5px',
+											cursor: 'pointer',
 										}}
 									>
-										{wallet
-											? `${wallet.slice(0, 4)}...${wallet.slice(-6)}`
-											: 'Details'}
-									</Typography>
-									<SearchIcon
-										sx={{
-											width: '21px',
-											height: '21px',
-											mt: '-2px',
-											color: '#0246FF',
-										}}
-									/>
-								</Box>
+										<Typography
+											sx={{
+												...commonStyles,
+												fontWeight: 400,
+												'@media (max-width:900px)': {
+													mt: '0px',
+												},
+											}}
+										>
+											{wallet
+												? `${wallet.slice(0, 4)}...${wallet.slice(-6)}`
+												: 'Details'}
+										</Typography>
+										<SearchIcon
+											sx={{
+												width: '21px',
+												height: '21px',
+												mt: '-2px',
+												color: '#0246FF',
+											}}
+										/>
+									</Box>
+								)}
 							</Box>
 						),
 					},

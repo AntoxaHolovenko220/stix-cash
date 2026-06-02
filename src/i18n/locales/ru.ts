@@ -151,6 +151,10 @@ export const ruTranslations = {
 	list3: 'не отредактированы',
 	list4: 'загружаются в формате JPG, PNG или PDF',
 	verify: 'Пройти верификацию',
+	verification_required_title: 'Требуется верификация',
+	verification_required_message:
+		'Для вывода средств необходимо пройти верификацию профиля. Загрузите документы в разделе профиля и дождитесь подтверждения.',
+	close: 'Закрыть',
 	dataprotected:
 		'Все загружаемые данные защищены и используются только для проверки личности.',
 	onlyOneFile: 'Вы можете загрузить только один файл',
@@ -179,6 +183,7 @@ export const ruTranslations = {
 	'please provide your name and phone':
 		'Пожалуйста, укажите имя и номер телефона, чтобы завершить пополнение через',
 	link: 'Cсылка',
+	'paypal payout address': 'Email или телефон PayPal',
 	'if you need help':
 		'Если Вам необходима помощь, Вы можете обратиться в службу поддержки',
 	'please provide correct data':
@@ -196,8 +201,14 @@ export const ruTranslations = {
 	'successful replenishment': 'Успех!',
 	'your balance update':
 		'Заявка на пополнение средств создана. Спасибо за использование Stix Cash.',
-	'step 1 for 2': 'ШАГ 1 из 2:  Выберите удобный способ вывода',
-	'confirm withdrawal': 'Выберите метод и подтвердите вывод средств',
+	'your balance updated paypal':
+		'Баланс пополнен через PayPal. Спасибо за использование Stix Cash.',
+	'paypal payment hint': 'Укажите сумму и оплатите через свой аккаунт PayPal.',
+	'paypal not configured':
+		'Оплата через PayPal временно недоступна. Обратитесь в поддержку.',
+	'paypal payment cancelled': 'Оплата через PayPal отменена.',
+	'step 1 for 2': 'ШАГ 1 из 2:  Выберите способ вывода',
+	'confirm withdrawal': 'Укажите удобный вариант для вывода средств',
 	'please provide data':
 		'Пожалуйста, укажите корректные данные, чтобы завершить вывод через',
 	'step 2 of 2': 'шаг 2 из 2: Заполните форму для вывода',
@@ -247,6 +258,15 @@ export const ruTranslations = {
 	aml: 'Политика AML',
 	amountError: 'сумма вывода превышает ваш баланс',
 	'debit or credit': 'Дебетовая или Кредитная',
+	email_not_verified: 'Подтвердите email перед входом',
+	verify_email_loading: 'Подтверждаем email…',
+	verify_email_loading_hint: 'Подождите, идёт проверка ссылки из письма.',
+	verify_email_invalid: 'Ссылка недействительна',
+	verify_email_invalid_hint:
+		'Ссылка истекла или уже была использована. Запросите новое письмо при входе.',
+	verify_email_not_found: 'Пользователь не найден',
+	verify_email_not_found_hint:
+		'Не удалось найти аккаунт для этой ссылки. Зарегистрируйтесь заново.',
 	confirmed: 'Почта подтверждена',
 	thank:
 		'Спасибо — ваш адрес электронной почты успешно подтверждён. Теперь вы можете войти в аккаунт и пользоваться всеми возможностями Stix Cash.',

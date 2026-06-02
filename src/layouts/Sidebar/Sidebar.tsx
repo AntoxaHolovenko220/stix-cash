@@ -39,6 +39,8 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 
 	const navItems = [
 		{ label: t('home'), path: routes.HomePage.path },
+		{ label: t('top up'), path: routes.TopUpPage.path },
+		{ label: t('withdraw'), path: routes.WithdrawPage.path },
 		{ label: t('transactions'), path: routes.TransactionsPage.path },
 		{ label: t('profile'), path: routes.ProfilePage.path },
 	]
@@ -53,11 +55,96 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 		navigate(routes.LandingPage.path)
 	}
 
+	const CURVE_SIZE = 20
+
+	const getNavItemSx = (isActive: boolean) => ({
+		cursor: 'pointer',
+		backgroundColor: isActive ? '#FFFFFF' : 'transparent',
+		color: isActive ? '#0C3E9C' : '#FFFFFF',
+		borderTopLeftRadius: '50px',
+		borderBottomLeftRadius: '50px',
+		borderTopRightRadius: isActive ? 0 : undefined,
+		borderBottomRightRadius: isActive ? 0 : undefined,
+		...(isActive && {
+			marginRight: '-50px',
+			paddingRight: '70px',
+		}),
+		px: '20px',
+		py: '12px',
+		position: 'relative',
+		zIndex: 1,
+		overflow: 'visible',
+		outline: 'none',
+		'&:focus': { outline: 'none' },
+		'&.Mui-focusVisible': { outline: 'none', boxShadow: 'none' },
+		...(isActive && {
+			'&::before': {
+				content: '""',
+				position: 'absolute',
+				top: `-${CURVE_SIZE}px`,
+				right: 0,
+				width: `${CURVE_SIZE}px`,
+				height: `${CURVE_SIZE}px`,
+				background: 'transparent',
+				borderBottomRightRadius: `${CURVE_SIZE}px`,
+				boxShadow: `0 ${CURVE_SIZE}px 0 0 #FFFFFF`,
+				pointerEvents: 'none',
+			},
+			'&::after': {
+				content: '""',
+				position: 'absolute',
+				bottom: `-${CURVE_SIZE}px`,
+				right: 0,
+				width: `${CURVE_SIZE}px`,
+				height: `${CURVE_SIZE}px`,
+				background: 'transparent',
+				borderTopRightRadius: `${CURVE_SIZE}px`,
+				boxShadow: `0 -${CURVE_SIZE}px 0 0 #FFFFFF`,
+				pointerEvents: 'none',
+			},
+		}),
+	})
+
+	const renderNavItem = (item: { label: string; path: string }) => {
+		const isActive = activePath === item.path
+
+		return (
+			<Box
+				key={item.path}
+				sx={{
+					position: 'relative',
+					overflow: 'visible',
+					'&:hover': {
+						'& .nav-item': {
+							borderTopRightRadius: !isActive ? '50px' : 0,
+							borderBottomRightRadius: !isActive ? '50px' : 0,
+							backgroundColor: !isActive
+								? 'rgba(255, 255, 255, 0.1)'
+								: '#FFFFFF',
+						},
+					},
+				}}
+			>
+				<ListItem
+					className='nav-item'
+					onClick={() => {
+						navigate(item.path)
+						onClose()
+					}}
+					sx={getNavItemSx(isActive)}
+				>
+					{item.label}
+				</ListItem>
+			</Box>
+		)
+	}
+
 	return (
 		<Box
 			sx={{
 				height: '100vh',
 				width: '295px',
+				flexShrink: 0,
 				backgroundColor: '#0C3E9C',
 				position: isWideScreen ? 'relative' : 'fixed',
 				left: isOpen ? 0 : '-345px',
@@ -66,6 +153,8 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 				zIndex: 1000,
 				pt: '16px',
 				pl: '50px',
+				overflow: 'hidden',
+				isolation: 'isolate',
 			}}
 		>
 			<Box
@@ -111,99 +200,11 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 						fontFamily: 'Manrope',
 						fontSize: '18px',
 						lineHeight: 1,
+						overflow: 'visible',
+						py: `${CURVE_SIZE}px`,
 					}}
 				>
-					{navItems.map(item => {
-						const isActive = activePath === item.path
-
-						return (
-							<Box
-								key={item.path}
-								sx={{
-									position: 'relative',
-									'&:hover': {
-										'& .nav-item': {
-											borderTopRightRadius: !isActive ? '50px' : '0',
-											borderBottomRightRadius: !isActive ? '50px' : '0',
-											backgroundColor: !isActive
-												? 'rgba(255, 255, 255, 0.1)'
-												: '#FFFFFF',
-										},
-									},
-								}}
-							>
-								<ListItem
-									className='nav-item'
-									onClick={() => {
-										navigate(item.path)
-										onClose()
-									}}
-									sx={{
-										cursor: 'pointer',
-										backgroundColor: isActive ? '#FFFFFF' : 'transparent',
-										color: isActive ? '#0C3E9C' : '#FFFFFF',
-										borderTopLeftRadius: '50px',
-										borderBottomLeftRadius: '50px',
-
-										px: '20px',
-										py: '12px',
-										position: 'relative',
-										zIndex: 1,
-									}}
-								>
-									{item.label}
-								</ListItem>
-
-								{isActive && (
-									<>
-										<Box
-											sx={{
-												position: 'absolute',
-												right: '42px',
-												top: '-62px',
-												bottom: '0',
-												width: '20px',
-												border: 'none',
-												backgroundColor: '#FFFFFF',
-												transform: 'rotate(-90deg)',
-												zIndex: 0,
-											}}
-										>
-											<Box
-												sx={{
-													width: '100%',
-													height: '100%',
-													backgroundColor: '#0C3E9C',
-													borderBottomLeftRadius: '50px',
-												}}
-											/>
-										</Box>
-										<Box
-											sx={{
-												position: 'absolute',
-												right: '42px',
-												top: '0',
-												bottom: '-62px',
-												width: '20px',
-												backgroundColor: '#FFFFFF',
-												transform: 'rotate(90deg)',
-												zIndex: 0,
-											}}
-										>
-											<Box
-												sx={{
-													width: '100%',
-													height: '100%',
-													backgroundColor: '#0C3E9C',
-													borderTopLeftRadius: '50px',
-												}}
-											/>
-										</Box>
-									</>
-								)}
-							</Box>
-						)
-					})}
+					{navItems.map(renderNavItem)}
 				</List>
 			) : (
 				<Box sx={{ mt: '40px' }}>
@@ -227,98 +228,11 @@ const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
 							fontFamily: 'Manrope',
 							fontSize: '18px',
 							lineHeight: 1,
+							overflow: 'visible',
+							py: `${CURVE_SIZE}px`,
 						}}
 					>
-						{adminNavItems.map(item => {
-							const isActive = activePath === item.path
-
-							return (
-								<Box
-									key={item.path}
-									sx={{
-										position: 'relative',
-										'&:hover': {
-											'& .nav-item': {
-												borderTopRightRadius: !isActive ? '50px' : '0',
-												borderBottomRightRadius: !isActive ? '50px' : '0',
-												backgroundColor: !isActive
-													? 'rgba(255, 255, 255, 0.1)'
-													: '#FFFFFF',
-											},
-										},
-									}}
-								>
-									<ListItem
-										className='nav-item'
-										onClick={() => {
-											navigate(item.path)
-											onClose()
-										}}
-										sx={{
-											cursor: 'pointer',
-											backgroundColor: isActive ? '#FFFFFF' : 'transparent',
-											color: isActive ? '#0C3E9C' : '#FFFFFF',
-											borderTopLeftRadius: '50px',
-											borderBottomLeftRadius: '50px',
-
-											px: '20px',
-											py: '12px',
-											position: 'relative',
-											zIndex: 1,
-										}}
-									>
-										{item.label}
-									</ListItem>
-
-									{isActive && (
-										<>
-											<Box
-												sx={{
-													position: 'absolute',
-													right: '42px',
-													top: '-62px',
-													bottom: '0',
-													width: '20px',
-													backgroundColor: '#FFFFFF',
-													transform: 'rotate(-90deg)',
-													zIndex: 0,
-												}}
-											>
-												<Box
-													sx={{
-														width: '100%',
-														height: '100%',
-														backgroundColor: '#0C3E9C',
-														borderBottomLeftRadius: '50px',
-													}}
-												/>
-											</Box>
-											<Box
-												sx={{
-													position: 'absolute',
-													right: '42px',
-													top: '0',
-													bottom: '-62px',
-													width: '20px',
-													backgroundColor: '#FFFFFF',
-													transform: 'rotate(90deg)',
-													zIndex: 0,
-												}}
-											>
-												<Box
-													sx={{
-														width: '100%',
-														height: '100%',
-														backgroundColor: '#0C3E9C',
-														borderTopLeftRadius: '50px',
-													}}
-												/>
-											</Box>
-										</>
-									)}
-								</Box>
-							)
-						})}
+						{adminNavItems.map(renderNavItem)}
 					</List>
 				</Box>
 			)}

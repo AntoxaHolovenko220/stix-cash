@@ -176,7 +176,6 @@ const HomePage = () => {
 					<CardBalance
 						balance={Number(profile.balance).toFixed(2)}
 						showBtcBalance={profile.showBTCBalance}
-						BTCbalance={Number(profile.balanceBTC).toFixed(8)}
 					/>
 					<Box
 						sx={{
@@ -316,6 +315,7 @@ const HomePage = () => {
 					{t('all transactions')}
 				</Button>
 			)}
+
 		</Box>
 	)
 }

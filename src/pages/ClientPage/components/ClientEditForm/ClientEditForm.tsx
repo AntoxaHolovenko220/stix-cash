@@ -13,7 +13,6 @@ import CheckIcon from '@mui/icons-material/Check'
 import LabelIcon from '@mui/icons-material/Label'
 import { Loader } from '@/components'
 import WalletModal from '../WalletModal'
-import WireTransferModal from '../WireTransferModal'
 import ZelleModal from '../ZelleModal'
 import countries from '@/pages/RegisterModal/countries.json'
 import { useCallback, useRef, useState, Dispatch, SetStateAction } from 'react'
@@ -60,36 +59,13 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 	const [walletBTCAddress, setWalletBTCAddress] = useState(
 		client.walletBTCAddress
 	)
-	const [wireTransferFirstName, setWireTransferFirstName] = useState(
-		client.wireTransfer.firstName
-	)
-	const [wireTransferLastName, setWireTransferLastName] = useState(
-		client.wireTransfer.lastName
-	)
-	const [wireTransferAccountNumber, setWireTransferAccountNumber] = useState(
-		client.wireTransfer.accountNumber
-	)
-	const [wireTransferRoutingNumber, setWireTransferRoutingNumber] = useState(
-		client.wireTransfer.routingNumber
-	)
-	const [wireTransferBankName, setWireTransferBankName] = useState(
-		client.wireTransfer.bankName
-	)
-	const [wireTransferAddress, setWireTransferAddress] = useState(
-		client.wireTransfer.address
-	)
-	const [paypal, setPaypal] = useState(client.paypalAddress)
-	const [zelleName, setZelleName] = useState(client.zelleTransfer.recipientName)
-	const [zelleEmail, setZelleEmail] = useState(client.zelleTransfer.email)
-	const [zellePhone, setZellePhone] = useState(client.zelleTransfer.phone)
-	const [merchantAddress, setMerchantAddress] = useState(client.merchantAddress)
+	const [zelleName, setZelleName] = useState(client.zelleTransfer?.recipientName ?? '')
+	const [zelleEmail, setZelleEmail] = useState(client.zelleTransfer?.email ?? '')
+	const [zellePhone, setZellePhone] = useState(client.zelleTransfer?.phone ?? '')
 	const [country, setCountry] = useState(client.country)
 	const [password, setPassword] = useState('')
 	const [balance, setBalance] = useState(client.balance)
-	const [balanceBTC, setBalanceBTC] = useState(
-		Number(client.balanceBTC).toFixed(8).toString()
-	)
-	const [showBTCBalance, setShowBTCBalance] = useState(client.showBTCBalance)
+	const [showBTCBalance, setShowBTCBalance] = useState(client.showBTCBalance ?? false)
 	const [isTransactionAllowed, setIsTransactionAllowed] = useState(
 		client.isTransactionAllowed
 	)
@@ -103,8 +79,6 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 		setModalInputValue,
 		modalName,
 		setModalName,
-		modalWireValues,
-		setModalWireValues,
 		modalZelleValues,
 		setModalZelleValues,
 	} = useModals()
@@ -115,19 +89,52 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 		}, 0)
 	}, [])
 
+	const getValueToSave = (key: string) => {
+		switch (key) {
+			case 'firstName':
+				return firstName
+			case 'lastName':
+				return lastName
+			case 'email':
+				return email
+			case 'phone':
+				return phone
+			case 'country':
+				return country
+			case 'password':
+				return password
+			case 'balance':
+				return Number(balance).toFixed(2)
+			case 'kycStatus':
+				return kycStatus
+			default:
+				return undefined
+		}
+	}
+
+	const commitFieldEdit = async (key: string) => {
+		if (!isEditing[key]) {
+			setIsEditing(prev => ({ ...prev, [key]: true }))
+			focusInput(key)
+			return
+		}
+
+		try {
+			const valueToSave = getValueToSave(key)
+			await handleSaveField(key, valueToSave)
+			setIsEditing(prev => ({ ...prev, [key]: false }))
+		} catch (err) {
+			console.error('Failed to save field:', err)
+		}
+	}
+
 	const handleKeyDown = (
 		e: React.KeyboardEvent<HTMLInputElement>,
 		key: string
 	) => {
 		if (e.key === 'Enter') {
 			e.preventDefault()
-			setIsEditing(prev => ({
-				...prev,
-				[key]: !prev[key],
-			}))
-			if (!isEditing[key]) {
-				focusInput(key)
-			}
+			void commitFieldEdit(key)
 		}
 	}
 
@@ -143,9 +150,6 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 			if (modalInputKey === 'walletBTCAddress') {
 				await handleSaveField('walletBTCAddress', modalInputValue)
 				setWalletBTCAddress(modalInputValue)
-			} else if (modalInputKey === 'paypal') {
-				await handleSaveField('paypalAddress', modalInputValue)
-				setPaypal(modalInputValue)
 			} else if (modalInputKey === 'zelle') {
 				if (modalInputKey === 'zelle') {
 					const updatedZelleTransfer = {
@@ -160,24 +164,6 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 					setZelleEmail(updatedZelleTransfer.email)
 					setZellePhone(updatedZelleTransfer.phone)
 				}
-			} else if (modalInputKey === 'wire transfer') {
-				const updatedWireTransfer = {
-					firstName: modalWireValues.firstName,
-					lastName: modalWireValues.lastName,
-					accountNumber: modalWireValues.accountNumber,
-					routingNumber: modalWireValues.routingNumber,
-					bankName: modalWireValues.bankName,
-					address: modalWireValues.address,
-				}
-
-				await updateClientField(id, { wireTransfer: updatedWireTransfer })
-
-				setWireTransferFirstName(updatedWireTransfer.firstName)
-				setWireTransferLastName(updatedWireTransfer.lastName)
-				setWireTransferAccountNumber(updatedWireTransfer.accountNumber)
-				setWireTransferRoutingNumber(updatedWireTransfer.routingNumber)
-				setWireTransferBankName(updatedWireTransfer.bankName)
-				setWireTransferAddress(updatedWireTransfer.address)
 			}
 
 			setIsWalletModalOpen(false)
@@ -248,29 +234,10 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 			inputType: 'modal',
 		},
 		{
-			name: 'Wire transfer',
-			key: 'wire transfer',
-			value: `${wireTransferFirstName || ''} ${wireTransferLastName || ''}`,
-			inputType: 'modal',
-		},
-		{
-			img: '/paypal.svg',
-			key: 'paypal',
-			value: paypal,
-			onchange: (val: string) => setPaypal(val),
-			inputType: 'modal',
-		},
-		{
 			img: '/zelle.svg',
 			key: 'zelle',
 			value: `${zelleName || ''} ${zelleEmail || ''}`,
 			inputType: 'modal',
-		},
-		{
-			img: '/mastercard.svg',
-			key: 'merchantAddress',
-			value: merchantAddress,
-			onchange: (val: string) => setMerchantAddress(val),
 		},
 		{
 			name: t('mycountry'),
@@ -291,13 +258,6 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 			key: 'balance',
 			value: balance,
 			onchange: (val: string) => setBalance(val),
-			type: 'string',
-		},
-		{
-			name: t('balanceBTC'),
-			key: 'balanceBTC',
-			value: balanceBTC,
-			onchange: (val: string) => setBalanceBTC(val),
 			type: 'string',
 		},
 	]
@@ -370,16 +330,6 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 							{input.key === 'walletBTCAddress' && (
 								<Box component='img' src='/wallet.svg' />
 							)}
-							{input.key === 'wire transfer' && (
-								<Box component='img' src='/wire-transfer.svg' />
-							)}
-							{input.key === 'merchantAddress' && (
-								<Box
-									component='img'
-									src='/visa.png'
-									sx={{ maxHeight: '13px' }}
-								/>
-							)}
 							{input.img ? (
 								<Box
 									component='img'
@@ -413,8 +363,6 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 								>
 									{input.key === 'walletBTCAddress'
 										? input.value
-										: input.key === 'paypal'
-										? input.value
 										: 'details...'}
 								</Typography>
 							) : input.key === 'kycStatus' ? (
@@ -427,10 +375,7 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 									onKeyDown={e => {
 										if (e.key === 'Enter') {
 											e.preventDefault()
-											setIsEditing(prev => ({
-												...prev,
-												[input.key]: false,
-											}))
+											void commitFieldEdit(input.key)
 										}
 									}}
 									MenuProps={{
@@ -577,7 +522,7 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 									value={input.value}
 									onChange={e => {
 										const val = e.target.value
-										if (input.key === 'balance' || input.key === 'balanceBTC') {
+										if (input.key === 'balance') {
 											let cleaned = val.replace(/[^0-9.]/g, '')
 											const parts = cleaned.split('.')
 											if (parts.length > 2) {
@@ -611,16 +556,7 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 								<IconButton
 									onClick={() => {
 										setModalInputKey(input.key)
-										if (input.key === 'wire transfer') {
-											setModalWireValues({
-												firstName: wireTransferFirstName,
-												lastName: wireTransferLastName,
-												accountNumber: wireTransferAccountNumber,
-												routingNumber: wireTransferRoutingNumber,
-												bankName: wireTransferBankName,
-												address: wireTransferAddress,
-											})
-										} else if (input.key === 'zelle') {
+										if (input.key === 'zelle') {
 											setModalZelleValues({
 												name: zelleName,
 												email: zelleEmail,
@@ -640,44 +576,7 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 								</IconButton>
 							) : (
 								<IconButton
-									onClick={async () => {
-										if (isEditing[input.key]) {
-											try {
-												let valueToSave: any
-												if (input.key === 'firstName') valueToSave = firstName
-												else if (input.key === 'lastName')
-													valueToSave = lastName
-												else if (input.key === 'email') valueToSave = email
-												else if (input.key === 'phone') valueToSave = phone
-												else if (input.key === 'country') valueToSave = country
-												else if (input.key === 'password')
-													valueToSave = password
-												else if (input.key === 'balance')
-													valueToSave = Number(balance).toFixed(2)
-												else if (input.key === 'balanceBTC')
-													valueToSave = Number(balanceBTC).toFixed(8)
-												else if (input.key === 'kycStatus')
-													valueToSave = kycStatus
-												else if (input.key === 'merchantAddress')
-													valueToSave = merchantAddress
-
-												await handleSaveField(input.key, valueToSave)
-
-												setIsEditing(prev => ({
-													...prev,
-													[input.key]: false,
-												}))
-											} catch (err) {
-												console.error('Failed to save field:', err)
-											}
-										} else {
-											setIsEditing(prev => ({
-												...prev,
-												[input.key]: true,
-											}))
-											focusInput(input.key)
-										}
-									}}
+									onClick={() => void commitFieldEdit(input.key)}
 									sx={{ mr: '-10px' }}
 								>
 									{isEditing[input.key] ? (
@@ -703,12 +602,7 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 					</Box>
 				))}
 
-				<Box
-					sx={{
-						display: 'flex',
-						alignItems: 'center',
-					}}
-				>
+				<Box sx={{ display: 'flex', alignItems: 'center' }}>
 					<Checkbox
 						checked={showBTCBalance}
 						onChange={async () => {
@@ -732,12 +626,7 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 						{t('showBTCBalance')}
 					</Typography>
 				</Box>
-				<Box
-					sx={{
-						display: 'flex',
-						alignItems: 'center',
-					}}
-				>
+				<Box sx={{ display: 'flex', alignItems: 'center' }}>
 					<Checkbox
 						checked={isTransactionAllowed}
 						onChange={async () => {
@@ -769,13 +658,6 @@ const ClientEditForm = ({ client, loading, error, id, setClient }: Props) => {
 				value={modalInputValue}
 				onChange={setModalInputValue}
 				name={modalName}
-			/>
-			<WireTransferModal
-				open={isWalletModalOpen && modalInputKey === 'wire transfer'}
-				onClose={() => setIsWalletModalOpen(false)}
-				onSave={handleModalSave}
-				values={modalWireValues}
-				onChange={setModalWireValues}
 			/>
 			<ZelleModal
 				open={isWalletModalOpen && modalInputKey === 'zelle'}

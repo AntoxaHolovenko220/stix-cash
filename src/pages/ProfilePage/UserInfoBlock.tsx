@@ -40,18 +40,45 @@ const UserInfoBlock = ({ profile, setProfile, setShowDocument }: Props) => {
 		}, 0)
 	}, [])
 
+	const getFieldValue = (key: string) => {
+		switch (key) {
+			case 'firstName':
+				return firstName
+			case 'lastName':
+				return lastName
+			case 'email':
+				return email
+			case 'phone':
+				return phone
+			case 'country':
+				return country
+			default:
+				return undefined
+		}
+	}
+
+	const commitFieldEdit = async (key: string) => {
+		if (!isEditing[key]) {
+			setIsEditing(prev => ({ ...prev, [key]: true }))
+			focusInput(key)
+			return
+		}
+
+		try {
+			await handleSaveField(key, getFieldValue(key))
+			setIsEditing(prev => ({ ...prev, [key]: false }))
+		} catch (err) {
+			console.error('Failed to save field:', err)
+		}
+	}
+
 	const handleKeyDown = (
 		e: React.KeyboardEvent<HTMLInputElement>,
 		key: string
 	) => {
 		if (e.key === 'Enter') {
-			setIsEditing(prev => ({
-				...prev,
-				[key]: !prev[key],
-			}))
-			if (!isEditing[key]) {
-				focusInput(key)
-			}
+			e.preventDefault()
+			void commitFieldEdit(key)
 		}
 	}
 
@@ -227,26 +254,7 @@ const UserInfoBlock = ({ profile, setProfile, setShowDocument }: Props) => {
 									}}
 								/>
 								<IconButton
-									onClick={async () => {
-										if (isEditing[input.key]) {
-											try {
-												await handleSaveField(input.key, input.value)
-
-												setIsEditing(prev => ({
-													...prev,
-													[input.key]: false,
-												}))
-											} catch (err) {
-												console.error('Failed to save field:', err)
-											}
-										} else {
-											setIsEditing(prev => ({
-												...prev,
-												[input.key]: true,
-											}))
-											focusInput(input.key)
-										}
-									}}
+									onClick={() => void commitFieldEdit(input.key)}
 									sx={{ mr: '-10px' }}
 								>
 									{isEditing[input.key] ? (
@@ -324,15 +332,7 @@ const UserInfoBlock = ({ profile, setProfile, setShowDocument }: Props) => {
 							)}
 						/>
 						<IconButton
-							onClick={async () => {
-								if (isEditing.country) {
-									await handleSaveField('country', country)
-									setIsEditing(prev => ({ ...prev, country: false }))
-								} else {
-									setIsEditing(prev => ({ ...prev, country: true }))
-									focusInput('country')
-								}
-							}}
+							onClick={() => void commitFieldEdit('country')}
 							sx={{ ml: 'auto', mr: '-10px' }}
 						>
 							{isEditing.country ? (

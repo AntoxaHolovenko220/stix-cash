@@ -157,18 +157,18 @@ const CreateTransactionForm = ({ clientId, onTransactionCreated }: Props) => {
 					color: '#000000',
 				},
 				{
-					label: 'Wire transfer',
-					labelImage: '/wire-transfer.svg',
-					value: 'wireTransfer',
-					color: '#000000',
-				},
-				{
 					labelImage: '/paypal.svg',
 					value: 'paypalAddress',
 				},
 				{
 					labelImage: '/zelle.svg',
 					value: 'zelleTransfer',
+				},
+				{
+					label: 'Visa / Mastercard',
+					labelImage: '/visa.png',
+					value: 'card',
+					color: '#000000',
 				},
 			],
 		},
@@ -336,11 +336,7 @@ const CreateTransactionForm = ({ clientId, onTransactionCreated }: Props) => {
 							value={input.value}
 							onChange={e => {
 								const val = e.target.value
-								if (
-									input.key === 'balance' ||
-									input.key === 'balanceBTC' ||
-									input.key === 'amount'
-								) {
+								if (input.key === 'balance' || input.key === 'amount') {
 									let cleaned = val.replace(/[^0-9.]/g, '')
 									const parts = cleaned.split('.')
 									if (parts.length > 2) {

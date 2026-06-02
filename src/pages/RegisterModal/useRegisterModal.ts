@@ -170,6 +170,11 @@ export const useRegisterModal = () => {
 			) {
 				setErrors({ password: t('incorrect password') })
 			} else if (
+				errorMessage.includes('Подтвердите email') ||
+				errorMessage.includes('Confirm your email')
+			) {
+				setErrors({ form: t('email_not_verified') })
+			} else if (
 				errorMessage.includes('Пользователь') ||
 				errorMessage.includes('User')
 			) {
